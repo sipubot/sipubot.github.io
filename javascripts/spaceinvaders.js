@@ -697,6 +697,7 @@ PlayState.prototype.draw = function(game, dt, ctx) {
     ctx.fillRect(invader.x - invader.width / 2, invader.y - invader.height / 2, invader.width, invader.height);
   });
   // Draw Boss.
+  var boss = this.boss;
   if (this.boss.hp > 0) {
     ctx.fillStyle = 'rgb(255,'+Math.floor(boss.hp/4).toString()+',11)';
     ctx.fillRect(boss.x - boss.width / 2, boss.y - boss.height / 2, boss.width, boss.height);
