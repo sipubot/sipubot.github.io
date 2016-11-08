@@ -13,131 +13,32 @@
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 </head>
-<style>
-    /* Styling needed for a fullscreen canvas and no scrollbars. */
-
-    body,
-    html {
-        width: 100%;
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-    }
-    .stage {
-      width: 80%;
-      margin: 0 auto;
-      list-style: none;
-      -ms-box-orient: horizontal;
-      display: -webkit-box;
-      display: -moz-box;
-      display: -ms-flexbox;
-      display: -moz-flex;
-      display: -webkit-flex;
-      display: flex;
-    }
-
-    .stage li{
-      text-align: center;
-      width: 80%;
-      margin: 0 auto;
-      padding-top: 5%;
-      padding-bottom: 5%;
-      border : 2px solid;
-      border-radius: 2px;
-    }
-
-    #keycapfield {
-        width: 100%;
-        height: 100%;
-        z-index: -1;
-        position: absolute;
-        left: 0px;
-        top: 0px;
-    }
-
-    #gamecontainer {
-        width: 600px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    #gamecanvas {
-        width: 600px;
-        height: 800px;
-    }
-
-    #info {
-        width: 600px;
-        text-align: center;
-        margin-left: auto;
-        margin-right: auto;
-        bottom : 10%;
-    }
-
-    #choicestage {
-        font-size: : 20px;
-        color: white;
-    }
-</style>
-</head>
 
 <body>
-<div id="keycapfield"></div>
-<div id="gamecontainer">
-    <canvas id="gameCanvas"></canvas>
-</div>
-<div id="info">
-    <p>Move with arrow keys, fire with the space bar. The invaders get faster and drop more bombs as you complete each level!</p>
-    <p><a id="muteLink" href="#" onclick="toggleMute()">mute</a> |
-        <a href="http://github.com/sipubot/codenvaders">codeinvaders on github</a> |
-        via <a href="http://github.com/dwmkerr/spaceinvaders">spaceinvaders on github</a>
-</div>
-<script src="javascripts/keycapfield.js"></script>
-<script src="javascripts/spaceinvaders.js"></script>
-<script>
-    // 게임 로드 실행 부분 수정해야할필요가 있다.
-    //  Create the keycapfield.
-    var container = document.getElementById('keycapfield');
-    var keycapfield = new KeycapField();
-    keycapfield.initialise(container);
-    keycapfield.start();
+    <div class="wrapper">
+        <header>
+            <h1>Sipubot's github</h1>
+            <p></p>
+            <p class="view"><a href="http://sipu.iptime.org">Home Page</a></p>
+            <p class="view"><a href="https://github.com/sipubot">View My GitHub Profile</a></p>
+            <p class="view"><a href="https://github.com/sipubot/CodeInvaders.html">Code Invaders</a></p>
+        </header>
+        <section>
+            <article>
+              <h3></h3>
+            </article>
+            <article>
 
-    //  Setup the canvas.
-    var canvas = document.getElementById("gameCanvas");
-    canvas.width = 600;
-    canvas.height = 800;
+            </article>
+            <article>
 
-    //  Create the game.
-    var game = new Game();
-
-    //  Initialise it with the game canvas. & background.
-    game.initialise(canvas);
-    game.backgroundScreen = keycapfield;
-
-    //  Start the game.
-    game.start();
-
-    //  Listen for keyboard events.
-    window.addEventListener("keydown", function keydown(e) {
-        var keycode = e.which || window.event.keycode;
-        //  Supress further processing of left/right/space (37/29/32)
-        if (keycode == 37 || keycode == 39 || keycode == 32) {
-            e.preventDefault();
-        }
-        game.keyDown(keycode);
-    });
-    window.addEventListener("keyup", function keydown(e) {
-        var keycode = e.which || window.event.keycode;
-        game.keyUp(keycode);
-    });
-
-    function toggleMute() {
-        game.mute();
-        document.getElementById("muteLink").innerText = game.sounds.mute ? "unmute" : "mute";
-    }
-</script>
-<script src="javascripts/scale.fix.js"></script>
+            </article>
+        </section>
+        <footer>
+            <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+        </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
 
 </body>
 
