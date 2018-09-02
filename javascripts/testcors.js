@@ -5,7 +5,6 @@ function callOtherDomain() {
   if(invocation) {    
     invocation.open('GET', url, true);
     invocation.withCredentials = true;
-    invocation.add_header("Access-Control-Allow-Origin", "https://sipu.iptime.org");
     invocation.onreadystatechange = handler;
     invocation.send(); 
   }
