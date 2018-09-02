@@ -19,8 +19,8 @@ function handler() {
       }
 }
 
-var s = document.getElementsByTagName("button")[0];
-s.addEventListener("click", function (e){
+var s = document.getElementsByTagName("button");
+s[0].addEventListener("click", function (e){
     callOtherDomain();
 
 },false);
