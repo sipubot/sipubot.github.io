@@ -4,6 +4,7 @@ var url = 'https://sipu.iptime.org/Sipu/TestCors';
 function callOtherDomain() {
   if(invocation) {    
     invocation.open('GET', url, true);
+    invocation.withCredentials = true;
     invocation.onreadystatechange = handler;
     invocation.send(); 
   }
