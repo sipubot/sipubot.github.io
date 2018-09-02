@@ -19,7 +19,8 @@ function handler() {
       }
 }
 
-var s = document.getElementById("co").addEventListener("click", function (e){
+var s = document.getElementById("co");
+s.addEventListener("click", function (e){
     callOtherDomain();
 
 },false);
