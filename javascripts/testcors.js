@@ -19,7 +19,7 @@ function handler() {
       }
 }
 
-var s = document.getElementById("co");
+var s = document.getElementsByTagName("button")[0];
 s.addEventListener("click", function (e){
     callOtherDomain();
 
