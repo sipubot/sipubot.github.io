@@ -1,10 +1,10 @@
 var invocation = new XMLHttpRequest();
-var url = 'https://sipu.iptime.org/Sipu/TestCors';
+var url = 'https://sipu.iptime.org/json/dataperson.json';
    
 function callOtherDomain() {
   if(invocation) {    
     invocation.open('GET', url, true);
-    invocation.withCredentials = true;
+    invocation.withCredentials = false;
     invocation.onreadystatechange = handler;
     invocation.send(); 
   }
