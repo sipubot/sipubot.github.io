@@ -612,14 +612,14 @@ var SipuViewer = (function (SipuViewer, undefined) {
                 if (OBJMOD.Pos.length - 1 === i) {
                     if (OBJMOD.PicLarge !== "") {
                         Canvas.ctx.drawImage(OBJMOD.PicLarge
-                            , (a[0] - (a[2] * 0.5)), (a[1] - a[2]), a[2], a[2] * 0.67);
+                            , (a[0] - (a[2] * 0.5)), (a[1] - a[2] * 0.33), a[2], a[2] * 0.67);
                     } else {
                         Canvas.ctx.drawImage(OBJMOD.Pic[i]
-                            , (a[0] - (a[2] * 0.5)), (a[1] - a[2]), a[2], a[2] * 0.67);
+                            , (a[0] - (a[2] * 0.5)), (a[1] - a[2] * 0.33), a[2], a[2] * 0.67);
                     }
                 } else {
                     Canvas.ctx.drawImage(OBJMOD.Pic[i]
-                        , (a[0] - (a[2] * 0.5)), (a[1] - a[2]), a[2], a[2] * 0.67);
+                        , (a[0] - (a[2] * 0.5)), (a[1] - a[2] * 0.33), a[2], a[2] * 0.67);
                 }
             }
         });
