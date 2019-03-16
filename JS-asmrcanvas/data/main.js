@@ -285,7 +285,7 @@ var SipuViewer = (function (SipuViewer, undefined) {
                 OBJMOD.PathSet.x = x;
                 OBJMOD.PathSet.y = y;
                 loadBigPic("");
-                console.log(USER.TimeSet, idx);
+                //console.log(USER.TimeSet, idx);
             }
         }
     }
@@ -300,7 +300,7 @@ var SipuViewer = (function (SipuViewer, undefined) {
                     && a[1] + a[2] > y
                 ) {
                     if (USER.State !== USERSTATE.Walk) { return; }
-                    console.log(OBJITEM.POS[key], x, y);
+                    //console.log(OBJITEM.POS[key], x, y);
                     USER.Energy = USER.Energy + (OBJITEM.LIFE[key][i] * 0.1) > USER.EnergyMax ?
                         USER.EnergyMax : USER.Energy + (OBJITEM.LIFE[key][i] * 0.1);
                     OBJITEM.LIFEADDPOS = [x - 12, y - 12, 20, 1];
@@ -317,7 +317,7 @@ var SipuViewer = (function (SipuViewer, undefined) {
                 USER.PosYAdd[2] = USER.PosYAdd[2] > 0 ? USER.PosYAdd[2] - dt : 0;
                 if (USER.PosYAdd.every(a => a === 0)) {
                     USER.State = USERSTATE.Walk;
-                    console.log(USER.Pos, "Go again");
+                    //console.log(USER.Pos, "Go again");
                 }
             } else {
                 if (USER.PosYAdd[0] < USER.RestPostYOri[0]) {
@@ -507,7 +507,7 @@ var SipuViewer = (function (SipuViewer, undefined) {
         OBJITEM.PATH[item].push(path);
         OBJITEM.LIFE[item].push(999);
         OBJITEM.POS[item].push([path[0][0], path[0][1], 20]);
-        console.log(item, OBJITEM.LIFE[item]);
+        //console.log(item, OBJITEM.LIFE[item]);
     }
     function drawItem() {
         OBJITEM.POS["APPLE"].map(a => {
@@ -621,7 +621,7 @@ var SipuViewer = (function (SipuViewer, undefined) {
             OBJMOD.PicLargekey = "";
         } else {
             loadJSON("imgdata/" + key + ".json", function (data) {
-                console.log(data);
+                //console.log(data);
                 OBJMOD.PicLarge = new Image();
                 OBJMOD.PicLarge.src = "data:image/png;base64," + data.data;
             });
@@ -739,7 +739,7 @@ var SipuViewer = (function (SipuViewer, undefined) {
             return;
         }
         OBJBG.AIRTIMER = SipuViewer.init.timefps;
-        //console.log(buffer);
+        ////console.log(buffer);
         //t[0] = hour, t[1] = min
         var t = nowTime();
         //t = [20, 20];
@@ -755,7 +755,7 @@ var SipuViewer = (function (SipuViewer, undefined) {
         COLOR.NOWAIR = c;
     }
     function drawAllTimeColor() {
-        //console.log()
+        ////console.log()
         Canvas.ctx.globalAlpha = COLOR.NOWAIR[3];
         Canvas.ctx.fillStyle = rgbToHex(COLOR.NOWAIR.slice(0, 3));
         Canvas.ctx.fillRect(0, 0, CAN.WIDTH, CAN.HEIGHT);
