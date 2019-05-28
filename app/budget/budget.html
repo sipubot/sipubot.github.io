@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시퍼렁어</title>
+<link rel="icon" type="image/png" href="favicon.ico">
+<link href="css/common.css" rel="stylesheet" media="screen"/>
+</head>
+<body>
+	<div class="header">
+		<ul id="menu">
+			<li id="button-main-day"><a href="#PAGE-DAY">DAY</a></li> 
+			<li id="button-main-sum"><a href="#PAGE-SUM">SUM</a></li> 
+			<li id="button-main-stat"><a href="#PAGE-STAT">STAT</a></li> 
+			<li id="button-main-set"><a href="#PAGE-SET">SET</a></li>
+		</ul>
+	</div>
+	<div class="content">
+		<div id="PAGE-DAY" class="section day">
+			<div class="submenu">
+				<ul class="submenu day">
+					<li id="button-day-daypick" class="submenu input">
+						<input type="text" id="input-day-datepicker">
+					</li> 
+					<li id="button-day-search" class="submenu button search">검색</li> 
+					<li id="button-day-income" class="submenu button15">수입</li> 
+					<li id="button-day-expense" class="submenu button15">지출</li> 
+					<li id="button-day-transfer" class="submenu button15">이체</li> 
+				</ul>
+			</div>
+			<table id="table-day-expense">
+				<tbody>
+					<tr>
+						<th>날짜</th>
+						<th>계좌</th>
+						<th>항목</th>
+						<th>지출</th>
+						<th>삭제</th>
+					</tr>
+				</tbody>
+			</table>
+			<table id="table-day-income">
+				<tbody>
+					<tr>
+						<th>날짜</th>
+						<th>계좌</th>
+						<th>항목</th>
+						<th>수입</th>
+						<th>삭제</th>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div id="PAGE-SUM" class="section sum">
+			<div class="submenu">
+				<ul class="submenu sum">
+					<li id="button-sum-day" class="submenu button32">일 합계</li> 
+					<li id="button-sum-month" class="submenu button32">월 합계</li> 
+					<li id="button-sum-year" class="submenu button32">연 합계</li>
+				</ul>
+			</div>
+			<div class="graph" id="sum-graph-dayNmonth" ></div>
+			<table id="table-sum">
+				<tbody>
+					<tr>
+						<th>날짜</th>
+						<th>수익</th>
+						<th>지출</th>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div id="PAGE-STAT" class="section stat">
+			<div class="submenu">
+				<ul class="submenu stat">
+					<li id="button-stat-month-expense" class="submenu button">월 지출</li> 
+					<li id="button-stat-month-income" class="submenu button">월 수입</li> 
+					<li id="button-stat-year-expense" class="submenu button">연 지출</li> 
+					<li id="button-stat-year-income" class="submenu button">연 수입</li> 
+				</ul>
+			</div>
+			<div class="graph" id="stat-graph-stat" ></div>
+			<select id="select-statview-category"  name="CA" class="form-control"  required ></select>
+			<table id="table-stat">
+				<tbody>
+					<tr>
+						<th>년월</th>
+						<th>금액</th>
+						<th>비율</th>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div  id="PAGE-SET" class="section set">
+			<div class="submenu">
+				<ul class="submenu set">
+					<li id="button-set-account" class="submenu button">계좌</li> 
+					<li id="button-set-tax" class="submenu button">결산</li> 
+				</ul>
+			</div>
+			<div class ="set account" >
+				<table id="table-set-account">
+					<tbody>
+						<tr>
+							<th>코드</th>
+							<th>계좌</th>
+							<th>잔액</th>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class ="set tax" >
+				<button id="button-set-tax-ret">결산조회</button>
+				<table id="table-set-tax">
+					<tbody>
+						<tr>
+							<th>연도</th>
+							<th>계좌</th>
+							<th>금액</th>
+						</tr>
+					</tbody>
+				</table>
+				<table id="table-set-tax-detail">
+					<tbody>
+						<tr>
+							<th>연도</th>
+							<th>계좌</th>
+							<th>분류</th>
+							<th>금액</th>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div id = "modal-submit-income" class="submitModal">
+		<div class="modalbox">
+			<p>수입</p>
+			<button class="cancel">X</button>
+			<div id="form-submit-income" >
+				<input  id="input-submit-income-datepicker" name="DAY" type="text" class="form-control" placeholder="날짜" required >
+				<select id="select-submit-income-account" name="AC"  class="form-control"  required ></select>
+				<select id="select-submit-income-category"  name="CA" class="form-control"  required ></select>
+				<input id="input-submit-income-qt"  name="QT" type="number" class="form-control" placeholder="금액" required >
+				<button id="button-submit-income" class="modal button" type="submit">입력</button>
+			</div>
+		</div>
+	</div>
+	<div id = "modal-submit-expense" class="submitModal">
+		<div class="modalbox">
+			<p>지출</p>
+			<button class="cancel">X</button>
+			<div id="form-submit-expense" >
+				<input  id="input-submit-expense-datepicker" name="DAY" type="text" class="form-control" placeholder="날짜" required >
+				<select id="select-submit-expense-account" name="AC"  class="form-control"  required ></select>
+				<select id="select-submit-expense-category"  name="CA" class="form-control" required ></select>
+				<input id="input-submit-expense-qt"  name="QT" type="number" class="form-control" placeholder="금액" required >
+				<button id="button-submit-expense" class="modal button" type="submit">입력</button>
+			</div>
+		</div>
+	</div>
+	<div id = "modal-submit-transfer" class="submitModal">
+		<div class="modalbox">
+			<p>이체</p>
+			<button class="cancel">X</button>
+			<div id="form-submit-transfer" >
+				<input  id="input-submit-transfer-datepicker" name="DAY" type="text" class="form-control" placeholder="날짜" required >
+				<select id="select-submit-transfer-account-from" name="ACF"  class="form-control"  required ></select>
+				<select id="select-submit-transfer-account-to"  name="ACT" class="form-control"  required ></select>
+				<input id="input-submit-transfer-qt"  name="QT" type="number" class="form-control" placeholder="금액" required >
+				<button id="button-submit-transfer" class="modal button" type="submit">입력</button>
+			</div>
+		</div>
+	</div>
+	<div id = "modal-submit-stat-detail" class="submitModal">
+		<div class="modalbox">
+			<p></p>
+			<button class="cancel">X</button>
+			<div class="graph" id="modal-graph-stat-detail" ></div>
+		</div>
+	</div>
+	<div id = "modal-submit-tax" class="submitModal">
+		<div class="modalbox">
+			<p>연말정산</p>
+			<button class="cancel">X</button>
+			<div id="form-submit-tax" >
+				<input id="input-submit-tax-qt"  name="QT" type="number" class="form-control" placeholder="년도" required>
+				<button id="button-submit-tax" class="modal button" type="submit">조회</button>
+			</div>
+		</div>
+	</div>
+	<div class="footer">
+		<h5>Allright reseved by 시퍼렁어</h5>
+	</div>
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+	<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js" integrity="sha256-xNjb53/rY+WmG+4L6tTl9m6PpqknWZvRt0rO1SRnJzw=" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script src="js/main.min.js"></script>
+</body>
+</html>
