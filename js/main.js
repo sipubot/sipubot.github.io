@@ -1,3 +1,24 @@
+$.ajax({
+        url: "https://cors-test.appspot.com/test",
+        type: "POST",
+        data: '{"test":"data"}',
+        beforeSend: function (xhr) {
+            if (xhr.overrideMimeType) {
+                xhr.overrideMimeType("application/json");
+            }
+        },
+        dataType: 'json',
+        scriptCharset: "utf-8",
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR);
+        }
+    })
+    .done(function (data) {
+        console.log(data)
+    })
+    .fail(function (e) {
+        console.log(e);
+    });
 var SipuMain = (function(SipuMain, $, undefined) {
   var DATA = {
     MASTER_URL: "",
