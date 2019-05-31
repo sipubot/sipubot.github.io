@@ -1,5 +1,5 @@
 $.ajax({
-        url: "https://cors-test.appspot.com/test",
+        url: "http://cors-test.appspot.com/test",
         type: "POST",
         data: '{"test":"data"}',
         beforeSend: function (xhr) {
