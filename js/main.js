@@ -1,13 +1,13 @@
 $.ajax({
-        url: "http://cors-test.appspot.com/test",
-        type: "POST",
+        url: "https://sipu.iptime.org",
+        type: "GET",
         data: '{"test":"data"}',
         beforeSend: function (xhr) {
             if (xhr.overrideMimeType) {
-                xhr.overrideMimeType("application/json");
+                xhr.overrideMimeType("plain/text");
             }
         },
-        dataType: 'json',
+        dataType: 'plain',
         scriptCharset: "utf-8",
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
