@@ -5,7 +5,6 @@ body {
   margin: 0;
   padding: 0;
   line-height: 1.4;
-
   /* make it look decent enough */
   background: #333;
   color: #aaa;
@@ -147,6 +146,7 @@ a:hover {
 #menu h6 {
   margin: 0 auto;
 }
+
 /*
   * And let's fade it in from the left
   */
@@ -165,28 +165,39 @@ section {
   opacity: 0;
   transition: visibility 0s linear 0.33s, opacity 0.33s linear;
 }
+
 section:target {
   width: 100%;
   visibility: visible;
   opacity: 1;
   transition-delay: 0s;
 }
+
 .section.clearfix {
   width: 95%;
   position: relative;
-  display: inline-block;    
+  display: inline-block;
 }
-audio, canvas, iframe, img, svg, video {
+
+audio,
+canvas,
+iframe,
+img,
+svg,
+video {
   vertical-align: middle;
 }
+
 fieldset {
   border: 0;
   margin: 0;
   padding: 0;
 }
+
 textarea {
   resize: vertical;
 }
+
 .browserupgrade {
   margin: 0.2em 0;
   background: #ccc;
@@ -195,19 +206,23 @@ textarea {
 }
 
 canvas {
-image-rendering : pixelated;
+  image-rendering: pixelated;
 }
 
 h3 {
   margin-left: 3em;
 }
+
 /* ===================
   ALL: Orange Theme
  =================== */
 
 .header-container {
-padding: 2em;
+  margin: 0 auto;
+  padding: 2em;
+  max-width: 800px;
 }
+
 .profileImage {
   width: 4em;
   height: 4em;
@@ -215,11 +230,13 @@ padding: 2em;
   float: left;
   border-radius: 100%;
 }
+
 .bio {
-font-style: italic;
-font-weight: lighter;
-font-size: 0.4em;
+  font-style: italic;
+  font-weight: lighter;
+  font-size: 0.4em;
 }
+
 .title {
   display: block;
   float: left;
@@ -228,58 +245,68 @@ font-size: 0.4em;
   padding-top: 0.8em;
   margin: 0;
 }
+
 .main-container {
+  margin: 0 auto;
   margin-top: 3em;
+  max-width: 800px;
+  position: relative;
 }
+
 .Icon {
-margin: 0 auto;
-padding: 0;
+  margin: 0 auto;
+  padding: 0;
 }
+
 .Icon li {
-width: 15%;
-display: block;
-border-radius: .5em;
-margin: 5%;
-padding-bottom: 15%;
-height: 0;
-background-size: cover;
-background-color: #939393;
-float: left;
-box-shadow: 2px 2px 4px #444;
+  width: 15%;
+  display: block;
+  border-radius: .5em;
+  margin: 5%;
+  padding-bottom: 15%;
+  height: 0;
+  background-size: cover;
+  background-color: #939393;
+  float: left;
+  box-shadow: 2px 2px 4px #444;
 }
+
 .Stat li {
-width: 21%;
-display: block;
-border-radius: 6em;
-margin: 6%;
-padding-bottom: 21%;
-height: 0;
-background-size: cover;
-background-color: #dddddd;
-float: left;
-box-shadow: 2px 2px 4px #444;
+  width: 21%;
+  display: block;
+  border-radius: 6em;
+  margin: 6%;
+  padding-bottom: 21%;
+  height: 0;
+  background-size: cover;
+  background-color: #dddddd;
+  float: left;
+  box-shadow: 2px 2px 4px #444;
 }
-.Stat li p{
-margin-top : -0.4em;
-margin-left : -0.2em;
-margin-bottom : 0;
-margin-right : 0;
-font-size : 1.3em;
-float: left;
+
+.Stat li p {
+  margin-top: -0.4em;
+  margin-left: -0.2em;
+  margin-bottom: 0;
+  margin-right: 0;
+  font-size: 1.3em;
+  float: left;
 }
+
 .Icon a {
-overflow: hidden;
-display: block;
-width: 100%;
-padding-bottom: 100%;
+  overflow: hidden;
+  display: block;
+  width: 100%;
+  padding-bottom: 100%;
 }
+
 .qut li {
-color: #222;
-background-color: #bbb;
-border-radius: .4em;
-padding: .5em;
-margin-top: .5em;
-text-align: left;
+  color: #222;
+  background-color: #bbb;
+  border-radius: .4em;
+  padding: .5em;
+  margin-top: .5em;
+  text-align: left;
 }
 
 #input_text textarea {
@@ -306,8 +333,9 @@ text-align: left;
   vertical-align: top;
   height: 2em;
   width: 100%;
-box-shadow: inset -0.1em -0.1em 0.1em #8B8B8C, inset 0.1em 0.1em 0.1em #C6C6C6;
+  box-shadow: inset -0.1em -0.1em 0.1em #8B8B8C, inset 0.1em 0.1em 0.1em #C6C6C6;
 }
+
 .qut li time {
   margin-left: 10px;
   font-weight: lighter;
@@ -321,11 +349,13 @@ box-shadow: inset -0.1em -0.1em 0.1em #8B8B8C, inset 0.1em 0.1em 0.1em #C6C6C6;
 .main {
   padding: 30px 0;
 }
+
 .main article h1 {
   font-size: 2em;
 }
+
 .main h2 {
-margin-bottom : 0;
+  margin-bottom: 0;
 }
 
 /* ===============
@@ -346,39 +376,46 @@ margin-bottom : 0;
  ======================== */
 
   .profileImage {
-      width: 8em;
-      height:  8em;
+    width: 8em;
+    height: 8em;
   }
+
   .title {
     padding-left: 1.5em;
   }
 
 }
+
 @media only screen and (min-width: 768px) {
+
   /* ============
   WIDE: Menu
  ============ */
   .title {
-      float: left;
+    float: left;
   }
+
   /* ============
   WIDE: Main
  ============ */
   .main article {
-      width: 100%;
+    width: 100%;
   }
+
   .main h2 {
-    margin-bottom : 0;
+    margin-bottom: 0;
   }
 }
+
 @media only screen and (min-width: 1140px) {
+
   /* ===============
   Maximal Width
  =============== */
   .wrapper {
-      width: 1026px;
-      /* 1140px - 10% for margins */
-      margin: 0 auto;
+    width: 1026px;
+    /* 1140px - 10% for margins */
+    margin: 0 auto;
   }
 }
 
@@ -390,6 +427,7 @@ margin-bottom : 0;
   display: none !important;
   visibility: hidden;
 }
+
 .visuallyhidden {
   border: 0;
   clip: rect(0 0 0 0);
@@ -400,7 +438,9 @@ margin-bottom : 0;
   position: absolute;
   width: 1px;
 }
-.visuallyhidden.focusable:active, .visuallyhidden.focusable:focus {
+
+.visuallyhidden.focusable:active,
+.visuallyhidden.focusable:focus {
   clip: auto;
   height: auto;
   margin: 0;
@@ -408,16 +448,21 @@ margin-bottom : 0;
   position: static;
   width: auto;
 }
+
 .invisible {
   visibility: hidden;
 }
-.clearfix:before, .clearfix:after {
+
+.clearfix:before,
+.clearfix:after {
   content: " ";
   display: table;
 }
+
 .clearfix:after {
   clear: both;
 }
+
 .clearfix {
   *zoom: 1;
 }
