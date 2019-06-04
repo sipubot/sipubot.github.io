@@ -1,114 +1,164 @@
-<!doctype html>
+<!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
 <!--[if gt IE 8]><!-->
-<html class="no-js" lang="ko">
+<html
+    class=" js flexbox canvas canvastext webgl touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths"
+    lang="ko">
 <!--<![endif]-->
-        
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>시퍼렁어</title>
     <meta name="viewport" content="width=device-width">
-    <link rel="icon" type="image/png" href="icon/favicon.ico">
-    <link rel="shortcut icon" href="icon/bookmark.png">
-    <link rel="apple-touch-icon" href="icon/bookmark.png">
+    <link rel="icon" type="image/png" href="/icon/favicon.ico">
+    <link rel="shortcut icon" href="/icon/bookmark.png">
+    <link rel="apple-touch-icon" href="/icon/bookmark.png">
 </head>
+
 <body>
-	<!--[if lt IE 8]>
+    <!--[if lt IE 8]>
         <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-	<div class="header-container">
-		<header class="wrapper clearfix">
-			<a href="/"><img class="profileImage"
-				src="icon/profile.png" alt="Profile" /></a>
-			<h1 class="title">
-				SIPU  <span class="bio" data-node="Bio"></span>
-			</h1>
-		</header>
-	</div>
-	<div class="main-container">
-		<div class="main wrapper clearfix">
-			<article>
-				<section id="main">
-					<h2>Profile</h2>
-					<hr />
-					<ul>
-						<li><b>Live In</b> : System Solar System Milky Way Galaxy
-							Local Group Virgo Supercluster Observable Universe.</li>
-						<li><b>Live Time</b> : <span id="lifetime"></span></li>
-						<li><b>Live On</b> : <span id="lifeplace"></span></li>
-						<li><b>Live By</b> : Workers &#8594; SW Dev
-							&#8594; Volunteer &#8594; SM &#8594; Web Dev &#8594; SW Dev</li>
-						<li><b>Live For</b> : Not Yet.</li>
-					</ul>
-				</section>
-				<section id="now">
-					<h2>Now</h2>
-					<hr />
-					<ul class="Status Stat clearfix">
-						<li>
-							<p>🎭</p>
-						</li>
-						<li>
-							<p>🏃</p>
-						</li>
-						<li>
-							<p>💻</p>
-						</li>
-					</ul>
-				</section>
-				<section>
-					<h2>Works</h2>
-					<hr />
-					<ul class="app Icon clearfix" data-node="App"></ul>
-				</section>
-				<section>
-					<h2>Links</h2>
-					<hr />
-					<ul class="link Icon clearfix" data-node="Link"></ul>
-				</section>
-				<section>
-					<h2>Saying</h2>
-					<hr />
-					<div id="input_text">
-						<textarea id="text_content" data-node="BoardInsert" rows="4"></textarea>
-						<button id="submit" data-node="BoardInsert" type="button">전송</button>
-					</div>
-					<ul class="qut" data-node="Board"></ul>
-				</section>
-			</article>
-		</div>
-	</div>
-	<div class="footer-container">
-		<footer class="wrapper">
-			<h3>&copy; - SIPU</h3>
-		</footer>
-	</div>
-	<link rel="stylesheet" href="stylesheets/normalize.min.css">
-	<link rel="stylesheet" href="stylesheets/common.min.css" media="screen" />
-	<script src="js/modernizr-2.8.3-respond-1.4.2.min.js"></script>
-	<script src="https://code.jquery.com/jquery-1.12.4.min.js"
-		integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
-		crossorigin="anonymous"></script>
-	<script src="js/main.min.js"></script>
-	<script src="js/SnailComp.js"></script>
-	<script>
-		(function(i, s, o, g, r, a, m) {
-			i['GoogleAnalyticsObject'] = r;
-			i[r] = i[r] || function() {
-				(i[r].q = i[r].q || []).push(arguments)
-			}, i[r].l = 1 * new Date();
-			a = s.createElement(o), m = s.getElementsByTagName(o)[0];
-			a.async = 1;
-			a.src = g;
-			m.parentNode.insertBefore(a, m)
-		})(window, document, 'script',
-				'//www.google-analytics.com/analytics.js', 'ga');
+    <nav role='navigation'>
+        <div id="menuToggle">
+            <input type="checkbox" />
+            <!--Some spans to act as a hamburger.-->
+            <span></span>
+            <span></span>
+            <span></span>
+            <ul id="menu">
+                <a href="#home">
+                    <li>
+                        <i class="fa fa-home fa-2x"></i>
+                        <h6>HOME</h6>
+                    </li>
+                </a>
+                <a href="#stat">
+                    <li>
+                        <i class="fa fa-id-badge fa-2x"></i>
+                        <h6>STAT</h6>
+                    </li>
+                </a>
+                <a href="#app">
+                    <li>
+                        <i class="fa fa-archive fa-2x"></i>
+                        <h6>APP</h6>
+                    </li>
+                </a>
+                <a href="#quot">
+                    <li>
+                        <i class="fa fa-quote-right fa-2x"></i>
+                        <H6>QUOT</H6>
+                    </li>
+                </a>
+                <a href="#set">
+                    <li>
+                        <i class="fa fa-cog fa-2x"></i>
+                        <H6>SET</H6>
+                    </li>
+                </a>
+                <a href="#">
+                    <li>
+                        <i class="fa fa-database fa-2x"></i>
+                        <H6>DATA</H6>
+                    </li>
+                </a>
+                <a href="#">
+                    <li>
+                        <i class="fa fa-chart-bar fa-2x"></i>
+                        <H6>STAT</H6>
+                    </li>
+                </a>
+            </ul>
+        </div>
+    </nav>
+    <div class="header-container">
+        <header class="wrapper clearfix">
+            <a href="http://sipu.iptime.org"><img class="profileImage" src="icon/profile.png" alt="Profile" /></a>
+            <h1 class="title">
+                SIPU <span class="bio" data-node="Bio"></span>
+            </h1>
+        </header>
+    </div>
+    <div class="main-container">
+        <div class="main wrapper clearfix">
+            <section id="home">
+                <div class="section clearfix">
+                    <h3>Profile</h3>
+                    <ul>
+                        <li><b>Live In</b> : System Solar System Milky Way Galaxy
+                            Local Group Virgo Supercluster Observable Universe.</li>
+                        <li><b>Live Time</b> : <span id="lifetime"></span></li>
+                        <li><b>Live On</b> : <span id="lifeplace"></span></li>
+                        <li><b>Live By</b> : Workers &#8594; SW Dev
+                            &#8594; Volunteer &#8594; SM &#8594; Web Dev &#8594; SW Dev</li>
+                        <li><b>Live For</b> : Not Yet.</li>
+                    </ul>
+                </div>
+            </section>
+            <section id="stat">
+                <div class="section clearfix">
+                    <h3>Now</h3>
+                    <ul class="now Stat clearfix">
+                        <li>
+                            <p>🎭</p>
+                        </li>
+                        <li>
+                            <p>🏃</p>
+                        </li>
+                        <li>
+                            <p>💻</p>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+            <section id="app">
+                <div class="section clearfix">
+                    <h3>Works</h3>
+                    <ul class="app Icon clearfix" data-node="App"></ul>
+                </div>
+            </section>
+            <section id="qout">
+                <div class="section clearfix">
+                    <h3>Links</h3>
+                    <ul class="link Icon clearfix" data-node="Link"></ul>
+                    <h3>Saying</h3>
+                    <div id="input_text">
+                        <textarea id="text_content" data-node="BoardInsert" rows="4"></textarea>
+                        <button id="submit" data-node="BoardInsert" type="button">전송</button>
+                    </div>
+                    <ul class="qut" data-node="Board"></ul>
+                </div>
+            </section>
+            <section id="set">
+                <div class="section clearfix"></div>
 
-		ga('create', 'UA-39498193-6', 'auto');
-		ga('send', 'pageview');
-	</script>
+            </section>
+        </div>
+    </div>
+    <link rel="stylesheet" href="stylesheet/normalize.min.css">
+    <link rel="stylesheet" href="stylesheet/common.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"
+        integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o), m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script',
+            '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-39498193-6', 'auto');
+        ga('send', 'pageview');
+    </script>
 </body>
+
 </html>
