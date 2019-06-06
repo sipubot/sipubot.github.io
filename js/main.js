@@ -1,7 +1,6 @@
-
 var SipuMain = (function (SipuMain, $, undefined) {
   var DATA = {
-    MASTER_URL: "",
+    MASTER_URL: "https://sipu.iptime.org/",
     IMOJI_LIST: ["status-sad.png", "status-nom.png", "status-hap.png"],
     IMOJI_BACK: ["#ef6f45", "#c0c0c0", "#94de59"]
   };
@@ -89,6 +88,7 @@ var SipuMain = (function (SipuMain, $, undefined) {
               xhr.overrideMimeType("application/json");
             }
           },
+          contentType: 'application/json',
           dataType: 'json',
           scriptCharset: "utf-8",
           error: function (jqXHR, textStatus, errorThrown) {
@@ -112,6 +112,32 @@ var SipuMain = (function (SipuMain, $, undefined) {
         REQUEST.rqQ(namespace);
       };
       REQUEST.rQCallbackMethod[namespace] = callback;
+    },
+    directAjax: function (addURL, type, data, callback) {
+      $.ajax({
+        url: REQUEST.LINK.MASTER + addURL,
+        type: type,
+        data: data,
+        beforeSend: function (xhr) {
+          if (xhr.overrideMimeType) {
+            xhr.overrideMimeType("application/json");
+          }
+        },
+        contentType: 'application/json',
+        dataType: 'json',
+        scriptCharset: "utf-8",
+        error: function (jqXHR, textStatus, errorThrown) {
+          console.log(jqXHR);
+        }
+      })
+      .done(function (data) {
+        if (typeof callback === "function") {
+          callback(data);
+        }
+      })
+      .fail(function () {
+        console.log("송수신 실패");
+      });
     },
     init: function () {},
     log: function () {
@@ -198,11 +224,13 @@ var SipuMain = (function (SipuMain, $, undefined) {
           $(NODES.UL.Link).append('<li style="background-image : url(' + data.ImageLink + ')"><a href="' + data.Link + '" title="' + data.Title + '" target="_blank"></a></li>');
         });
       },
-      Board: function () {
-        $(NODES.UL.Board).empty();
+      quotboard: function () {
+        $(NODES.UL.quotboard).empty();
         $.each(arguments[0], function (index, data) {
           if (index < 10) {
-            $(NODES.UL.Board).append('<li>' + VERIFY.UrlLinker(data.Qut) + '<time>' + data.Time + '</time></li>');
+            var buildText = data.split('').map(a => `<span>${a}</span>`).join('');
+            var t = `<li class="list-group-item"><h4>${buildText}</h4></li>`;
+            $(NODES.UL.quotboard).prepend(t);
           }
         });
       }
@@ -215,41 +243,40 @@ var SipuMain = (function (SipuMain, $, undefined) {
     }
   };
 
-  REQUEST.rQMethodSet("BoardInsert", "/QutInsert", function () {
-    REQUEST.RQDATA.TIMELINE = VERIFY.RemoveQuot($(NODES.TEXTAREA.BoardInsert).val());
+  REQUEST.rQMethodSet("QutInsert", "/qut", function () {
+    REQUEST.RQDATA.TIMELINE = $(NODES.INPUT.quotinput).val();
   }, function () {
-    $(NODES.UL.Board).prepend('<li>' + VERIFY.UrlLinker($(NODES.TEXTAREA.BoardInsert).val()) + '<time>now</time></li>');
-    $(NODES.TEXTAREA.BoardInsert).val("");
+    var insertText = $(NODES.INPUT.quotinput).val();
+    var buildText = insertText.split('').map(a => `<span>${a}</span>`).join('');
+    var re = `<li class="list-group-item"><h4>${buildText}</h4></li>`;
+    $(NODES.UL.quotboard).prepend(re);
+    $(NODES.INPUT.quotinput).val("");
   });
 
-  EVENT.setClick("BoardInsert", function () {
-    if ($(NODES.TEXTAREA.BoardInsert).val().length < 2) {
+  EVENT.setClick("QutInsert", function () {
+    if ($(NODES.INPUT.quotinput).val().length < 2) {
       return false;
     } else {
-      REQUEST.rQMethod.BoardInsert();
+      REQUEST.rQMethod.QutInsert();
     }
   });
-  EVENT.initFunc.Bio = function () {
-    $.getJSON(DATA.MASTER_URL + "data/datamain.json", MAPPING.SPAN.Bio);
-  };
-  EVENT.initFunc.App = function () {
-    $.getJSON(DATA.MASTER_URL + "data/dataapp.json", MAPPING.UL.App);
-  };
-  EVENT.initFunc.Link = function () {
-    $.getJSON(DATA.MASTER_URL + "data/datalink.json", MAPPING.UL.Link);
-  };
+  //EVENT.initFunc.Bio = function () {
+  //  $.getJSON(DATA.MASTER_URL + "data/datamain.json", MAPPING.SPAN.Bio);
+  //};
+  //EVENT.initFunc.App = function () {
+  //  $.getJSON(DATA.MASTER_URL + "data/dataapp.json", MAPPING.UL.App);
+  //};
+  //EVENT.initFunc.Link = function () {
+  //  $.getJSON(DATA.MASTER_URL + "data/datalink.json", MAPPING.UL.Link);
+  //};
   EVENT.initFunc.Board = function () {
-    $.getJSON(DATA.MASTER_URL + "data/databoard.json", MAPPING.UL.Board);
+    REQUEST.directAjax("/qut", "GET", "", MAPPING.UL.quotboard);
+    //$.getJSON(DATA.MASTER_URL + "data/databoard.json", MAPPING.UL.Board);
   };
   EVENT.initFunc.Profile = function () {
     life();
-    SetStat();
-    quot();
+    //SetStat();
   };
-
-  function quot() {
-    
-  }
 
   function life() {
     var sheep = 0;
