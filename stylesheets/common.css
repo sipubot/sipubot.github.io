@@ -1,14 +1,13 @@
 @import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css);
-@import url(https://fonts.googleapis.com/notosanskr.css);
+@import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css);
 
 body {
   margin: 0;
   padding: 0;
-  line-height: 1.4;
   /* make it look decent enough */
+  font-family: 'Noto Sans KR', sans-serif;
   background: #333;
   color: #aaa;
-
   overflow-x: hidden;
   /* needed because hiding the menu on the right side is not perfect,  */
 }
@@ -28,8 +27,7 @@ a:hover {
   display: block;
   position: absolute;
   top: 20px;
-  right: 10px;
-
+  right: 3px;
   z-index: 1;
 
   -webkit-user-select: none;
@@ -116,13 +114,12 @@ a:hover {
   */
 #menu {
   position: fixed;
-  width: 100px;
+  width: 50px;
   height: 100%;
-  margin: -50px 0 0 0;
-  padding: 15px;
-  padding-top: 125px;
+  margin: 0 auto;
+  padding-top: 100px;
   padding-left: 0px;
-  right: -50px;
+  right: 0;
   top: 0;
 
   display: inline-block;
@@ -139,12 +136,12 @@ a:hover {
 #menu li {
   text-align: center;
   padding: 10px 0;
-  font-size: 18px;
-  margin-left: -35px;
+  margin-left: 0px;
 }
 
 #menu h6 {
   margin: 0 auto;
+  font-size: 0.85rem;
 }
 
 /*
@@ -156,7 +153,7 @@ a:hover {
 }
 
 /*
-* menu css
+* main css
 */
 
 section {
@@ -164,6 +161,7 @@ section {
   visibility: hidden;
   opacity: 0;
   transition: visibility 0s linear 0.33s, opacity 0.33s linear;
+  margin-top: 5rem;
 }
 
 section:target {
@@ -174,7 +172,7 @@ section:target {
 }
 
 .section.clearfix {
-  width: 95%;
+  width: 100%;
   position: relative;
   display: inline-block;
 }
@@ -194,10 +192,6 @@ fieldset {
   padding: 0;
 }
 
-textarea {
-  resize: vertical;
-}
-
 .browserupgrade {
   margin: 0.2em 0;
   background: #ccc;
@@ -207,10 +201,6 @@ textarea {
 
 canvas {
   image-rendering: pixelated;
-}
-
-h3 {
-  margin-left: 3em;
 }
 
 /* ===================
@@ -229,21 +219,6 @@ h3 {
   display: block;
   float: left;
   border-radius: 100%;
-}
-
-.bio {
-  font-style: italic;
-  font-weight: lighter;
-  font-size: 0.4em;
-}
-
-.title {
-  display: block;
-  float: left;
-  color: #888;
-  padding-left: 0.8em;
-  padding-top: 0.8em;
-  margin: 0;
 }
 
 .main-container {
@@ -300,48 +275,24 @@ h3 {
   padding-bottom: 100%;
 }
 
+#quot-board {
+  margin-top: 10rem;
+  overflow: hidden;
+}
+
 .qut li {
   color: #222;
   background-color: #bbb;
-  border-radius: .4em;
-  padding: .5em;
+  border-radius: .4rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
   margin-top: .5em;
   text-align: left;
 }
 
-#input_text textarea {
-  border: 1px solid #777;
-  padding: 0;
-  margin: 0;
-  background-color: #ccc;
-  color: #111;
-  width: 99.5%;
-  border-radius: .3em;
-  resize: none;
-  height: 4em;
-  float: left;
+.qut li p {
+  margin:  0 auto;
 }
-
-#input_text button {
-  border: 0;
-  padding: 0;
-  margin: 0;
-  font-size: 1em;
-  font-weight: 700;
-  border-radius: .2em;
-  background-color: #a1a1a1;
-  vertical-align: top;
-  height: 2em;
-  width: 100%;
-  box-shadow: inset -0.1em -0.1em 0.1em #8B8B8C, inset 0.1em 0.1em 0.1em #C6C6C6;
-}
-
-.qut li time {
-  margin-left: 10px;
-  font-weight: lighter;
-  font-size: .6em;
-}
-
 /* ==============
   MOBILE: Main
  ============== */
@@ -379,11 +330,6 @@ h3 {
     width: 8em;
     height: 8em;
   }
-
-  .title {
-    padding-left: 1.5em;
-  }
-
 }
 
 @media only screen and (min-width: 768px) {
@@ -391,10 +337,7 @@ h3 {
   /* ============
   WIDE: Menu
  ============ */
-  .title {
-    float: left;
-  }
-
+ 
   /* ============
   WIDE: Main
  ============ */

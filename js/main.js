@@ -1,62 +1,42 @@
-$.ajax({
-        url: "https://sipu.iptime.org",
-        type: "GET",
-        data: '{"test":"data"}',
-        beforeSend: function (xhr) {
-            if (xhr.overrideMimeType) {
-                xhr.overrideMimeType("plain/text");
-            }
-        },
-        dataType: 'plain',
-        scriptCharset: "utf-8",
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.log(jqXHR);
-        }
-    })
-    .done(function (data) {
-        console.log(data)
-    })
-    .fail(function (e) {
-        console.log(e);
-    });
-var SipuMain = (function(SipuMain, $, undefined) {
+
+var SipuMain = (function (SipuMain, $, undefined) {
   var DATA = {
     MASTER_URL: "",
-    IMOJI_LIST : ["status-sad.png","status-nom.png","status-hap.png"],
-    IMOJI_BACK : ["#ef6f45","#c0c0c0","#94de59"]
+    IMOJI_LIST: ["status-sad.png", "status-nom.png", "status-hap.png"],
+    IMOJI_BACK: ["#ef6f45", "#c0c0c0", "#94de59"]
   };
 
   var VERIFY = {
-    OnlyChar: function(obj) {
+    OnlyChar: function (obj) {
       obj = obj.replace(/[^(가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9)]/gi, "");
       return obj;
     },
-    OutSpecial: function(obj) {
+    OutSpecial: function (obj) {
       obj = obj.replace(/[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi, ""); // 특수문자 제거
       return obj;
     },
-    OnlyNumber: function(obj) {
+    OnlyNumber: function (obj) {
       obj = obj.replace(/[^\d\.]/g, "");
       return obj;
     },
-    RemoveQuot: function(obj) {
+    RemoveQuot: function (obj) {
       obj = obj.replace(/'/g, "&apos;").replace(/"/g, "&quot;");
       return obj;
     },
-    RemoveJQ: function(obj) {
+    RemoveJQ: function (obj) {
       obj = obj.replace(".", "").replace("#", "");
       return obj;
     },
-		UrlLinker : function (obj) {
-			var urlRegex = /(https?:\/\/[^\s]+)/g;
-	    return obj.replace(urlRegex, function(url) {
-	        return '<a href="' + url + '" target="_blank">&#128279</a>';
-	    });
-		}
+    UrlLinker: function (obj) {
+      var urlRegex = /(https?:\/\/[^\s]+)/g;
+      return obj.replace(urlRegex, function (url) {
+        return '<a href="' + url + '" target="_blank">&#128279</a>';
+      });
+    }
   };
 
   var NODES = {
-    init: function() {
+    init: function () {
       var node = document.getElementsByTagName("*");
       var datatag = "data-node";
       var attrValue = "None";
@@ -77,7 +57,7 @@ var SipuMain = (function(SipuMain, $, undefined) {
         }
       }
     },
-    log: function() {
+    log: function () {
       console.log(this);
     }
   };
@@ -96,7 +76,7 @@ var SipuMain = (function(SipuMain, $, undefined) {
     rqPermit: true,
     rQCallbackMethod: {},
     rQMethod: {},
-    rqQ: function(namespace) {
+    rqQ: function (namespace) {
       if (!REQUEST.rqPermit) {
         return false;
       }
@@ -104,28 +84,28 @@ var SipuMain = (function(SipuMain, $, undefined) {
           url: REQUEST.RQLINK,
           type: REQUEST.RQTYPE,
           data: REQUEST.RQDATA,
-          beforeSend: function(xhr) {
+          beforeSend: function (xhr) {
             if (xhr.overrideMimeType) {
               xhr.overrideMimeType("application/json");
             }
           },
           dataType: 'json',
           scriptCharset: "utf-8",
-          error: function(jqXHR, textStatus, errorThrown) {
+          error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
           }
         })
-        .done(function(data) {
+        .done(function (data) {
           if (typeof REQUEST.rQCallbackMethod[namespace] === "function") {
             REQUEST.rQCallbackMethod[namespace](data);
           }
         })
-        .fail(function() {
+        .fail(function () {
           console.log("송수신 실패");
         });
     },
-    rQMethodSet: function(namespace, addURL, func, callback) {
-      REQUEST.rQMethod[namespace] = function() {
+    rQMethodSet: function (namespace, addURL, func, callback) {
+      REQUEST.rQMethod[namespace] = function () {
         REQUEST.RQLINK = REQUEST.LINK.MASTER + addURL;
         REQUEST.RQDATA.RQ = namespace;
         func();
@@ -133,8 +113,8 @@ var SipuMain = (function(SipuMain, $, undefined) {
       };
       REQUEST.rQCallbackMethod[namespace] = callback;
     },
-    init: function() {},
-    log: function() {
+    init: function () {},
+    log: function () {
       console.log(this);
     }
   };
@@ -142,35 +122,35 @@ var SipuMain = (function(SipuMain, $, undefined) {
   var EVENT = {
     BUTTON: {},
     INPUT: {},
-    setClick: function(namespace, func) {
-      $.each(NODES.BUTTON[namespace], function(i) {
-        $(this).click(function() {
+    setClick: function (namespace, func) {
+      $.each(NODES.BUTTON[namespace], function (i) {
+        $(this).click(function () {
           func();
         });
       });
     },
-    setEnter: function(namespace, func) {
-      $.each(NODES.INPUT[namespace], function(i) {
-        $(this).keydown(function(e) {
+    setEnter: function (namespace, func) {
+      $.each(NODES.INPUT[namespace], function (i) {
+        $(this).keydown(function (e) {
           if (e.which == 13) {
             func();
           }
         });
       });
     },
-    setTrigger: function() {},
+    setTrigger: function () {},
     initFunc: {},
-    init: function() {
-      $.each(EVENT.initFunc, function(key, func) {
+    init: function () {
+      $.each(EVENT.initFunc, function (key, func) {
         if (typeof EVENT.initFunc[key] === "function") {
           func.apply();
         }
       });
     },
-    trigger: function() {
+    trigger: function () {
       this.setTrigger();
     },
-    log: function() {
+    log: function () {
       console.log(this);
     }
   };
@@ -201,26 +181,26 @@ var SipuMain = (function(SipuMain, $, undefined) {
 
   var MAPPING = {
     UL: {
-      Stat: function() {
-        $.each(arguments[0], function(index, data) {
+      Stat: function () {
+        $.each(arguments[0], function (index, data) {
           $(NODES.UL.App).append('<li style="background-image : url(' + data.ImageLink + ')"><a href="' + data.Link + '" title="' + data.Title + '" target="_blank"></a></li>');
         });
       },
-      App: function() {
+      App: function () {
         $(NODES.UL.App).empty();
-        $.each(arguments[0], function(index, data) {
+        $.each(arguments[0], function (index, data) {
           $(NODES.UL.App).append('<li style="background-image : url(' + data.ImageLink + ')"><a href="' + data.Link + '" title="' + data.Title + '" target="_blank"></a></li>');
         });
       },
-      Link: function() {
+      Link: function () {
         $(NODES.UL.Link).empty();
-        $.each(arguments[0], function(index, data) {
+        $.each(arguments[0], function (index, data) {
           $(NODES.UL.Link).append('<li style="background-image : url(' + data.ImageLink + ')"><a href="' + data.Link + '" title="' + data.Title + '" target="_blank"></a></li>');
         });
       },
-      Board: function() {
+      Board: function () {
         $(NODES.UL.Board).empty();
-        $.each(arguments[0], function(index, data) {
+        $.each(arguments[0], function (index, data) {
           if (index < 10) {
             $(NODES.UL.Board).append('<li>' + VERIFY.UrlLinker(data.Qut) + '<time>' + data.Time + '</time></li>');
           }
@@ -228,7 +208,7 @@ var SipuMain = (function(SipuMain, $, undefined) {
       }
     },
     SPAN: {
-      Bio: function() {
+      Bio: function () {
         $(NODES.SPAN.Bio).empty();
         $(NODES.SPAN.Bio).html(arguments[0][0].Qut);
       }
@@ -239,40 +219,44 @@ var SipuMain = (function(SipuMain, $, undefined) {
     REQUEST.RQDATA.TIMELINE = VERIFY.RemoveQuot($(NODES.TEXTAREA.BoardInsert).val());
   }, function () {
     $(NODES.UL.Board).prepend('<li>' + VERIFY.UrlLinker($(NODES.TEXTAREA.BoardInsert).val()) + '<time>now</time></li>');
-	$(NODES.TEXTAREA.BoardInsert).val("");
+    $(NODES.TEXTAREA.BoardInsert).val("");
   });
 
   EVENT.setClick("BoardInsert", function () {
     if ($(NODES.TEXTAREA.BoardInsert).val().length < 2) {
-       return false;
+      return false;
     } else {
-       REQUEST.rQMethod.BoardInsert();
+      REQUEST.rQMethod.BoardInsert();
     }
   });
-  EVENT.initFunc.Bio = function() {
+  EVENT.initFunc.Bio = function () {
     $.getJSON(DATA.MASTER_URL + "data/datamain.json", MAPPING.SPAN.Bio);
   };
-  EVENT.initFunc.App = function() {
+  EVENT.initFunc.App = function () {
     $.getJSON(DATA.MASTER_URL + "data/dataapp.json", MAPPING.UL.App);
   };
-  EVENT.initFunc.Link = function() {
+  EVENT.initFunc.Link = function () {
     $.getJSON(DATA.MASTER_URL + "data/datalink.json", MAPPING.UL.Link);
   };
-  EVENT.initFunc.Board = function() {
+  EVENT.initFunc.Board = function () {
     $.getJSON(DATA.MASTER_URL + "data/databoard.json", MAPPING.UL.Board);
   };
-  EVENT.initFunc.Profile = function() {
+  EVENT.initFunc.Profile = function () {
     life();
     SetStat();
+    quot();
   };
 
+  function quot() {
+    
+  }
 
   function life() {
     var sheep = 0;
     var sp = document.getElementById('lifetime');
     var sp2 = document.getElementById('lifeplace');
     var startval = 1089658152;
-    var func = function() {
+    var func = function () {
       var addval = new Date() - new Date("2015-01-01");
       var nowHour = new Date().getUTCHours();
       if (nowHour > -1 && nowHour < 14) {
@@ -315,32 +299,31 @@ var SipuMain = (function(SipuMain, $, undefined) {
     }
     setInterval(func, 1000);
   }
-  
+
   function SetStat() {
-	$.getJSON(DATA.MASTER_URL + "json/dataperson.json", Rfunc);
-	function Rfunc(v) {
-		var passpoint = 10;
-		var wa = v.map(function (a) {
-				return +a["WAdata"];
-		}).slice(0, 7); 
-		var point = [50, 20, 10, 5, 3, 2];
-		var rp = Array.apply(null, Array(6)).map(function (a, i) {
-				return wa[i] - wa[i + 1] >= passpoint ? point[i] : 0;
-		}).reduce(function (s, a) {
-				return s + a;
-		}, 0);  
-		var picidx = [Math.round((+v[0]["PAdata"])/53)
-		    ,Math.round((+v[0]["GAdata"])/53)
-			,Math.round(rp/53)];
-		var node = $(".Status > li");
-		$.each(node,function (i,n) {
-			$(n).css("background-image","url(/icon/"+DATA.IMOJI_LIST[picidx[i]]+")");
-			$(n).css("background-color",DATA.IMOJI_BACK[picidx[i]]);
-		});
-	}
+    $.getJSON(DATA.MASTER_URL + "json/dataperson.json", Rfunc);
+
+    function Rfunc(v) {
+      var passpoint = 10;
+      var wa = v.map(function (a) {
+        return +a["WAdata"];
+      }).slice(0, 7);
+      var point = [50, 20, 10, 5, 3, 2];
+      var rp = Array.apply(null, Array(6)).map(function (a, i) {
+        return wa[i] - wa[i + 1] >= passpoint ? point[i] : 0;
+      }).reduce(function (s, a) {
+        return s + a;
+      }, 0);
+      var picidx = [Math.round((+v[0]["PAdata"]) / 53), Math.round((+v[0]["GAdata"]) / 53), Math.round(rp / 53)];
+      var node = $(".Status > li");
+      $.each(node, function (i, n) {
+        $(n).css("background-image", "url(/icon/" + DATA.IMOJI_LIST[picidx[i]] + ")");
+        $(n).css("background-color", DATA.IMOJI_BACK[picidx[i]]);
+      });
+    }
   }
- 
-  SipuMain.run = function() {
+
+  SipuMain.run = function () {
     // 기본실행
     REQUEST.init();
     EVENT.init();
