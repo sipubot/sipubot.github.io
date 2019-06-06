@@ -1,9 +1,6 @@
 //es5 convert 2018.10.05
 var SipuBudget = (function(SipuBudget, $, undefined) {
-	//구글 차트 설정(필수)
-	google.charts.load('current', {packages: ['corechart']});
-	google.charts.setOnLoadCallback(SipuBudget.graphDraw);
-
+	
 	var masterlink = "/Budget";
 	var Param = {
 		ajaxLink : {

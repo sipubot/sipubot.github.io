@@ -161,7 +161,6 @@ section {
   visibility: hidden;
   opacity: 0;
   transition: visibility 0s linear 0.33s, opacity 0.33s linear;
-  margin-top: 5rem;
 }
 
 section:target {
@@ -175,6 +174,7 @@ section:target {
   width: 100%;
   position: relative;
   display: inline-block;
+  margin-top: 1rem;
 }
 
 audio,
@@ -203,27 +203,21 @@ canvas {
   image-rendering: pixelated;
 }
 
+button {
+  margin-left: 0.5rem;
+}
+
 /* ===================
   ALL: Orange Theme
  =================== */
 
 .header-container {
   margin: 0 auto;
-  padding: 2em;
   max-width: 800px;
-}
-
-.profileImage {
-  width: 4em;
-  height: 4em;
-  display: block;
-  float: left;
-  border-radius: 100%;
 }
 
 .main-container {
   margin: 0 auto;
-  margin-top: 3em;
   max-width: 800px;
   position: relative;
 }
@@ -297,6 +291,19 @@ canvas {
 .qut li p {
   margin:  0 auto;
 }
+
+.date-picker {
+  padding-bottom: 0.4rem !important;
+  width: 10rem !important;
+}
+
+._chart{
+  width: 100%;
+  min-height: 900px;
+  background-color: #ffffff !important;
+  font-size: 3rem;
+}
+path.domain { display: none; }
 /* ==============
   MOBILE: Main
  ============== */
