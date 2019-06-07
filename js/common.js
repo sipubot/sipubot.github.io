@@ -65,7 +65,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     NODES.log();
 
     function FETCHER() {
-        this.RqBASE_URL = "";
+        this.RqBASE_URL = "https://sipu.iptime.org";
         this.RqADD_HEADER = {};
         this.RqMethod = "POST";
         this.RqContentType = "application/json";
@@ -306,7 +306,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     };
 
     function init() {
-        workers.qutget.triggerfunc();
     }
 
     SIPUCOMMON.run = function () {
