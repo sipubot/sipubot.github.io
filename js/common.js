@@ -205,7 +205,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 "email": NODES.INPUT.LoginEmail.value,
                 "password": CryptoJS.SHA3(NODES.INPUT.LoginPassword[0].value, {
                     outputLength: 512
-                })
+                }).toString()
             };
         };
         n.RqADD_URL = "/login"
