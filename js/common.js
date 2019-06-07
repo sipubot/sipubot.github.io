@@ -184,10 +184,10 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
 
     workers.qutset = function () {
         var n = new FETCHER();
-        n.triggerNode = NODES.BUTTON.Quot;
-        n.getNode = NODES.INPUT.Quot;
+        n.triggerNode = NODES.BUTTON.Quot[0];
+        n.getNode = NODES.INPUT.Quot[0];
         //n.nodeDataGet = 
-        n.setNode = NODES.UL.Quot;
+        n.setNode = NODES.UL.Quot[0];
         n.setPushType = "ADD";
         n.setHTML = "";
         n.RqADD_URL = "/qut"
