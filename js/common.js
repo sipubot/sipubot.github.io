@@ -93,10 +93,8 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             self.RqHEADER.append(a[0], a[1]);
         });
         self.getDataObj = self.RequestBodyGetter();
-        if (!self.RqMethod === "GET") {
-            self.getDataStr = JSON.stringify(self.getDataObj);
-            self.RqBody = self.getDataStr;
-        }
+        self.getDataStr = JSON.stringify(self.getDataObj);
+        self.RqBody = self.getDataStr;
         self.Rqinit = {
             method: self.RqMethod,
             headers: self.RqHEADER,
