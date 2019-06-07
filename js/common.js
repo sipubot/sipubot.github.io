@@ -81,7 +81,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         this.setPushType = "SET"; // "ADD_"
         this.setHTML; // "{date}This is Dummy{amount}";
     }
-    FETCHER.prototype.ResponseCallback = (res) => (console.log(res));
     FETCHER.prototype.RequestBodyGetter = function () {};
     FETCHER.prototype.fetch = function () {
         var self = this;
@@ -93,7 +92,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         Object.entries(self.RqADD_HEADER).map(a => {
             self.RqHEADER.append(a[0], a[1]);
         });
-        self.getDataObj = self.RequestBodyGetter(); 
+        self.getDataObj = self.RequestBodyGetter();
         if (!self.RqMethod === "GET") {
             self.getDataStr = JSON.stringify(self.getDataObj);
             self.RqBody = self.getDataStr;
@@ -184,6 +183,10 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             self.triggerfunc();
         }, false);
     };
+    FETCHER.prototype.ResponseCallback = function (data) {
+        var self = this;
+        self.nodeDataSet(data);
+    }
     FETCHER.prototype.triggerfunc = function () {
         var self = this;
         self.fetch();
@@ -211,7 +214,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.RqADD_URL = "/qut"
         n.RqMethod = "POST"
         n.RequestBodyGetter = n.nodeDataGet;
-        n.ResponseCallback = function (data) {
+        n.nodeDataSet = function (data) {
             n.getNode.value = "";
             data.map(a => {
                 var str = a["message"];
@@ -237,7 +240,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.RqADD_URL = "/qut"
         n.RqMethod = "GET"
         n.RequestBodyGetter = () => {};
-        n.ResponseCallback = function (data) {
+        n.nodeDataSet = function (data) {
             n.setNode.innerHTML = "";
             data.map(a => {
                 var str = a["message"];
@@ -273,7 +276,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     }
 
     function chunkString(str, length) {
-        console.log(str,length)
         if (length === 1) {
             return str.split('');
         }
