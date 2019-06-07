@@ -188,7 +188,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         var n = new FETCHER();
         n.triggerNode = NODES.BUTTON.Quot[0];
         n.getNode = NODES.INPUT.Quot[0];
-        //n.nodeDataGet = 
+        n.nodeDataGet = function () {
+            return {"message":n.getNode.value};
+        };
         n.setNode = NODES.UL.Quot[0];
         n.setPushType = "ADD";
         n.setHTML = "";
@@ -215,11 +217,12 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.setHTML = "";
         n.RqADD_URL = "/qut"
         n.RqMethod = "GET"
-        n.RequestBodyGetter = () => {};
+        n.RequestBodyGetter = () => {
+        };
         n.ResponseCallback = function (data) {
             n.setNode.innerHTML = "";
             data.map(a => {
-                var s = a.split('').map(c => `<span>${c}</span>`).join('');
+                var s = a["messsage"].split('').map(c => `<span>${c}</span>`).join('');
                 n.setNode.innerHTML += `<h4>${s}</h4>`;
             });
         };
