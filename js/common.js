@@ -110,6 +110,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 if (self.RqMethod === "POST") {
                     response.text().then(data => {
                         console.log(data);
+                        self.getDataObj = JSON.parse(self.getDataObj);
                         if (Array.isArray(self.getDataObj)) {
                             self.ResponseCallback(self.getDataObj);
                         } else {
@@ -147,6 +148,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             return self.getDataObj;
         }
         self.getDataObj = self.getNode.value || self.getNode.options[self.getNode.selectedIndex].value;
+        self.getNode.value = "";
         return self.getDataObj;
     }
     FETCHER.prototype.nodeDataSet = function (data) {
@@ -165,10 +167,13 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     }
     FETCHER.prototype.binder = function () {
         var self = this;
-        self.triggerNode.addEventListener('keyup', (e) => {
+        self.triggerNode.addEventListener("keyup", (e) => {
             if (e.keyCode === 13) self.triggerfunc();
         }, false);
-        self.triggerNode.addEventListener('click touchstart', (e) => {
+        self.triggerNode.addEventListener("click", (e) => {
+            self.triggerfunc();
+        }, false);
+        self.triggerNode.addEventListener("touchstart", (e) => {
             self.triggerfunc();
         }, false);
     };
@@ -198,8 +203,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.RqMethod = "POST"
         n.RequestBodyGetter = n.nodeDataGet;
         n.ResponseCallback = function (data) {
+            n.getNode.value = "";
             data.map(a => {
-                var s = a.split('').map(c => `<span>${c}</span>`).join('');
+                var s = a["message"].split('').map(c => `<span>${c}</span>`).join('');
                 n.setNode.innerHTML += `<li class="list-group-item"><h4>${s}</h4></li>`;
             });
         };
