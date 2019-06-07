@@ -272,13 +272,17 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.RqMethod = "GET"
         n.fetch();
     }
-
+    CryptoJS.SHA3(document
+        .getElementById("password-temp").value, {
+    outputLength : 256
+});
     function chunkString(str, length) {
         if (length === 1) {
             return str.split('');
         }
         return str.match(new RegExp('.{1,' + length + '}', 'g'));
     }
+
 
     function life() {
         var sheep = 0;
