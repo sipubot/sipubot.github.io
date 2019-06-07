@@ -222,7 +222,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.ResponseCallback = function (data) {
             n.setNode.innerHTML = "";
             data.map(a => {
-                var s = a["messsage"].split('').map(c => `<span>${c}</span>`).join('');
+                var s = a["message"].split('').map(c => `<span>${c}</span>`).join('');
                 n.setNode.innerHTML += `<h4>${s}</h4>`;
             });
         };
