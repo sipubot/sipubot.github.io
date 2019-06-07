@@ -202,7 +202,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.triggerNode = NODES.BUTTON.Login[0];
         n.nodeDataGet = function () {
             return {
-                "email": NODES.INPUT.LoginEmail.value,
+                "email": NODES.INPUT.LoginEmail[0].value,
                 "password": CryptoJS.SHA3(NODES.INPUT.LoginPassword[0].value, {
                     outputLength: 512
                 }).toString()
