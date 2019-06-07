@@ -99,6 +99,30 @@
     -webkit-animation-delay: 0.8s;
 }
 
+#quot-board h4 span:nth-child(15) {
+    -webkit-animation-delay: 0.9s;
+}
+
+#quot-board h4 span:nth-child(16) {
+    -webkit-animation-delay: 1.0s;
+}
+
+#quot-board h4 span:nth-child(17) {
+    -webkit-animation-delay: 1.1s;
+}
+
+#quot-board h4 span:nth-child(18) {
+    -webkit-animation-delay: 1.2s;
+}
+
+#quot-board h4 span:nth-child(17) {
+    -webkit-animation-delay: 1.3s;
+}
+
+#quot-board h4 span:nth-child(18) {
+    -webkit-animation-delay: 1.4s;
+}
+
 /* ANIMATION */
 @-webkit-keyframes bounce {
     100% {
