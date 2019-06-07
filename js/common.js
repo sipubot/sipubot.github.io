@@ -283,7 +283,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     function life() {
         var sheep = 0;
         var sp = NODES.P.LiveTime[0];
-        var sp2 = NODES.P.LiveOn[0];
+        var sp2 = NODES.SPAN.LiveOn[0];
         NODES.IMG.LiveOn[0].src = getPic(new Date().getUTCHours());
         var startval = 1089658152;
         var func = function () {
