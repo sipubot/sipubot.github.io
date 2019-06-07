@@ -197,6 +197,33 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         })
     }
 
+    Workers.login = function () {
+        var n = new FETCHER();
+        n.triggerNode = NODES.BUTTON.Login[0];
+        n.nodeDataGet = function () {
+            return {
+                "email": NODES.INPUT.LoginEmail,
+                "password": CryptoJS.SHA3(NODES.INPUT.LoginPassword, {
+                    outputLength: 512
+                })
+            };
+        };
+        n.RqADD_URL = "/login"
+        n.RqMethod = "POST"
+        n.RequestBodyGetter = n.nodeDataGet;
+        n.triggerfunc = n.fetch;
+        n.binder();
+    }
+
+    Workers.logout = function () {
+        var n = new FETCHER();
+        n.triggerNode = NODES.BUTTON.Logout[0];
+        n.RqADD_URL = "/logout"
+        n.RqMethod = "GET"
+        n.triggerfunc = n.fetch;
+        n.binder();
+    }
+
     Workers.qutset = function () {
         var n = new FETCHER();
         n.triggerNode = NODES.BUTTON.Quot[0];
@@ -272,10 +299,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.RqMethod = "GET"
         n.fetch();
     }
-    CryptoJS.SHA3(document
-        .getElementById("password-temp").value, {
-    outputLength : 256
-});
+
     function chunkString(str, length) {
         if (length === 1) {
             return str.split('');
