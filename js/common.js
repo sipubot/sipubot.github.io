@@ -213,7 +213,11 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.ResponseCallback = function (data) {
             n.getNode.value = "";
             data.map(a => {
-                var s = chunkString(a["message"], Math.floor(a["message"].length * 0.1)).map(c => `<span>${c}</span>`).join('');
+                var str = a["message"];
+                var len = str.length < 10 ? 1 : str.length * 0.1;
+                len = Math.floor(len);
+                str = chunkString(str, len);
+                var s = str.map(c => `<span>${c}</span>`).join('');
                 n.setNode.innerHTML += `<li class="list-group-item"><h4>${s}</h4></li>`;
             });
         };
@@ -235,7 +239,11 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.ResponseCallback = function (data) {
             n.setNode.innerHTML = "";
             data.map(a => {
-                var s = chunkString(a["message"], Math.floor(a["message"].length * 0.1)).map(c => `<span>${c}</span>`).join('');
+                var str = a["message"];
+                var len = str.length < 10 ? 1 : str.length * 0.1;
+                len = Math.floor(len);
+                str = chunkString(str, len);
+                var s = str.map(c => `<span>${c}</span>`).join('');
                 n.setNode.innerHTML += `<li class="list-group-item"><h4>${s}</h4></li>`;
             });
         };
