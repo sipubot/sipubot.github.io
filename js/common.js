@@ -143,6 +143,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     };
     FETCHER.prototype.nodeDataGet = function () {
         var self = this;
+        if (self.RqMethod === "GET") {
+            return;
+        }
         if (!isinsertNode(self.getNode)) {
             self.getDataObj = null;
             return self.getDataObj;
@@ -189,7 +192,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         })
     }
 
-    workers.qutset = function () {
+    Workers.qutset = function () {
         var n = new FETCHER();
         n.triggerNode = NODES.BUTTON.Quot[0];
         n.getNode = NODES.INPUT.Quot[0];
@@ -215,7 +218,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.binder();
     }
 
-    workers.qutget = function () {
+    Workers.qutget = function () {
         var n = new FETCHER();
         //n.triggerNode = NODES.BUTTON.Quot[0];
         //n.getNode = NODES.INPUT.Quot[0];
@@ -229,14 +232,32 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.ResponseCallback = function (data) {
             n.setNode.innerHTML = "";
             data.map(a => {
-                var s = achunkString(a["message"], Math.floor(a["message"].length * 0.1)).map(c => `<span>${c}</span>`).join('');
+                var s = chunkString(a["message"], Math.floor(a["message"].length * 0.1)).map(c => `<span>${c}</span>`).join('');
                 n.setNode.innerHTML += `<li class="list-group-item"><h4>${s}</h4></li>`;
             });
         };
-        n.fetch();
         //n.triggerfunc = n.fetch;
         //n.binder();
+        n.fetch();
+    }
 
+    Workers.linkget = function () {
+        var n = new FETCHER();
+        n.RqBASE_URL = "/data/link.json";
+        n.setNode = NODES.UL.Link[0];
+        n.setPushType = "SET";
+        n.setHTML = `<a href="{href}"><li class="Icon" style="background-image : url({imageurl})"><p>{picon}</p></li></a>`;
+        n.RqMethod = "GET"
+        n.fetch();
+    }
+    Workers.appget = function () {
+        var n = new FETCHER();
+        n.RqBASE_URL = "/data/app.json";
+        n.setNode = NODES.UL.App[0];
+        n.setPushType = "SET";
+        n.setHTML = `<a href="{href}"><li class="Icon" style="background-image : url({imageurl})"><p>{picon}</p></li></a>`;
+        n.RqMethod = "GET"
+        n.fetch();
     }
 
     function chunkString(str, length) {
