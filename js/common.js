@@ -223,7 +223,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             n.setNode.innerHTML = "";
             data.map(a => {
                 var s = a["message"].split('').map(c => `<span>${c}</span>`).join('');
-                n.setNode.innerHTML += `<h4>${s}</h4>`;
+                n.setNode.innerHTML += `<li class="list-group-item"><h4>${s}</h4></li>`;
             });
         };
         n.fetch();
