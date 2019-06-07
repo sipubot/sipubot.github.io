@@ -261,6 +261,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     }
 
     function chunkString(str, length) {
+        if (length === 1) {
+            return str.split('');
+        }
         return str.match(new RegExp('.{1,' + length + '}', 'g'));
     }
 
