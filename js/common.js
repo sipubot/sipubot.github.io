@@ -303,7 +303,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     };
 
     function init() {
-
+        workers.qutget.triggerfunc();
     }
 
     SIPUCOMMON.run = function () {
