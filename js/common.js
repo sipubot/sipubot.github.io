@@ -66,6 +66,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
 
     function FETCHER() {
         this.RqBASE_URL = "https://sipu.iptime.org";
+        this.RqADD_URL = "";
         this.RqADD_HEADER = {};
         this.RqMethod = "POST";
         this.RqContentType = "application/json";
