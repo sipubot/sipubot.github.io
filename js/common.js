@@ -282,8 +282,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
 
     function life() {
         var sheep = 0;
-        var sp = document.getElementById('lifetime');
-        var sp2 = document.getElementById('lifeplace');
+        var sp = NODES.P.LiveTime[0];
+        var sp2 = NODES.P.LiveOn[0];
+        NODES.IMG.LiveOn[0].src = getPic(new Date().getUTCHours());
         var startval = 1089658152;
         var func = function () {
             var addval = new Date() - new Date("2015-01-01");
@@ -312,7 +313,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                     case (21 <= h):
                         return "FreeTime on Week!";
                     default:
-
                 }
             } else {
                 switch (true) {
@@ -322,6 +322,31 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                     case (7 <= h):
                         sheep = 0;
                         return "Weekend Plan!";
+                    default:
+                }
+            }
+        }
+
+        function getPic(h) {
+            var weekNumber = (new Date()).getDay();
+            if (0 < weekNumber && 5 >= weekNumber) {
+                switch (true) {
+                    case (7 > h):
+                        return "https://66.media.tumblr.com/b7aafe176884b49659af62347d1e4571/tumblr_pskw2aOJMP1s8funmo1_250.jpg";
+                    case (18 > h && 7 <= h):
+                        return "https://66.media.tumblr.com/b7aafe176884b49659af62347d1e4571/tumblr_pskw2aOJMP1s8funmo1_250.jpg";
+                    case (18 <= h && 21 > h):
+                        return "https://66.media.tumblr.com/b7aafe176884b49659af62347d1e4571/tumblr_pskw2aOJMP1s8funmo1_250.jpg";
+                    case (21 <= h):
+                        return "https://66.media.tumblr.com/b7aafe176884b49659af62347d1e4571/tumblr_pskw2aOJMP1s8funmo1_250.jpg";
+                    default:
+                }
+            } else {
+                switch (true) {
+                    case (7 > h):
+                        return "https://66.media.tumblr.com/b7aafe176884b49659af62347d1e4571/tumblr_pskw2aOJMP1s8funmo1_250.jpg";
+                    case (7 <= h):
+                        return "https://66.media.tumblr.com/b7aafe176884b49659af62347d1e4571/tumblr_pskw2aOJMP1s8funmo1_250.jpg";
                     default:
                 }
             }
@@ -352,7 +377,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         }
     }
 
-    var DATA = {
+    var statDATA = {
         MASTER_URL: "https://sipu.iptime.org/",
         IMOJI_LIST: ["status-sad.png", "status-nom.png", "status-hap.png"],
         IMOJI_BACK: ["#ef6f45", "#c0c0c0", "#94de59"]
@@ -363,6 +388,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     SIPUCOMMON.run = function () {
         Workerrunner();
         init();
+        life();
     };
     return SIPUCOMMON;
 })(window.SIPUCOMMON || {}, jQuery);
