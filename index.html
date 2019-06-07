@@ -22,6 +22,7 @@
     <!--[if lt IE 8]>
         <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
+    <canvas id="snail" width="40" height="40" style="position: absolute; left: 0px; top: 0px; z-index: 1000;"></canvas>
     <nav role='navigation'>
         <div id="menuToggle">
             <input type="checkbox" />
@@ -247,8 +248,7 @@
                         <input data-node="Quot" type="text" class="form-control" placeholder="Say Some..."
                             aria-label="Say Some..." aria-describedby="basic-addon2">
                         <div class="input-group-append">
-                            <button data-node="Quot" class="btn btn-outline-secondary"
-                                type="button">Button</button>
+                            <button data-node="Quot" class="btn btn-outline-secondary" type="button">Button</button>
                         </div>
                     </div>
                     <ul id="quot-board" class="list-group list-group-flush qut" data-node="Quot">
