@@ -199,7 +199,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
 
     Workers.dataget = function () {
         var n = new FETCHER();
-        n.triggerNode = NODES.BUTTON.DataSerach[0];
+        n.triggerNode = NODES.BUTTON.DataSearch[0];
         n.getNode = NODES.INPUT.DatePick[0];
         n.nodeDataGet = function () {
             if (n.getNode.value.length > 0) {
