@@ -100,7 +100,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-body border-0">
-                        <h3>Buy!</h3>
+                        <h3>Bye!</h3>
                     </div>
                     <div class="modal-footer border-0">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -115,9 +115,9 @@
             <section id="data">
                 <header class="wrapper clearfix">
                     <div class="text-right">
-                        <input class="date-picker" type="text" placeholder="Select Date.." data-id="datetime"
+                        <input data-node="DatePick" class="date-picker" type="text" placeholder="Select Date.." data-id="datetime"
                             readonly="readonly">
-                        <button data-node="data-search" type="button" class="btn btn-outline-light">SEARCH</button>
+                        <button data-node="DataSearch" type="button" class="btn btn-outline-light">SEARCH</button>
                         <button data-node="data-new-modal" data-toggle="modal" data-target="#data-new-modal"
                             type="button" class="btn btn-outline-light">NEW</button>
                     </div>
@@ -134,7 +134,7 @@
                                 <th scope="col">AMOUNT</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody data-node="DataTable">
                             <tr>
                                 <th scope="row"><button>-</button></th>
                                 <td>Mark</td>
@@ -249,6 +249,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.5.7/flatpickr.min.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
+    <script type="text/javascript" src="js/common.js"></script>
     <link rel="stylesheet" href="stylesheets/common.css">
 
     <script>
