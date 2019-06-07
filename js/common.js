@@ -75,6 +75,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         this.getNode;
         this.setNode;
         this.getDataObj;
+        this.getDataStr;
         this.setDataObj;
         this.setPushType = "SET"; // "ADD_"
         this.setHTML; // "{date}This is Dummy{amount}";
@@ -91,8 +92,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         Object.entries(self.RqADD_HEADER).map(a => {
             self.RqHEADER.append(a[0], a[1]);
         });
-        self.getDataObj = JSON.stringify(self.RequestBodyGetter());
-        self.RqBody = self.getDataObj;
+        self.getDataObj = self.RequestBodyGetter(); 
+        self.getDataStr = JSON.stringify(self.getDataObj);
+        self.RqBody = self.getDataStr;
         self.Rqinit = {
             method: self.RqMethod,
             headers: self.RqHEADER,
@@ -110,7 +112,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 if (self.RqMethod === "POST") {
                     response.text().then(data => {
                         console.log(data);
-                        self.getDataObj = JSON.parse(self.getDataObj);
                         if (Array.isArray(self.getDataObj)) {
                             self.ResponseCallback(self.getDataObj);
                         } else {
@@ -210,7 +211,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.ResponseCallback = function (data) {
             n.getNode.value = "";
             data.map(a => {
-                var s = achunkString(a["message"], Math.floor(a["message"].length * 0.1)).map(c => `<span>${c}</span>`).join('');
+                var s = chunkString(a["message"], Math.floor(a["message"].length * 0.1)).map(c => `<span>${c}</span>`).join('');
                 n.setNode.innerHTML += `<li class="list-group-item"><h4>${s}</h4></li>`;
             });
         };
