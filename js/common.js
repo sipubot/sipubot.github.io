@@ -194,7 +194,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.triggerNode = NODES.BUTTON.Quot[0];
         n.getNode = NODES.INPUT.Quot[0];
         n.nodeDataGet = function () {
-            return {"message":n.getNode.value};
+            return {
+                "message": n.getNode.value
+            };
         };
         n.setNode = NODES.UL.Quot[0];
         n.setPushType = "ADD";
@@ -205,7 +207,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.ResponseCallback = function (data) {
             n.getNode.value = "";
             data.map(a => {
-                var s = a["message"].split('').map(c => `<span>${c}</span>`).join('');
+                var s = achunkString(a["message"], Math.floor(a["message"].length * 0.1)).map(c => `<span>${c}</span>`).join('');
                 n.setNode.innerHTML += `<li class="list-group-item"><h4>${s}</h4></li>`;
             });
         };
@@ -223,12 +225,11 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.setHTML = "";
         n.RqADD_URL = "/qut"
         n.RqMethod = "GET"
-        n.RequestBodyGetter = () => {
-        };
+        n.RequestBodyGetter = () => {};
         n.ResponseCallback = function (data) {
             n.setNode.innerHTML = "";
             data.map(a => {
-                var s = a["message"].split('').map(c => `<span>${c}</span>`).join('');
+                var s = achunkString(a["message"], Math.floor(a["message"].length * 0.1)).map(c => `<span>${c}</span>`).join('');
                 n.setNode.innerHTML += `<li class="list-group-item"><h4>${s}</h4></li>`;
             });
         };
@@ -236,6 +237,10 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         //n.triggerfunc = n.fetch;
         //n.binder();
 
+    }
+
+    function chunkString(str, length) {
+        return str.match(new RegExp('.{1,' + length + '}', 'g'));
     }
 
     function life() {
