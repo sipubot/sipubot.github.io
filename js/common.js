@@ -205,8 +205,8 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
 
     workers.qutget = function () {
         var n = new FETCHER();
-        n.triggerNode = NODES.BUTTON.Quot[0];
-        n.getNode = NODES.INPUT.Quot[0];
+        //n.triggerNode = NODES.BUTTON.Quot[0];
+        //n.getNode = NODES.INPUT.Quot[0];
         //n.nodeDataGet = 
         n.setNode = NODES.UL.Quot[0];
         n.setPushType = "SET";
@@ -221,8 +221,10 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 n.setNode.innerHTML += `<h4>${s}</h4>`;
             });
         };
-        n.triggerfunc = n.fetch;
-        n.binder();
+        n.fetch();
+        //n.triggerfunc = n.fetch;
+        //n.binder();
+        
     }
 
     function life() {
