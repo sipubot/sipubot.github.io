@@ -129,10 +129,12 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                         self.ResponseCallback(self.setDataObj);
                     });
                 }
-                response.text().then((data) => {
-                    self.setDataObj = data;
-                    self.ResponseCallback(self.setDataObj);
-                });
+                if (self.RsType === "text") {
+                    response.text().then((data) => {
+                        self.setDataObj = data;
+                        self.ResponseCallback(self.setDataObj);
+                    });
+                }
             })
             .catch(function (error) {
                 console.log('There has been a problem with your fetch operation: ' + error.message);
@@ -224,7 +226,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.fetch();
         //n.triggerfunc = n.fetch;
         //n.binder();
-        
+
     }
 
     function life() {
@@ -305,8 +307,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         IMOJI_BACK: ["#ef6f45", "#c0c0c0", "#94de59"]
     };
 
-    function init() {
-    }
+    function init() {}
 
     SIPUCOMMON.run = function () {
         workerrunner();
