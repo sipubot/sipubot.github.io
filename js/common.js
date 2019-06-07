@@ -62,6 +62,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     };
     //노드맵은 초기 생성필요
     NODES.init();
+    NODES.log();
 
     function FETCHER() {
         this.RqBASE_URL = "";
