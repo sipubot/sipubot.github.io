@@ -184,10 +184,10 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         var self = this;
         self.fetch();
     };
-    var workers = {};
+    var Workers = {};
 
-    function workerrunner() {
-        Object.entries(workers).map(a => {
+    function Workerrunner() {
+        Object.entries(Workers).map(a => {
             a[1]();
         })
     }
@@ -345,7 +345,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     function init() {}
 
     SIPUCOMMON.run = function () {
-        workerrunner();
+        Workerrunner();
         init();
     };
     return SIPUCOMMON;
