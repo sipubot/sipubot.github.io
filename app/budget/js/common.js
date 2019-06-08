@@ -43,16 +43,23 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             for (var i = 0; i < node.length; i++) {
                 if (node[i].hasAttribute(datatag) || node[i].getAttribute(datatag) !== null) {
                     if (node[i].getAttribute(datatag).length > 0) {
-                        attrValue = node[i].getAttribute(datatag);
+                        attrValue = node[i].getAttribute(datatag).split('-');
+                        if (!NODES[attrValue[0]]) {
+                            NODES[attrValue[0]] = {};
+                            NODES[attrValue[0]]["GET"] = {};
+                            NODES[attrValue[0]]["SET"] = {};
+                            NODES[attrValue[0]]["EVT"] = {};
+                        }
                     }
-                    tag = node[i].tagName;
-                    if (!NODES[tag]) {
-                        NODES[tag] = {};
+                    if (attrValue[1] === "GET") {
+                        NODES[attrValue[0]]["GET"][attrValue[2]] = node[i];
                     }
-                    if (!NODES[tag][attrValue]) {
-                        NODES[tag][attrValue] = [];
+                    if (attrValue[1] === "SET") {
+                        NODES[attrValue[0]]["SET"][attrValue[2]] = node[i];
                     }
-                    NODES[tag][attrValue].push(node[i]);
+                    if (attrValue[1] === "EVT") {
+                        NODES[attrValue[0]]["EVT"][attrValue[2]] = node[i];
+                    }
                 }
             }
         },
@@ -64,137 +71,230 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     NODES.init();
     NODES.log();
 
-    function FETCHER() {
-        this.RqBASE_URL = "https://sipu.iptime.org";
-        this.RqADD_URL = "";
-        this.RqADD_HEADER = {};
-        this.RqMethod = "POST";
-        this.RqContentType = "application/json";
-        this.RsType = "json";
+    var DATA = {};
 
-        this.triggerNode;
-        this.getNode;
-        this.setNode;
-        this.getDataObj;
-        this.getDataStr;
-        this.setDataObj;
-        this.setPushType = "SET"; // "ADD_"
-        this.setHTML; // "{date}This is Dummy{amount}";
-    }
-    FETCHER.prototype.fetch = function () {
-        var self = this;
-        if (self.RqMethod === "GET" && self.getDataObj !== undefined) {
-            return self.ResponseCallback(self.getDataObj);
+    function WORKER(obj) {
+        console.log(obj);
+        var BASE_URL = obj.BASE_URL || "https://sipu.iptime.org";
+        var ADD_URL = obj.ADD_URL || "";
+        var rqMethod = obj.rqMethod || "POST";
+        var rqContentType = obj.rqContentType || "application/json";
+        var rsContentType = obj.rsContentType || "json";
+        var rqData = typeof(obj.rqData) === "function" ? obj.rqData() : getrqData(NODES[obj.id]);
+        var setHTML = obj.setHTML || "";
+        var setPushType = obj.setPushType || "SET"; // "ADD_"
+        var rsData = "";
+        var rsFunc = obj.rsFunc || setrsData;
+
+        function getrqData(nodes) {
+            if (nodes === undefined) {
+                return;
+            }
+            nodes = nodes["GET"];
+            if (rqMethod === "GET") {
+                return;
+            }
+            var re = {};
+            Object.entries(nodes).map(a => {
+                if (a[1].tagName === "INPUT") {
+                    re[a[0]] = $(a[1]).val();
+                }
+                if (a[1].tagName === "SELECT") {
+                    re[a[0]] = $(a[1]).find(":selected").val();
+                }
+                if (a[1].tagName === "TEXTAREA") {
+                    re[a[0]] = $(a[1]).val();
+                }
+            });
+            return re;
         }
-        self.RqHEADER = new Headers();
-        self.RqHEADER.append("Content-Type", self.RqContentType);
-        Object.entries(self.RqADD_HEADER).map(a => {
-            self.RqHEADER.append(a[0], a[1]);
-        });
-        self.getDataObj = self.RequestBodyGetter();
-        self.getDataStr = JSON.stringify(self.getDataObj);
-        self.RqBody = self.getDataStr;
-        self.Rqinit = {
-            method: self.RqMethod,
-            headers: self.RqHEADER,
-            body: self.RqBody,
+
+        function setrsData(data) {
+            if (Object.entries(NODES[obj.id]["SET"]).length < 1 || setHTML == undefined) {
+                return;
+            }
+            if (!Array.isArray(data)) {
+                data = [data];
+            }
+            if (setPushType !== "ADD") {
+                Object.entries(NODES[obj.id]["SET"]).map(a => {
+                    a[1].innerHTML = "";
+                });
+            }
+            data.map(item => {
+                var t = setHTML;
+                Object.entries(item).map(a => {
+                    t = t.replace(`{${a[0]}}`, a[1]);
+                });
+                Object.entries(NODES[obj.id]["SET"]).map(a => {
+                    a[1].innerHTML += t;
+                });
+            })
+        };
+        //ajax
+        var rqHEADER = new Headers();
+        rqHEADER.append("Content-Type", rqContentType);
+        var rqBody = JSON.stringify(rqData);
+        var rqInit = {
+            method: rqMethod,
+            headers: rqHEADER,
             credentials: 'include',
             mode: 'cors',
             cache: 'default'
         };
-        self.RqURL = self.RqBASE_URL + self.RqADD_URL;
-        fetch(self.RqURL, self.Rqinit)
+        if (rqMethod !== "GET") {
+            rqInit.body = rqBody;
+        }
+        var rqURL = BASE_URL + ADD_URL;
+        console.log(rqInit,rqURL);
+        fetch(rqURL, rqInit)
             .then(response => {
                 if (!response.ok) {
                     console.log("request fail");
+                    return;
                 }
-                if (self.RqMethod === "POST") {
+                if (rqMethod === "POST") {
                     response.text().then(data => {
                         console.log(data);
-                        if (Array.isArray(self.getDataObj)) {
-                            self.ResponseCallback(self.getDataObj);
+                        if (Array.isArray(rqData)) {
+                            rsFunc(rqData);
                         } else {
-                            self.ResponseCallback([self.getDataObj]);
+                            rsFunc([rqData]);
                         }
                     });
-                }
-                if (self.RsType === "blob") {
+                } else if (rsContentType === "blob") {
                     response.blob().then((data) => {
-                        self.setDataObj = data;
-                        self.ResponseCallback(self.setDataObj);
+                        rsData = data;
+                        DATA[obj.id] = rsData;
+                        rsFunc(rsData);
                     });
-                }
-                if (self.RsType === "json") {
+                } else if (rsContentType === "json") {
                     response.json().then((data) => {
-                        self.setDataObj = data;
-                        self.ResponseCallback(self.setDataObj);
+                        rsData = data;
+                        DATA[obj.id] = rsData;
+                        rsFunc(rsData);
                     });
-                }
-                if (self.RsType === "text") {
+                } else if (rsContentType === "text") {
                     response.text().then((data) => {
-                        self.setDataObj = data;
-                        self.ResponseCallback(self.setDataObj);
+                        rsData = data;
+                        DATA[obj.id] = rsData;
+                        rsFunc(rsData);
                     });
                 }
             })
             .catch(function (error) {
                 console.log('There has been a problem with your fetch operation: ' + error.message);
             });
-    };
-    FETCHER.prototype.nodeDataGet = function () {
-        var self = this;
-        if (self.RqMethod === "GET") {
-            return;
-        }
-        if (!isinsertNode(self.getNode)) {
-            self.getDataObj = null;
-            return self.getDataObj;
-        }
-        self.getDataObj = self.getNode.value || self.getNode.options[self.getNode.selectedIndex].value;
-        self.getNode.value = "";
-        return self.getDataObj;
     }
-    FETCHER.prototype.RequestBodyGetter = function () {};
-    FETCHER.prototype.nodeDataSet = function (data) {
-        var self = this;
-        self.setDataObj = data;
-        if (self.setPushType === "SET") {
-            self.setNode.innerHTML = "";
-        }
-        self.setNode.innerHTML += self.setDataObj.map(item => {
-            var t = self.setHTML;
-            Object.entries(item).map(a => {
-                t = t.split(`{${a[0]}}`).join(a[1]);
-            });
-            return t;
-        }).join('');
-    }
-    FETCHER.prototype.binder = function () {
-        var self = this;
-        self.triggerNode.addEventListener("keyup", (e) => {
-            if (e.keyCode === 13) self.triggerfunc();
-        }, false);
-        self.triggerNode.addEventListener("click", (e) => {
-            self.triggerfunc();
-        }, false);
-        self.triggerNode.addEventListener("touchstart", (e) => {
-            self.triggerfunc();
-        }, false);
-    };
-    FETCHER.prototype.ResponseCallback = function (data) {
-        var self = this;
-        self.nodeDataSet(data);
-    }
-    FETCHER.prototype.triggerfunc = function () {
-        var self = this;
-        self.fetch();
-    };
-    var Workers = {};
 
-    function Workerrunner() {
-        Object.entries(Workers).map(a => {
-            a[1]();
-        })
+    var FEEDER = {
+        LOGIN: {
+            id: "LOGIN",
+            //BASE_URL = "https://sipu.iptime.org",
+            ADD_URL: "/login",
+            //rqMethod : "POST",
+            //rqContentType : "application/json",
+            //rsContentType : "json",
+            rqData: function () {
+                return {
+                    "email": NODES.LOGIN.GET.email.value,
+                    "password": CryptoJS.SHA3(NODES.LOGIN.GET.password.value, {
+                        outputLength: 512
+                    }).toString()
+                }
+            },
+            //setHTML : NODES[obj.id].setHTML,
+            //setPushType : "SET",
+            //rsData : "",
+            //rsFunc : setrsData,
+        },
+        LOGOUT: {
+            id: "LOGOUT",
+            //BASE_URL = "https://sipu.iptime.org",
+            ADD_URL: "/logout",
+            rqMethod: "GET",
+            //rqContentType : "application/json",
+            //rsContentType : "json",
+            //rqData :
+            //setHTML : NODES[obj.id].setHTML,
+            //setPushType : "SET",
+            //rsData : "",
+            //rsFunc : setrsData,
+        },
+        QUTSET: {
+            id: "QUTSET",
+            //BASE_URL = "https://sipu.iptime.org",
+            ADD_URL: "/qut",
+            rqMethod: "POST",
+            //rqContentType : "application/json",
+            //rsContentType : "json",
+            //rqData :
+            //setHTML : NODES[obj.id].setHTML,
+            setPushType: "ADD",
+            //rsData : "",
+            rsFunc: function (data) {
+                console.log(data);
+                NODES.QUTSET.SET.message.value = "";
+                data.map(a => {
+                    var str = a["message"];
+                    var len = str.length < 10 ? 1 : str.length * 0.1;
+                    len = Math.floor(len);
+                    str = chunkString(str, len);
+                    var s = str.map(c => `<span>${c}</span>`).join('');
+                    NODES.QUT.SET.ul += `<li class="list-group-item"><h4>${s}</h4></li>`;
+                });
+            }
+        },
+        QUTGET: {
+            id: "QUTGET",
+            //BASE_URL = "https://sipu.iptime.org",
+            ADD_URL: "/qut",
+            rqMethod: "GET",
+            //rqContentType : "application/json",
+            //rsContentType : "json",
+            //rqData :
+            //setHTML : NODES[obj.id].setHTML,
+            //setPushType : "SET",
+            //rsData : "",
+            rsFunc: function (data) {
+                NODES.QUTSET.GET.message.value = "";
+                console.log(NODES.QUT);
+                data.map(a => {
+                    var str = a["message"];
+                    var len = str.length < 10 ? 1 : str.length * 0.1;
+                    len = Math.floor(len);
+                    str = chunkString(str, len);
+                    var s = str.map(c => `<span>${c}</span>`).join('');
+                    NODES.QUT.SET.ul.innerHTML += `<li class="list-group-item"><h4>${s}</h4></li>`;
+                });
+            }
+        },
+        LINK: {
+            id: "LINK",
+            BASE_URL: "/data/link.json",
+            //ADD_URL: "/data/link.json",
+            rqMethod: "GET",
+            //rqContentType : "application/json",
+            //rsContentType : "json",
+            //rqData :function (data) {}
+            setHTML: `<a href="{href}"><li class="Icon" style="background-image : url({imageurl})"><p>{picon}</p></li></a>`
+            //setPushType : "SET",
+            //rsData : "",
+            //rsFunc : function (data) {}
+        },
+        APP: {
+            id: "APP",
+            BASE_URL: "/data/app.json",
+            //ADD_URL: "",
+            rqMethod: "GET",
+            //rqContentType : "application/json",
+            //rsContentType : "json",
+            //rqData :function (data) {}
+            setHTML: `<a href="{href}"><li class="Icon" style="background-image : url({imageurl})"><p>{picon}</p></li></a>`
+            //setPushType : "SET",
+            //rsData : "",
+            //rsFunc : function (data) {}
+        }
     }
 
     var DATA = {};
@@ -522,6 +622,25 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         });
     }
 
+    function initWORKER() {
+        Object.entries(FEEDER).map(a => {
+            if (!NODES[a[0]]) {
+                WORKER(a[1]);
+                return;
+            }
+            var e = Object.entries(NODES[a[0]]["EVT"]);
+            if (e.length === 0) {
+                WORKER(a[1]);
+                return;
+            }
+            e.map(n => {
+                $(n[1]).click(function () {
+                    WORKER(a[1]);
+                });
+            });
+        });
+    }
+
     SIPUCOMMON.delRow = {
         setPage: function (node) {
             $(node).parent().parent().remove();
@@ -535,7 +654,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     }
 
     SIPUCOMMON.run = function () {
-        Workerrunner();
+        initWORKER();
         initCal();
         setPageButton();
     };

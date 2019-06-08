@@ -74,7 +74,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     var DATA = {};
 
     function WORKER(obj) {
-        console.log(obj);
         var BASE_URL = obj.BASE_URL || "https://sipu.iptime.org";
         var ADD_URL = obj.ADD_URL || "";
         var rqMethod = obj.rqMethod || "POST";
@@ -146,7 +145,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             rqInit.body = rqBody;
         }
         var rqURL = BASE_URL + ADD_URL;
-        console.log(rqInit,rqURL);
         fetch(rqURL, rqInit)
             .then(response => {
                 if (!response.ok) {
@@ -155,7 +153,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 }
                 if (rqMethod === "POST") {
                     response.text().then(data => {
-                        console.log(data);
                         if (Array.isArray(rqData)) {
                             rsFunc(rqData);
                         } else {
@@ -233,7 +230,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             setPushType: "ADD",
             //rsData : "",
             rsFunc: function (data) {
-                console.log(data);
                 NODES.QUTSET.SET.message.value = "";
                 data.map(a => {
                     var str = a["message"];
@@ -258,7 +254,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             //rsData : "",
             rsFunc: function (data) {
                 NODES.QUTSET.GET.message.value = "";
-                console.log(NODES.QUT);
                 data.map(a => {
                     var str = a["message"];
                     var len = str.length < 10 ? 1 : str.length * 0.1;
