@@ -199,8 +199,8 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             //rsContentType : "json",
             rqData: function () {
                 return {
-                    "email": NODES.LOGIN.email.value,
-                    "password": CryptoJS.SHA3(NODES.LOGIN.password.value, {
+                    "email": NODES.LOGIN.GET.email.value,
+                    "password": CryptoJS.SHA3(NODES.LOGIN.GET.password.value, {
                         outputLength: 512
                     }).toString()
                 }
