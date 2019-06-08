@@ -196,6 +196,21 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             a[1]();
         })
     }
+    Workers.getcateacc = function () {
+
+    }
+//pub ttype: bool,
+//pub show: bool,
+//pub id: String,
+//pub name: String,
+//
+
+//pub id: String,
+//pub name: String,
+    Workers.accountset = function () {
+        var n = FETCHER()
+
+    }
 
     Workers.dataget = function () {
         var n = new FETCHER();
@@ -215,6 +230,34 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.triggerfunc = n.fetch;
         n.binder();
     }
+
+//    pub seq: u64,
+//    pub date: String,
+//    pub ttype: bool,
+//    pub category_id: String,
+//    pub account_id: String,
+//    pub amount: f64,
+
+
+    Workers.dataset = function () {
+        var n = new FETCHER();
+        n.triggerNode = NODES.BUTTON.NewData[0];
+        n.getNode = NODES.INPUT.NewAmount[0];
+        n.nodeDataGet = function () {
+            if (n.getNode.value.length > 0) {
+                n.RqADD_URL = "/budget/data/" + (n.getNode.value).slice(0,7);
+            }
+        };
+        n.setNode = NODES.TBODY.DataTable[0];
+        n.setPushType = "ADD";
+        n.setHTML = "";
+        n.RqMethod = "GET"
+        n.RequestBodyGetter = n.nodeDataGet;
+        n.setHTML = ``        
+        n.triggerfunc = n.fetch;
+        n.binder();
+    }
+
     function initCal () {
         var fp = flatpickr(".date-picker", {
             dateFormat: "Y-m-d",

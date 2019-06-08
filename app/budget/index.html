@@ -65,31 +65,26 @@
     </div>
     <div class="modal-container">
         <!-- Modal -->
-        <div class="modal fade" id="data-new-modal" tabindex="-1" role="dialog" aria-labelledby="Login"
+        <div class="modal fade" id="data-new-modal" tabindex="-1" role="dialog" aria-labelledby="New-Data"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
-                    <div class="modal-header border-0">
-                        <h5 class="modal-title" id="exampleModalLongTitle">SIGN IN</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form>
-                            <div class="form-group">
-                                <input data-node="login-email" type="email" class="form-control" id="exampleInputEmail1"
-                                    aria-describedby="emailHelp" placeholder="Enter email">
-                            </div>
-                            <div class="form-group">
-                                <input data-node="login-password" type="password" class="form-control"
-                                    id="exampleInputPassword1" placeholder="Password">
-                            </div>
-                        </form>
+                    <h3>New Item</h3>
+                    <input data-node="NewDatePick" class="date-picker" type="text" placeholder="Select Date.."
+                        data-id="datetime" readonly="readonly">
+                    <select data-node="NewAccount" class="custom-select">
+                        <option selected>aaa</option>
+                    </select>
+                    <select data-node="NewCategory" class="custom-select">
+                        <option selected>aaa</option>
+                    </select>
+                    <input data-node="NewAmount" type="text" class="form-control" placeholder="Amount"
+                        aria-label="Username" aria-describedby="basic-addon1">
+                    <div class="modal-body border-0">
                     </div>
                     <div class="modal-footer border-0">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button data-node="login-summit" type="button" class="btn btn-primary">LOGIN</button>
+                        <button data-node="NewData" type="button" class="btn btn-primary">OK</button>
                     </div>
                 </div>
             </div>
@@ -115,8 +110,8 @@
             <section id="data">
                 <header class="wrapper clearfix">
                     <div class="text-right">
-                        <input data-node="DatePick" class="date-picker" type="text" placeholder="Select Date.." data-id="datetime"
-                            readonly="readonly">
+                        <input data-node="DatePick" class="date-picker" type="text" placeholder="Select Date.."
+                            data-id="datetime" readonly="readonly">
                         <button data-node="DataSearch" type="button" class="btn btn-outline-light">SEARCH</button>
                         <button data-node="data-new-modal" data-toggle="modal" data-target="#data-new-modal"
                             type="button" class="btn btn-outline-light">NEW</button>
@@ -222,23 +217,80 @@
             <section id="set">
                 <header class="wrapper clearfix">
                     <div class="text-right">
-                        <button data-node="set-category" type="button" class="btn btn-outline-light">CATEGORY</button>
                         <button data-node="set-account" type="button" class="btn btn-outline-light">ACCOUNT</button>
+                        <button data-node="set-category" type="button" class="btn btn-outline-light">CATEGORY</button>
                         <button data-node="set-tax" type="button" class="btn btn-outline-light">TAX</button>
                     </div>
                 </header>
                 <div class="section clearfix">
-
+                    <div data-node="account-table">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Code</th>
+                                    <th scope="col">Name</th>
+                                </tr>
+                            </thead>
+                            <tbody data-node="AccountTable">
+                                <tr>
+                                    <td>
+                                        <input type="text" class="form-control" placeholder="code" aria-label="Code"
+                                            value="0001">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" placeholder="Name" aria-label="Name"
+                                            value="신한">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button data-node="AcoountNew" type="button" class="btn btn-outline-light">New</button>
+                        <button data-node="AcoountSave" type="button" class="btn btn-outline-light">Save</button>
+                    </div>
+                    <div data-node="category-table">
+                        <table class="table">
+                            <thead>
+                                <!--Type true income-->
+                                <tr>
+                                    <th scope="col">Show</th>
+                                    <th scope="col">Type</th>
+                                    <th scope="col">Code</th>
+                                    <th scope="col">Name</th>
+                                </tr>
+                            </thead>
+                            <tbody data-node="CategoryTable">
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" aria-label="Checkbox for following text input">
+                                    </td>
+                                    <td>
+                                        <select class="custom-select">
+                                            <option value="false" selected>지출</option>
+                                            <option value="true">수입</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" placeholder="code" aria-label="Code"
+                                            value="0001">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" placeholder="Name" aria-label="Name"
+                                            value="이체">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button data-node="CategoryNew" type="button" class="btn btn-outline-light">New</button>
+                        <button data-node="CategorySave" type="button" class="btn btn-outline-light">Save</button>
+                    </div>
                 </div>
             </section>
         </div>
     </div>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
-    </script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
         integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous">
     </script>
