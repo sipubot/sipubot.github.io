@@ -403,9 +403,24 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 n.RqADD_URL = "/budget/data/" + (n.getNode.value).slice(0, 7);
             }
         };
-        n.setNode = NODES.TBODY.DataTable[0];
         n.setPushType = "ADD";
         n.setHTML = "";
+        n.nodeDataSet = function (data) {
+            data.map(item =>{
+                if (!item.ttype) {
+                    self.setNode = $("INPUT[data-node='DataTableExpense']");
+                } else {
+                    self.setNode = $("INPUT[data-node='DataTableIncome']");
+                }
+                $(self.setNode).append(`<TR>
+                <td>${item.date}</td>
+                <td>${DATA.AccountHash[item.account_id]}</td>
+                <td>${DATA.CategoryHash[item.category_id]}</td>
+                <td>${item.amount}</td>
+                <th scope="row"><button value="${item.seq}" type="button" class="btn btn-secondary" onclick="javascript:SIPUCOMMON.delRow.setPage(this);">-</button></th>
+                </TR>`);
+            });
+        }
         n.RqMethod = "GET"
         n.RequestBodyGetter = n.nodeDataGet;
         n.setHTML = ``
