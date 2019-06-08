@@ -408,14 +408,16 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     //    pub amount: f64,
     Workers.datadel = function () {
         var n = new FETCHER();
+        n.triggerNode = NODES.BUTTON.NewData[0];
+        n.getNode = NODES.INPUT.NewAmount[0];
+        n.nodeDataGet = function () {
+            return DATA.data.filter(a => a.seq === DATA.delData)[0];
+        };
         n.setPushType = "ADD";
         n.RqADD_URL = "/budget/data/delete";
         n.RqMethod = "POST";
         n.RequestBodyGetter = n.nodeDataGet;
         n.triggerfunc = n.fetch;
-        n.dataPage = function () {
-            return DATA.data.filter(a => a.seq === DATA.delData);
-        };
         DATA.datadeleter = n;
     }
 
@@ -492,8 +494,11 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             $(node).parent().parent().remove();
         },
         dataPage: function (node) {
+            console.log(node);
             DATA.delData = +$(node).val();
+            console.log(DATA.delData);
             DATA.datadeleter.fetch();
+            console.log(DATA.datadeleter);
             $(node).parent().parent().remove();
         }
 
