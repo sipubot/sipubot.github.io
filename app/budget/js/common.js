@@ -199,9 +199,8 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             //rqContentType : "application/json",
             //rsContentType : "json",
             rqData :function () {
-                var data = [];
-                NODES.ACCOUNTSET.SET
-                $(NODES.ACCOUNTSET.SET).find("TR").each((i, tr) => {
+                var data = [];console.log(NODES.ACCOUNTSET.SET.tbody);
+                $(NODES.ACCOUNTSET.SET.tbody).find("TR").each((i, tr) => {
                     var a = {};
                     a.id = $(tr).find("INPUT[data-node='ACCOUNTSET-GET-id']").val();
                     a.name = $(tr).find("INPUT[data-node='ACCOUNTSET-GET-name']").val();
@@ -222,8 +221,8 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             //rqContentType : "application/json",
             //rsContentType : "json",
             rqData :function () {
-                var data = [];
-                $(NODES.CATEGORYSET.SET).find("TR").each((i, tr) => {
+                var data = []; console.log(NODES.CATEGORYSET.SET.tbody);
+                $(NODES.CATEGORYSET.SET.tbody).find("TR").each((i, tr) => {
                     var a = {};
                     a.show = $(tr).find("INPUT[data-node='CATEGORYSET-GET-show']").is(":checked");
                     a.ttype = $(tr).find("SELECT[data-node='CATEGORYSET-GET-ttype'] option:selected").val() === "false" ? false : true;
@@ -236,7 +235,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             setHTML: ``,
             //setPushType : "SET",
             //rsData : "",
-            //rsFunc : function (data) {},
+            rsFunc : function (data) {
+                
+            },
             id: "CATEGORYSET"
         },
         ACCOUNTGET: {
