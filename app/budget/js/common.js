@@ -467,6 +467,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.setPushType = "SET";
         n.nodeDataSet = function (data) {
             DATA.data = data;
+            n.setNode.innerHTML = "";
             data.map(item => {
                 $(n.setNode).append(`<TR>
                 <td>${DATA.AccountHash[item.account_id]}</td>
