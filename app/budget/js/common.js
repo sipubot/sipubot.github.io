@@ -268,11 +268,11 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     function setPageButton() {
         var tempAccount = `<tr><td><input type="text" class="form-control" placeholder="code" value="0001"></td><td><input type="text" class="form-control" placeholder="Name" value="신한"></td><td><button data-node="AccountDel" type="button" class="btn btn-secondary">삭제</button></td></tr>`;
         var tempCategory = `<tr><td><input type="checkbox" checked></td><select class="custom-select"><option value="false" selected>지출</option><option value="true">수입</option></select></td><td><input type="text" class="form-control" placeholder="code" value="0001"></td><td><input type="text" class="form-control" placeholder="Name" value="이체"></td><td><button data-node="CategoryDel" type="button" class="btn btn-secondary">삭제</button></td></tr>`;
-        $("BUTTON[data-node='CategoryNew']").click(function(){
-            $("TBODY[data-node='CategoryTable']").append(tempCategory);
-        });
         $("BUTTON[data-node='AccountNew']").click(function (){
             $("TBODY[data-node='AccountTable']").append(tempAccount);
+        });
+        $("BUTTON[data-node='CategoryNew']").click(function(){
+            $("TBODY[data-node='CategoryTable']").append(tempCategory);
         });
         $("BUTTON[data-node='AccountDel']").click(function (){
             $(this).parent().parent().remove();
