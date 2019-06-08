@@ -74,9 +74,10 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     var DATA = {};
 
     function WORKER(obj) {
+        
         var BASE_URL = obj.BASE_URL || "https://sipu.iptime.org";
         var ADD_URL = obj.ADD_URL || "";
-        var rqMethod = obj.reMethod || "POST";
+        var rqMethod = obj.rqMethod || "POST";
         var rqContentType = obj.rqContentType || "application/json";
         var rsContentType = obj.rsContentType || "json";
         var rqData = obj.rqData || getrqData(NODES[obj.id]["GET"]);
@@ -86,7 +87,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         var rsFunc = obj.rsFunc || setrsData;
 
         function getrqData(nodes) {
-            if (reMethod === "GET") {
+            if (rqMethod === "GET") {
                 return;
             }
             var re = {};
@@ -133,11 +134,13 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         var rqInit = {
             method: rqMethod,
             headers: rqHEADER,
-            body: rqMethod === "GET" ? "" : rqBody,
             credentials: 'include',
             mode: 'cors',
             cache: 'default'
         };
+        if (rqMethod !== "GET") {
+            rqInit.body = rqBody;
+        }
         var rqURL = BASE_URL + ADD_URL;
 
         fetch(rqURL, rqInit)
@@ -256,7 +259,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             id: "QUTGET",
             //BASE_URL = "https://sipu.iptime.org",
             ADD_URL: "/qut",
-            rqMethod: "get",
+            rqMethod: "GET",
             //rqContentType : "application/json",
             //rsContentType : "json",
             //rqData :
@@ -277,8 +280,8 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         },
         LINK: {
             id: "LINK",
-            //BASE_URL = "",
-            ADD_URL: "/data/link.json",
+            BASE_URL : "/data/link.json",
+            //ADD_URL: "/data/link.json",
             rqMethod: "GET",
             //rqContentType : "application/json",
             //rsContentType : "json",
@@ -290,8 +293,8 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         },
         APP: {
             id: "APP",
-            //BASE_URL = "",
-            ADD_URL: "/data/app.json",
+            BASE_URL : "/data/app.json",
+            //ADD_URL: "",
             rqMethod: "GET",
             //rqContentType : "application/json",
             //rsContentType : "json",
@@ -414,19 +417,19 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     };
 
     function initWORKER() {
-        Object.entries(NODES).map(a => {
-            console.log(a);
-            if (a["EVT"] === undefined){
+        Object.entries(FEEDER).map(a => {
+            if (a[1]["EVT"] === undefined){
                 return;
             }
-            var e = Object.entries(a["EVT"]);
+            var e = Object.entries(a[1]["EVT"]);
+            //console.log(a, a[1], e);
             if (e.length === 0) {
-                WORKER(FEEDER[a[1]]);
+                WORKER(FEEDER[a[0]]);
             } else {
+                console.log(a, FEEDER);
                 e.map(n => {
                     $(n[1]).click(function () {
-                        WORKER(FEEDER[a[1]]);
-                        console.log(a[1]);
+                        WORKER(FEEDER[a[0]]);
                     });
                 });
             }
