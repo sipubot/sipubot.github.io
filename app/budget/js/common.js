@@ -356,13 +356,14 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.getNode = NODES.INPUT.NewAmount[0];
         n.nodeDataGet = function () {
             if (n.getNode.value.length > 0) {
-                n.RqADD_URL = "/budget/data/" + (n.getNode.value).slice(0, 7);
+                 + (n.getNode.value).slice(0, 7);
             }
         };
         n.setNode = NODES.TBODY.DataTable[0];
         n.setPushType = "ADD";
         n.setHTML = "";
-        n.RqMethod = "GET"
+        n.RqADD_URL = "/budget/data";
+        n.RqMethod = "POST";
         n.RequestBodyGetter = n.nodeDataGet;
         n.setHTML = ``
         n.triggerfunc = n.fetch;
