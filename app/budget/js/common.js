@@ -405,8 +405,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         };
         n.setPushType = "ADD";
         n.setHTML = "";
+        $("TBODY[data-node='DataTableExpense']").html("");
+        $("TBODY[data-node='DataTableIncome']").html("");
         n.nodeDataSet = function (data) {
-            console.log(data);
             data.map(item =>{
                 if (!item.ttype) {
                     self.setNode = $("TBODY[data-node='DataTableExpense']");
