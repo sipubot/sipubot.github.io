@@ -209,7 +209,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 return data;
             },
             setHTML: ``,
-            //setPushType : "SET",
+            setPushType : "ADD",
             //rsData : "",
             //rsFunc : function (data) {},
             id: "ACCOUNTSET"
@@ -233,7 +233,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 return data;
             },
             setHTML: ``,
-            //setPushType : "SET",
+            setPushType : "ADD.",
             //rsData : "",
             rsFunc : function (data) {
                 
