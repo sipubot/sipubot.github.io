@@ -151,6 +151,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             .then(response => {
                 if (!response.ok) {
                     console.log("request fail");
+                    return;
                 }
                 if (rqMethod === "POST") {
                     response.text().then(data => {
@@ -161,22 +162,19 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                             rsFunc([rqData]);
                         }
                     });
-                }
-                if (rsContentType === "blob") {
+                } else if (rsContentType === "blob") {
                     response.blob().then((data) => {
                         rsData = data;
                         DATA[obj.id] = rsData;
                         rsFunc(rsData);
                     });
-                }
-                if (rsContentType === "json") {
+                } else if (rsContentType === "json") {
                     response.json().then((data) => {
                         rsData = data;
                         DATA[obj.id] = rsData;
                         rsFunc(rsData);
                     });
-                }
-                if (rsContentType === "text") {
+                } else if (rsContentType === "text") {
                     response.text().then((data) => {
                         rsData = data;
                         DATA[obj.id] = rsData;
