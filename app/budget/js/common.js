@@ -205,7 +205,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.getNode = NODES.TBODY.AccountTable[0];
         n.nodeDataGet = function () {
             var data = [];
-            $(n.getNode).find("TR").each((i,tr) => {
+            $(n.getNode).find("TR").each((i, tr) => {
                 var a = {};
                 a.id = $(tr).find("INPUT[data-node='AccountId']").val();
                 a.name = $(tr).find("INPUT[data-node='AccountName']").val();
@@ -247,10 +247,10 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.getNode = NODES.TBODY.CategoryTable[0];
         n.nodeDataGet = function () {
             var data = [];
-            $(n.getNode).find("TR").each((i,tr) => {
+            $(n.getNode).find("TR").each((i, tr) => {
                 var a = {};
                 a.show = $(tr).find("INPUT[data-node='CategoryShow']").is(":checked");
-                a.ttype = $(tr).find("INPUT[data-node='CategoryType'] option:selected").attr("value");
+                a.ttype = $(tr).find("SELECT[data-node='CategoryType'] option:selected").val() === "false" ? false : true;
                 a.id = $(tr).find("INPUT[data-node='CategoryId']").val();
                 a.name = $(tr).find("INPUT[data-node='CategoryName']").val();
                 data.push(a);
@@ -258,7 +258,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             n.getDataObj = data;
             return n.getDataObj;
         };
-        n.setNode = NODES.TBODY.AccountTable[0];
+        n.setNode = NODES.TBODY.CategoryTable[0];
         n.nodeDataSet = function (data) {
             var self = this;
             self.setDataObj = data;
@@ -305,21 +305,43 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 return t;
             }).join('');
         }
-        n.RqADD_URL = "/budget/account";
+        n.RqADD_URL = "/budget/data/account";
         n.RqMethod = "GET";
         n.RequestBodyGetter = n.nodeDataGet;
         n.triggerfunc = n.fetch;
-        //n.fetch();
+        n.fetch();
+        //this.get = n.fetch();
     }
 
-    //pub ttype: bool,
-    //pub show: bool,
-    //pub id: String,
-    //pub name: String,
-    Workers.getcateacc = function () {
-
+    Workers.categoryget = function () {
+        var n = new FETCHER();
+        n.getNode = NODES.TBODY.CategoryTable[0];
+        n.setNode = NODES.TBODY.CategoryTable[0];
+        n.nodeDataSet = function (data) {
+            var self = this;
+            self.setDataObj = data;
+            self.setNode.innerHTML = "";
+            self.setNode.innerHTML += self.setDataObj.map(item => {
+                var t = `<tr>
+                <td><input data-node="CategoryShow" type="checkbox" ${item.show?"checked":""}></td>
+                <td><select data-node="CategoryType" class="custom-select">
+                        <option value="false" ${item.ttype?"":"selected"}>지출</option>
+                        <option value="true" ${!item.ttype?"":"selected"}>수입</option>
+                    </select></td>
+                <td><input data-node="CategoryId" type="text" class="form-control" placeholder="code" value="${item.id}"></td>
+                <td><input data-node="CategoryName" type="text" class="form-control" placeholder="Name" value="${item.name}"></td>
+                <td><button data-node="CategoryDel" type="button" class="btn btn-secondary" onclick="javascript:SIPUCOMMON.delRow.setPage(this);">삭제</button></td>
+                </tr>`;
+                return t;
+            }).join('');
+        }
+        n.RqADD_URL = "/budget/data/category";
+        n.setPushType = "SET";
+        n.RqMethod = "GET";
+        n.RequestBodyGetter = n.nodeDataGet;
+        n.fetch();
     }
-
+    
     Workers.dataget = function () {
         var n = new FETCHER();
         n.triggerNode = NODES.BUTTON.DataSearch[0];
@@ -397,7 +419,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     }
 
     SIPUCOMMON.delRow = {
-        setPage : function (node) {
+        setPage: function (node) {
             $(node).parent().parent().remove();
         }
     }
