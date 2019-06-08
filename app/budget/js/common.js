@@ -378,7 +378,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         },
         CHARTGETMONTH: {
             //BASE_URL: "/data/app.json",
-            ADD_URL: "/budget/stat/category/"+ $('INPUT [data-node="CHARTGET-GET-date"]').val().slice(0,7),
+            ADD_URL: "/budget/stat/category/"+ $('INPUT[data-node="CHARTGET-GET-date"]').val().slice(0,7),
             rqMethod: "GET",
             //rqContentType : "application/json",
             //rsContentType : "json",
@@ -393,7 +393,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         },
         CHARTGETYEAR: {
             //BASE_URL: "/data/app.json",
-            ADD_URL: "/budget/stat/category/"+ $('INPUT [data-node="CHARTGET-GET-date"]').val().slice(0,4),
+            ADD_URL: "/budget/stat/category/"+ $('INPUT[data-node="CHARTGET-GET-date"]').val().slice(0,4),
             rqMethod: "GET",
             //rqContentType : "application/json",
             //rsContentType : "json",
