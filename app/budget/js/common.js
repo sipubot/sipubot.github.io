@@ -383,7 +383,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             <td>${DATA.AccountHash[self.getDataObj.account_id]}</td>
             <td>${DATA.CategoryHash[self.getDataObj.category_id]}</td>
             <td>${self.amount}</td>
-            <th scope="row"><button type="button" class="btn btn-secondary" onclick="javascript:SIPUCOMMON.delRow.setPage(this);">-</button></th>
+            <th scope="row"><button type="button" class="btn btn-secondary" >-</button></th>
             </TR>`);
         }
         n.setPushType = "ADD";
