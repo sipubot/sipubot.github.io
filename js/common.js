@@ -48,6 +48,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                             NODES[attrValue[0]] = {};
                             NODES[attrValue[0]]["GET"] = {};
                             NODES[attrValue[0]]["SET"] = {};
+                            NODES[attrValue[0]]["EVT"] = {};
                         }
                     }
                     if (attrValue[1] === "GET") {
@@ -276,7 +277,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         },
         LINK: {
             id: "LINK",
-            BASE_URL = "",
+            //BASE_URL = "",
             ADD_URL: "/data/link.json",
             rqMethod: "GET",
             //rqContentType : "application/json",
@@ -289,7 +290,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         },
         APP: {
             id: "APP",
-            BASE_URL = "",
+            //BASE_URL = "",
             ADD_URL: "/data/app.json",
             rqMethod: "GET",
             //rqContentType : "application/json",
@@ -311,9 +312,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
 
     function life() {
         var sheep = 0;
-        var sp = NODES.P.LiveTime[0];
-        var sp2 = NODES.SPAN.LiveOn[0];
-        NODES.IMG.LiveOn[0].src = getPic(new Date().getUTCHours());
+        var sp = $('P[data-custom="LiveTime"]');
+        var sp2 = $('SPAN[data-custom="LiveOn"]');
+        $('IMG[data-custom="LiveOn"]').src = getPic(new Date().getUTCHours());
         var startval = 1089658152;
         var func = function () {
             var addval = new Date() - new Date("2015-01-01");
@@ -414,6 +415,10 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
 
     function initWORKER() {
         Object.entries(NODES).map(a => {
+            console.log(a);
+            if (a["EVT"] === undefined){
+                return;
+            }
             var e = Object.entries(a["EVT"]);
             if (e.length === 0) {
                 WORKER(FEEDER[a[1]]);
@@ -421,6 +426,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 e.map(n => {
                     $(n[1]).click(function () {
                         WORKER(FEEDER[a[1]]);
+                        console.log(a[1]);
                     });
                 });
             }
@@ -429,7 +435,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
 
     SIPUCOMMON.run = function () {
         initWORKER();
-        init();
         life();
     };
     return SIPUCOMMON;
