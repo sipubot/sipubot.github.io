@@ -251,7 +251,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     //pub id: String,
     //pub name: String,
     Workers.accountset = function () {
-        var n = FETCHER();
+        var n = new FETCHER();
         n.triggerNode = NODES.BUTTON.AccountSave[0];
         n.getNode = NODES.TBODY.AccountTable[0];
         n.nodeDataGet = function () {
@@ -269,21 +269,17 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.nodeDataSet = function (data) {
             var self = this;
             self.setDataObj = data;
+            self.setNode.innerHTML = "";
             self.setNode.innerHTML += self.setDataObj.map(item => {
                 var t = `<tr>
-                <td>
-                <input type="text" class="form-control" placeholder="code" value="${item.id}">
-                </td>
-                <td>
-                <input type="text" class="form-control" placeholder="Name" value="${item.name}">
-                </td>
-                <td>
-                <button data-node="AccountDel" type="button" class="btn btn-secondary" onclick="javascript:SIPUCOMMON.delRow.setPage(this);>삭제</button>
-                </td>
+                    <td><input data-node="AccountId" type="text" class="form-control" placeholder="code" value="${item.id}"></td>
+                    <td><input data-node="AccountName" type="text" class="form-control" placeholder="Name" value="${item.name}"></td>
+                    <td><button data-node="AccountDel" type="button" class="btn btn-secondary" onclick="javascript:SIPUCOMMON.delRow.setPage(this);">삭제</button></td>
                 </tr>`;
                 return t;
             }).join('');
         }
+        n.RqADD_URL = "/budget/category";
         n.setPushType = "SET";
         n.setHTML = "";
         n.RqMethod = "POST";
@@ -310,10 +306,10 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         });
     }
 
-    SIPUCOMMON.delRow = function () {
-        this.setPage = function (node) {
+    SIPUCOMMON.delRow = {
+        setPage : function (node) {
             $(node).parent().parent().remove();
-        };
+        }
     }
 
     SIPUCOMMON.run = function () {
