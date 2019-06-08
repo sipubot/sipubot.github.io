@@ -462,7 +462,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         var n = new FETCHER();
         n.triggerNode = NODES.BUTTON.StatAll[0];
         n.getNode = NODES.INPUT.DatePick[1];
-        n.setNode = NODES.INPUT.StatTable[1];
+        n.setNode = NODES.TBODY.StatTable[1];
         n.RqADD_URL = "/budget/stat/account/0000"
         n.setPushType = "SET";
         n.nodeDataSet = function (data) {
@@ -478,6 +478,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.RequestBodyGetter = n.nodeDataGet;
         n.triggerfunc = n.fetch;
         n.binder();
+        n.fetch();
     }
 
     function initCal() {
