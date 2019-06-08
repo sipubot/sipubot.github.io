@@ -196,13 +196,129 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             a[1]();
         })
     }
-    Workers.getcateacc = function () {
 
+    var DATA = {};
+
+    Workers.accountset = function () {
+        var n = new FETCHER();
+        n.triggerNode = NODES.BUTTON.AccountSave[0];
+        n.getNode = NODES.TBODY.AccountTable[0];
+        n.nodeDataGet = function () {
+            var data = [];
+            $(n.getNode).find("TR").each((i,tr) => {
+                var a = {};
+                a.id = $(tr).find("INPUT[data-node='AccountId']").val();
+                a.name = $(tr).find("INPUT[data-node='AccountName']").val();
+                data.push(a);
+            });
+            n.getDataObj = data;
+            return n.getDataObj;
+        };
+        n.setNode = NODES.TBODY.AccountTable[0];
+        n.nodeDataSet = function (data) {
+            var self = this;
+            self.setDataObj = data;
+            self.setNode.innerHTML = "";
+            self.setNode.innerHTML += self.setDataObj.map(item => {
+                var t = `<tr>
+                    <td><input data-node="AccountId" type="text" class="form-control" placeholder="code" value="${item.id}"></td>
+                    <td><input data-node="AccountName" type="text" class="form-control" placeholder="Name" value="${item.name}"></td>
+                    <td><button data-node="AccountDel" type="button" class="btn btn-secondary" onclick="javascript:SIPUCOMMON.delRow.setPage(this);">삭제</button></td>
+                </tr>`;
+                return t;
+            }).join('');
+        }
+        n.RqADD_URL = "/budget/account";
+        n.setPushType = "SET";
+        n.setHTML = "";
+        n.RqMethod = "POST";
+        n.RequestBodyGetter = n.nodeDataGet;
+        n.triggerfunc = n.fetch;
+        n.binder();
     }
+
     //pub ttype: bool,
     //pub show: bool,
     //pub id: String,
     //pub name: String,
+    Workers.catergoryset = function () {
+        var n = new FETCHER();
+        n.triggerNode = NODES.BUTTON.CategorySave[0];
+        n.getNode = NODES.TBODY.CategoryTable[0];
+        n.nodeDataGet = function () {
+            var data = [];
+            $(n.getNode).find("TR").each((i,tr) => {
+                var a = {};
+                a.show = $(tr).find("INPUT[data-node='CategoryShow']").is(":checked");
+                a.ttype = $(tr).find("INPUT[data-node='CategoryType'] option:selected").attr("value");
+                a.id = $(tr).find("INPUT[data-node='CategoryId']").val();
+                a.name = $(tr).find("INPUT[data-node='CategoryName']").val();
+                data.push(a);
+            });
+            n.getDataObj = data;
+            return n.getDataObj;
+        };
+        n.setNode = NODES.TBODY.AccountTable[0];
+        n.nodeDataSet = function (data) {
+            var self = this;
+            self.setDataObj = data;
+            self.setNode.innerHTML = "";
+            self.setNode.innerHTML += self.setDataObj.map(item => {
+                var t = `<tr>
+                <td><input data-node="CategoryShow" type="checkbox" ${item.show?"checked":""}></td>
+                <td><select data-node="CategoryType" class="custom-select">
+                        <option value="false" ${item.ttype?"":"selected"}>지출</option>
+                        <option value="true" ${!item.ttype?"":"selected"}>수입</option>
+                    </select></td>
+                <td><input data-node="CategoryId" type="text" class="form-control" placeholder="code" value="${item.id}"></td>
+                <td><input data-node="CategoryName" type="text" class="form-control" placeholder="Name" value="${item.name}"></td>
+                <td><button data-node="CategoryDel" type="button" class="btn btn-secondary" onclick="javascript:SIPUCOMMON.delRow.setPage(this);">삭제</button></td>
+                </tr>`;
+                return t;
+            }).join('');
+        }
+        n.RqADD_URL = "/budget/category";
+        n.setPushType = "SET";
+        n.setHTML = "";
+        n.RqMethod = "POST";
+        n.RequestBodyGetter = n.nodeDataGet;
+        n.triggerfunc = n.fetch;
+        n.binder();
+    }
+
+    Workers.accountget = function () {
+        var n = new FETCHER();
+        n.triggerNode = NODES.BUTTON.AccountSave[0];
+        n.getNode = NODES.TBODY.AccountTable[0];
+        //n.nodeDataGet;
+        n.setNode = NODES.TBODY.AccountTable[0];
+        n.nodeDataSet = function (data) {
+            var self = this;
+            self.setDataObj = data;
+            self.setNode.innerHTML = "";
+            self.setNode.innerHTML += self.setDataObj.map(item => {
+                var t = `<tr>
+                    <td><input data-node="AccountId" type="text" class="form-control" placeholder="code" value="${item.id}"></td>
+                    <td><input data-node="AccountName" type="text" class="form-control" placeholder="Name" value="${item.name}"></td>
+                    <td><button data-node="AccountDel" type="button" class="btn btn-secondary" onclick="javascript:SIPUCOMMON.delRow.setPage(this);">삭제</button></td>
+                </tr>`;
+                return t;
+            }).join('');
+        }
+        n.RqADD_URL = "/budget/account";
+        n.RqMethod = "GET";
+        n.RequestBodyGetter = n.nodeDataGet;
+        n.triggerfunc = n.fetch;
+        //n.fetch();
+    }
+
+    //pub ttype: bool,
+    //pub show: bool,
+    //pub id: String,
+    //pub name: String,
+    Workers.getcateacc = function () {
+
+    }
 
     Workers.dataget = function () {
         var n = new FETCHER();
@@ -248,45 +364,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.binder();
     }
 
-    //pub id: String,
-    //pub name: String,
-    Workers.accountset = function () {
-        var n = new FETCHER();
-        n.triggerNode = NODES.BUTTON.AccountSave[0];
-        n.getNode = NODES.TBODY.AccountTable[0];
-        n.nodeDataGet = function () {
-            var data = [];
-            $(n.getNode).find("TR").each((tr) => {
-                var a = {};
-                a.id = tr.find("INPUT[data-node='AccountId']").val();
-                a.name = tr.find("INPUT[data-node='AccountName']").val();
-                data.push(a);
-            });
-            n.getDataObj = data;
-            return n.getDataObj;
-        };
-        n.setNode = NODES.TBODY.AccountTable[0];
-        n.nodeDataSet = function (data) {
-            var self = this;
-            self.setDataObj = data;
-            self.setNode.innerHTML = "";
-            self.setNode.innerHTML += self.setDataObj.map(item => {
-                var t = `<tr>
-                    <td><input data-node="AccountId" type="text" class="form-control" placeholder="code" value="${item.id}"></td>
-                    <td><input data-node="AccountName" type="text" class="form-control" placeholder="Name" value="${item.name}"></td>
-                    <td><button data-node="AccountDel" type="button" class="btn btn-secondary" onclick="javascript:SIPUCOMMON.delRow.setPage(this);">삭제</button></td>
-                </tr>`;
-                return t;
-            }).join('');
-        }
-        n.RqADD_URL = "/budget/category";
-        n.setPushType = "SET";
-        n.setHTML = "";
-        n.RqMethod = "POST";
-        n.RequestBodyGetter = n.nodeDataGet;
-        n.triggerfunc = n.fetch;
-        n.binder();
-    }
 
     function initCal() {
         var fp = flatpickr(".date-picker", {
@@ -296,8 +373,21 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     }
 
     function setPageButton() {
-        var tempAccount = `<tr><td><input type="text" class="form-control" placeholder="code" value="0001"></td><td><input type="text" class="form-control" placeholder="Name" value="신한"></td><td><button data-node="AccountDel" type="button" class="btn btn-secondary" onclick="javascript:SIPUCOMMON.delRow.setPage(this);">삭제</button></td></tr>`;
-        var tempCategory = `<tr><td><input type="checkbox" checked></td><td><select class="custom-select"><option value="false" selected>지출</option><option value="true">수입</option></select></td><td><input type="text" class="form-control" placeholder="code" value="0001"></td><td><input type="text" class="form-control" placeholder="Name" value="이체"></td><td><button data-node="CategoryDel" type="button" class="btn btn-secondary" onclick="javascript:SIPUCOMMON.delRow.setPage(this);">삭제</button></td></tr>`;
+        var tempAccount = `<tr>
+        <td><input data-node="AccountId" type="text" class="form-control" placeholder="code" value="0001"></td>
+        <td><input data-node="AccountName" type="text" class="form-control" placeholder="Name" value="신한"></td>
+        <td><button data-node="AccountDel" type="button" class="btn btn-secondary" onclick="javascript:SIPUCOMMON.delRow.setPage(this);">삭제</button></td>
+        </tr>`;
+        var tempCategory = `<tr>
+        <td><input data-node="CategoryShow" type="checkbox" checked></td>
+        <td><select data-node="CategoryType" class="custom-select">
+                <option value="false" selected>지출</option>
+                <option value="true">수입</option>
+            </select></td>
+        <td><input data-node="CategoryId" type="text" class="form-control" placeholder="code" value="0001"></td>
+        <td><input data-node="CategoryName" type="text" class="form-control" placeholder="Name" value="이체"></td>
+        <td><button data-node="CategoryDel" type="button" class="btn btn-secondary" onclick="javascript:SIPUCOMMON.delRow.setPage(this);">삭제</button></td>
+        </tr>`;
         $("BUTTON[data-node='AccountNew']").click(function () {
             $("TBODY[data-node='AccountTable']").append(tempAccount);
         });
