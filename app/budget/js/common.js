@@ -368,7 +368,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             rsFunc : function (data) {
                 $("TBODY[data-node='STATGET-SET-tbody']").html("");
                 data.map(item => {
-                    $(n.setNode).append(`<TR>
+                    $("TBODY[data-node='STATGET-SET-tbody']").append(`<TR>
                     <td>${DATA.AccountHash[item.account_id]}</td>
                     <td>${item.amount}</td>
                     </TR>`);
