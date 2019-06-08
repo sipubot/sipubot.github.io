@@ -203,24 +203,28 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.getNode = NODES.INPUT.DatePick[0];
         n.nodeDataGet = function () {
             if (n.getNode.value.length > 0) {
-                n.RqADD_URL += (n.getNode.value).slice(0,7);
+                n.RqADD_URL = "/budget/data/" + (n.getNode.value).slice(0,7);
             }
         };
         n.setNode = NODES.TBODY.DataTable[0];
         n.setPushType = "ADD";
         n.setHTML = "";
-        n.RqADD_URL = "/budget/data/"
         n.RqMethod = "GET"
         n.RequestBodyGetter = n.nodeDataGet;
         n.setHTML = ``        
         n.triggerfunc = n.fetch;
         n.binder();
     }
-
+    function initCal () {
+        var fp = flatpickr(".date-picker", {
+            dateFormat: "Y-m-d",
+            defaultDate: ["today"]
+        });
+    }
 
     SIPUCOMMON.run = function () {
         Workerrunner();
-        life();
+        initCal();
     };
     return SIPUCOMMON;
 })(window.SIPUCOMMON || {}, jQuery);
