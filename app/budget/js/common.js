@@ -511,6 +511,15 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         $("BUTTON[data-node='CategoryNew']").click(function () {
             $("TBODY[data-node='CategoryTable']").append(tempCategory);
         });
+        $("SELECT[data-node='NewType']").change(function () {
+            if ($("SELECT[data-node='NewType'] option:selected").val() === "false") {
+                $("SELECT[data-node='NewCategoryEx']").show();
+                $("SELECT[data-node='NewCategoryIn']").hide();
+            } else {
+                $("SELECT[data-node='NewCategoryEx']").hide();
+                $("SELECT[data-node='NewCategoryIn']").show();
+            }
+        });
     }
 
     SIPUCOMMON.delRow = {
@@ -518,11 +527,8 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             $(node).parent().parent().remove();
         },
         dataPage: function (node) {
-            console.log(node);
             DATA.delData = +$(node).val();
-            console.log(DATA.delData);
             DATA.datadeleter.fetch();
-            console.log(DATA.datadeleter);
             $(node).parent().parent().remove();
         }
 
