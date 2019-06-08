@@ -233,19 +233,16 @@
                             </thead>
                             <tbody data-node="AccountTable">
                                 <tr>
-                                    <td>
-                                        <input type="text" class="form-control" placeholder="code" aria-label="Code"
-                                            value="0001">
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" placeholder="Name" aria-label="Name"
-                                            value="신한">
-                                    </td>
+                                    <td><input type="text" class="form-control" placeholder="code" value="0001"></td>
+                                    <td><input type="text" class="form-control" placeholder="Name" value="신한"></td>
+                                    <td><button data-node="AccountDel" type="button" class="btn btn-secondary">삭제</button></td>
                                 </tr>
                             </tbody>
                         </table>
-                        <button data-node="AcoountNew" type="button" class="btn btn-outline-light">New</button>
-                        <button data-node="AcoountSave" type="button" class="btn btn-outline-light">Save</button>
+                        <div class="text-right">
+                            <button data-node="AcoountNew" type="button" class="btn btn-outline-light">New</button>
+                            <button data-node="AcoountSave" type="button" class="btn btn-outline-light">Save</button>
+                        </div>
                     </div>
                     <div data-node="category-table">
                         <table class="table">
@@ -260,28 +257,21 @@
                             </thead>
                             <tbody data-node="CategoryTable">
                                 <tr>
-                                    <td>
-                                        <input type="checkbox" aria-label="Checkbox for following text input">
-                                    </td>
-                                    <td>
-                                        <select class="custom-select">
+                                    <td><input type="checkbox" checked></td>
+                                    <td><select class="custom-select">
                                             <option value="false" selected>지출</option>
                                             <option value="true">수입</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" placeholder="code" aria-label="Code"
-                                            value="0001">
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" placeholder="Name" aria-label="Name"
-                                            value="이체">
-                                    </td>
+                                        </select></td>
+                                    <td><input type="text" class="form-control" placeholder="code" value="0001"></td>
+                                    <td><input type="text" class="form-control" placeholder="Name" value="이체"></td>
+                                    <td><button data-node="CategoryDel" type="button" class="btn btn-secondary">삭제</button></td>
                                 </tr>
                             </tbody>
                         </table>
-                        <button data-node="CategoryNew" type="button" class="btn btn-outline-light">New</button>
-                        <button data-node="CategorySave" type="button" class="btn btn-outline-light">Save</button>
+                        <div class="text-right">
+                            <button data-node="CategoryNew" type="button" class="btn btn-outline-light">New</button>
+                            <button data-node="CategorySave" type="button" class="btn btn-outline-light">Save</button>
+                        </div>
                     </div>
                 </div>
             </section>

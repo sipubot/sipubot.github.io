@@ -199,14 +199,14 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     Workers.getcateacc = function () {
 
     }
-//pub ttype: bool,
-//pub show: bool,
-//pub id: String,
-//pub name: String,
-//
+    //pub ttype: bool,
+    //pub show: bool,
+    //pub id: String,
+    //pub name: String,
+    //
 
-//pub id: String,
-//pub name: String,
+    //pub id: String,
+    //pub name: String,
     Workers.accountset = function () {
         var n = FETCHER()
 
@@ -218,7 +218,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.getNode = NODES.INPUT.DatePick[0];
         n.nodeDataGet = function () {
             if (n.getNode.value.length > 0) {
-                n.RqADD_URL = "/budget/data/" + (n.getNode.value).slice(0,7);
+                n.RqADD_URL = "/budget/data/" + (n.getNode.value).slice(0, 7);
             }
         };
         n.setNode = NODES.TBODY.DataTable[0];
@@ -226,17 +226,17 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.setHTML = "";
         n.RqMethod = "GET"
         n.RequestBodyGetter = n.nodeDataGet;
-        n.setHTML = ``        
+        n.setHTML = ``
         n.triggerfunc = n.fetch;
         n.binder();
     }
 
-//    pub seq: u64,
-//    pub date: String,
-//    pub ttype: bool,
-//    pub category_id: String,
-//    pub account_id: String,
-//    pub amount: f64,
+    //    pub seq: u64,
+    //    pub date: String,
+    //    pub ttype: bool,
+    //    pub category_id: String,
+    //    pub account_id: String,
+    //    pub amount: f64,
 
 
     Workers.dataset = function () {
@@ -245,7 +245,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.getNode = NODES.INPUT.NewAmount[0];
         n.nodeDataGet = function () {
             if (n.getNode.value.length > 0) {
-                n.RqADD_URL = "/budget/data/" + (n.getNode.value).slice(0,7);
+                n.RqADD_URL = "/budget/data/" + (n.getNode.value).slice(0, 7);
             }
         };
         n.setNode = NODES.TBODY.DataTable[0];
@@ -253,21 +253,39 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.setHTML = "";
         n.RqMethod = "GET"
         n.RequestBodyGetter = n.nodeDataGet;
-        n.setHTML = ``        
+        n.setHTML = ``
         n.triggerfunc = n.fetch;
         n.binder();
     }
 
-    function initCal () {
+    function initCal() {
         var fp = flatpickr(".date-picker", {
             dateFormat: "Y-m-d",
             defaultDate: ["today"]
         });
     }
 
+    function setPageButton() {
+        var tempAccount = `<tr><td><input type="text" class="form-control" placeholder="code" value="0001"></td><td><input type="text" class="form-control" placeholder="Name" value="신한"></td><td><button data-node="AccountDel" type="button" class="btn btn-secondary">삭제</button></td></tr>`;
+        var tempCategory = `<tr><td><input type="checkbox" checked></td><select class="custom-select"><option value="false" selected>지출</option><option value="true">수입</option></select></td><td><input type="text" class="form-control" placeholder="code" value="0001"></td><td><input type="text" class="form-control" placeholder="Name" value="이체"></td><td><button data-node="CategoryDel" type="button" class="btn btn-secondary">삭제</button></td></tr>`;
+        $("BUTTON[data-node='CategoryNew']").click(() => {
+            $("TBODY[data-node='CategoryTable']").append(tempCategory);
+        });
+        $("BUTTON[data-node='AccountNew']").click(() => {
+            $("TBODY[data-node='AccountTable']").append(tempAccount);
+        });
+        $("BUTTON[data-node='AccountDel']").click(() => {
+            $(this).parent().parent().remove();
+        });
+        $("BUTTON[data-node='CategoryDel']").click(() => {
+            $(this).parent().parent().remove();
+        });
+    }
+
     SIPUCOMMON.run = function () {
         Workerrunner();
         initCal();
+        setPageButton();
     };
     return SIPUCOMMON;
 })(window.SIPUCOMMON || {}, jQuery);
