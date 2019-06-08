@@ -367,7 +367,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             a.ttype = $("SELECT[data-node='NewType'] option:selected").val() === "false" ? false : true;
             a.category_id = a.ttype ? $("SELECT[data-node='NewCategoryIn'] option:selected").val() : $("SELECT[data-node='NewCategoryEx'] option:selected").val();
             a.account_id = $("SELECT[data-node='NewAccount'] option:selected").val();
-            a.amount = $("INPUT[data-node='NewAmount']").val();
+            a.amount = +$("INPUT[data-node='NewAmount']").val();
             self.getDataObj = a;
             return a;
         };
