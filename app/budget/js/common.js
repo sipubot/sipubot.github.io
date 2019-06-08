@@ -207,10 +207,10 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
 
     //pub id: String,
     //pub name: String,
-    Workers.accountset = function () {
-        var n = FETCHER()
-
-    }
+    //Workers.accountset = function () {
+    //    var n = FETCHER();
+//
+    //}
 
     Workers.dataget = function () {
         var n = new FETCHER();
