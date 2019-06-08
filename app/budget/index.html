@@ -151,17 +151,29 @@
             <section id="stat">
                 <header class="wrapper clearfix">
                     <div class="text-right">
-                        <button data-node="stat-month" type="button" class="btn btn-outline-light">MONTH</button>
-                        <button data-node="stat-year" type="button" class="btn btn-outline-light">YEAR</button>
-                        <button data-node="stat-all" type="button" class="btn btn-outline-light">TOTAL</button>
+                        <button data-node="StatAll" type="button" class="btn btn-outline-light">TOTAL</button>
                     </div>
                 </header>
                 <div class="section clearfix">
+                    <h4>Stat</h4>
+                    <table class="table table-striped table-dark">
+                        <thead>
+                            <tr>
+                                <th scope="col">DATE</th>
+                                <th scope="col">ACCOUNT</th>
+                                <th scope="col">AMOUNT</th>
+                            </tr>
+                        </thead>
+                        <tbody data-node="StatTable"></tbody>
+                        </tbody>
+                    </table>
                 </div>
             </section>
             <section id="chart">
                 <header class="wrapper clearfix">
                     <div class="text-right">
+                        <input data-node="DatePick" class="date-picker" type="text" placeholder="Select Date.."
+                            data-id="datetime" readonly="readonly">
                         <button data-node="chart-day" type="button" class="btn btn-outline-light">DAY</button>
                         <button data-node="chart-month" type="button" class="btn btn-outline-light">MONTH</button>
                         <button data-node="chart-year" type="button" class="btn btn-outline-light">YEAR</button>

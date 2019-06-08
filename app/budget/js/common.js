@@ -458,6 +458,28 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.binder();
     }
 
+    Workers.statget = function () {
+        var n = new FETCHER();
+        n.triggerNode = NODES.BUTTON.StatAll[0];
+        n.getNode = NODES.INPUT.DatePick[1];
+        n.setNode = NODES.INPUT.StatTable[1];
+        n.RqADD_URL = "/budget/stat/account/0000"
+        n.setPushType = "SET";
+        n.nodeDataSet = function (data) {
+            DATA.data = data;
+            data.map(item => {
+                $(self.setNode).append(`<TR>
+                <td>${DATA.AccountHash[item.account_id]}</td>
+                <td>${item.amount}</td>
+                </TR>`);
+            });
+        }
+        n.RqMethod = "GET"
+        n.RequestBodyGetter = n.nodeDataGet;
+        n.triggerfunc = n.fetch;
+        n.binder();
+    }
+
     function initCal() {
         var fp = flatpickr(".date-picker", {
             dateFormat: "Y-m-d",
