@@ -74,19 +74,23 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     var DATA = {};
 
     function WORKER(obj) {
-        
+        console.log(obj);
         var BASE_URL = obj.BASE_URL || "https://sipu.iptime.org";
         var ADD_URL = obj.ADD_URL || "";
         var rqMethod = obj.rqMethod || "POST";
         var rqContentType = obj.rqContentType || "application/json";
         var rsContentType = obj.rsContentType || "json";
-        var rqData = obj.rqData || getrqData(NODES[obj.id]["GET"]);
-        var setHTML = obj.setHTML || NODES[obj.id].setHTML;
+        var rqData = typeof(obj.rqData) === "function" ? obj.rqData() : getrqData(NODES[obj.id]);
+        var setHTML = obj.setHTML || "";
         var setPushType = obj.setPushType || "SET"; // "ADD_"
         var rsData = "";
         var rsFunc = obj.rsFunc || setrsData;
 
         function getrqData(nodes) {
+            if (nodes === undefined) {
+                return;
+            }
+            nodes = nodes["GET"];
             if (rqMethod === "GET") {
                 return;
             }
@@ -142,7 +146,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             rqInit.body = rqBody;
         }
         var rqURL = BASE_URL + ADD_URL;
-
+        console.log(rqInit,rqURL);
         fetch(rqURL, rqInit)
             .then(response => {
                 if (!response.ok) {
@@ -219,19 +223,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             //rsData : "",
             //rsFunc : setrsData,
         },
-        LOGOUT: {
-            id: "LOGOUT",
-            //BASE_URL = "https://sipu.iptime.org",
-            ADD_URL: "/logout",
-            rqMethod: "GET",
-            //rqContentType : "application/json",
-            //rsContentType : "json",
-            //rqData :
-            //setHTML : NODES[obj.id].setHTML,
-            //setPushType : "SET",
-            //rsData : "",
-            //rsFunc : setrsData,
-        },
         QUTSET: {
             id: "QUTSET",
             //BASE_URL = "https://sipu.iptime.org",
@@ -244,6 +235,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             setPushType: "ADD",
             //rsData : "",
             rsFunc: function (data) {
+                console.log(data);
                 NODES.QUTSET.SET.message.value = "";
                 data.map(a => {
                     var str = a["message"];
@@ -267,20 +259,21 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             //setPushType : "SET",
             //rsData : "",
             rsFunc: function (data) {
-                NODES.QUTSET.SET.message.value = "";
+                NODES.QUTSET.GET.message.value = "";
+                console.log(NODES.QUT);
                 data.map(a => {
                     var str = a["message"];
                     var len = str.length < 10 ? 1 : str.length * 0.1;
                     len = Math.floor(len);
                     str = chunkString(str, len);
                     var s = str.map(c => `<span>${c}</span>`).join('');
-                    NODES.QUT.SET.ul += `<li class="list-group-item"><h4>${s}</h4></li>`;
+                    NODES.QUT.SET.ul.innerHTML += `<li class="list-group-item"><h4>${s}</h4></li>`;
                 });
             }
         },
         LINK: {
             id: "LINK",
-            BASE_URL : "/data/link.json",
+            BASE_URL: "/data/link.json",
             //ADD_URL: "/data/link.json",
             rqMethod: "GET",
             //rqContentType : "application/json",
@@ -293,7 +286,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         },
         APP: {
             id: "APP",
-            BASE_URL : "/data/app.json",
+            BASE_URL: "/data/app.json",
             //ADD_URL: "",
             rqMethod: "GET",
             //rqContentType : "application/json",
@@ -418,21 +411,20 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
 
     function initWORKER() {
         Object.entries(FEEDER).map(a => {
-            if (a[1]["EVT"] === undefined){
+            if (!NODES[a[0]]) {
+                WORKER(a[1]);
                 return;
             }
-            var e = Object.entries(a[1]["EVT"]);
-            //console.log(a, a[1], e);
+            var e = Object.entries(NODES[a[0]]["EVT"]);
             if (e.length === 0) {
-                WORKER(FEEDER[a[0]]);
-            } else {
-                console.log(a, FEEDER);
-                e.map(n => {
-                    $(n[1]).click(function () {
-                        WORKER(FEEDER[a[0]]);
-                    });
-                });
+                WORKER(a[1]);
+                return;
             }
+            e.map(n => {
+                $(n[1]).click(function () {
+                    WORKER(a[1]);
+                });
+            });
         });
     }
 
