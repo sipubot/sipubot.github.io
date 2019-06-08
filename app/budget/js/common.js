@@ -304,6 +304,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 </tr>`;
                 return t;
             }).join('');
+            $('SELECT[data-node="NewAccount"]').html(self.setDataObj.map((item, i) => `<option value="${item.id}" ${i===0?"selected":""}>${item.name}</option>`).join(''));
         }
         n.RqADD_URL = "/budget/data/account";
         n.RqMethod = "GET";
@@ -334,12 +335,38 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 </tr>`;
                 return t;
             }).join('');
+            $('SELECT[data-node="NewCategory"]').html(self.setDataObj.map((item, i) => `<option value="${item.id}" ${i===0?"selected":""}>${item.name}</option>`).join(''));
         }
         n.RqADD_URL = "/budget/data/category";
         n.setPushType = "SET";
         n.RqMethod = "GET";
         n.RequestBodyGetter = n.nodeDataGet;
         n.fetch();
+    }
+    
+    //    pub seq: u64,
+    //    pub date: String,
+    //    pub ttype: bool,
+    //    pub category_id: String,
+    //    pub account_id: String,
+    //    pub amount: f64,
+    Workers.dataset = function () {
+        var n = new FETCHER();
+        n.triggerNode = NODES.BUTTON.NewData[0];
+        n.getNode = NODES.INPUT.NewAmount[0];
+        n.nodeDataGet = function () {
+            if (n.getNode.value.length > 0) {
+                n.RqADD_URL = "/budget/data/" + (n.getNode.value).slice(0, 7);
+            }
+        };
+        n.setNode = NODES.TBODY.DataTable[0];
+        n.setPushType = "ADD";
+        n.setHTML = "";
+        n.RqMethod = "GET"
+        n.RequestBodyGetter = n.nodeDataGet;
+        n.setHTML = ``
+        n.triggerfunc = n.fetch;
+        n.binder();
     }
     
     Workers.dataget = function () {
