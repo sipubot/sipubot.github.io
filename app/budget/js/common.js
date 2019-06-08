@@ -277,16 +277,16 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             //setPushType : "SET",
             //rsData : "",
             rsFunc : function (data) {
-                NODES.CATEGORY.SET.tbody.innerHTML = "";
-                NODES.CATEGORY.SET.tbody.innerHTML += data.map(item => {
+                NODES.CATEGORYSET.SET.tbody.innerHTML = "";
+                NODES.CATEGORYSET.SET.tbody.innerHTML += data.map(item => {
                     var t = `<tr>
-                    <td><input data-node="CATEGORY-GET-show" type="checkbox" ${item.show?"checked":""}></td>
-                    <td><select data-node="CATEGORY-GET-ttype" class="custom-select">
+                    <td><input data-node="CATEGORYSET-GET-show" type="checkbox" ${item.show?"checked":""}></td>
+                    <td><select data-node="CATEGORYSET-GET-ttype" class="custom-select">
                             <option value="false" ${item.ttype?"":"selected"}>지출</option>
                             <option value="true" ${!item.ttype?"":"selected"}>수입</option>
                         </select></td>
-                    <td><input data-node="CATEGORY-GET-id" type="text" class="form-control" placeholder="code" value="${item.id}"></td>
-                    <td><input data-node="CATEGORY-GET-name" type="text" class="form-control" placeholder="Name" value="${item.name}"></td>
+                    <td><input data-node="CATEGORYSET-GET-id" type="text" class="form-control" placeholder="code" value="${item.id}"></td>
+                    <td><input data-node="CATEGORYSET-GET-name" type="text" class="form-control" placeholder="Name" value="${item.name}"></td>
                     <td><button data-node="CategoryDel" type="button" class="btn btn-secondary" onclick="javascript:SIPUCOMMON.delRow.setPage(this);">삭제</button></td>
                     </tr>`;
                     return t;
