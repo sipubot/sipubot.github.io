@@ -203,14 +203,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     //pub show: bool,
     //pub id: String,
     //pub name: String,
-    //
-
-    //pub id: String,
-    //pub name: String,
-    //Workers.accountset = function () {
-    //    var n = FETCHER();
-    //
-    //}
 
     Workers.dataget = function () {
         var n = new FETCHER();
@@ -237,8 +229,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     //    pub category_id: String,
     //    pub account_id: String,
     //    pub amount: f64,
-
-
     Workers.dataset = function () {
         var n = new FETCHER();
         n.triggerNode = NODES.BUTTON.NewData[0];
@@ -258,6 +248,50 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.binder();
     }
 
+    //pub id: String,
+    //pub name: String,
+    Workers.accountset = function () {
+        var n = FETCHER();
+        n.triggerNode = NODES.BUTTON.AccountSave[0];
+        n.getNode = NODES.TBODY.AccountTable[0];
+        n.nodeDataGet = function () {
+            var data = [];
+            $(n.getNode).find("TR").each((tr) => {
+                var a = {};
+                a.id = tr.find("INPUT[data-node='AccountId']").val();
+                a.name = tr.find("INPUT[data-node='AccountName']").val();
+                data.push(a);
+            });
+            n.getDataObj = data;
+            return n.getDataObj;
+        };
+        n.setNode = NODES.TBODY.AccountTable[0];
+        n.nodeDataSet = function (data) {
+            var self = this;
+            self.setDataObj = data;;
+            self.setNode.innerHTML += self.setDataObj.map(item => {
+                var t = `<tr>
+                <td>
+                <input type="text" class="form-control" placeholder="code" value="${item.id}">
+                </td>
+                <td>
+                <input type="text" class="form-control" placeholder="Name" value="${item.name}">
+                </td>
+                <td>
+                <button data-node="AccountDel" type="button" class="btn btn-secondary">삭제</button>
+                </td>
+                </tr>`;
+                return t;
+            }).join('');
+        }
+        n.setPushType = "ADD";
+        n.setHTML = "";
+        n.RqMethod = "POST"
+        n.RequestBodyGetter = n.nodeDataGet;
+        
+        n.triggerfunc = n.fetch;
+        n.binder();
+    }
     function initCal() {
         var fp = flatpickr(".date-picker", {
             dateFormat: "Y-m-d",
@@ -286,6 +320,10 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         $("BUTTON[data-node='CategoryDel']").click(function () {
             $(this).parent().parent().remove();
         });
+    }
+    SIPUCOMMON.delRow = function (n) {
+        console.log(this);
+        console.log(n);
     }
 
     SIPUCOMMON.run = function () {

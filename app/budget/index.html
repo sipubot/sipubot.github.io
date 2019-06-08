@@ -234,9 +234,9 @@
                             </thead>
                             <tbody data-node="AccountTable">
                                 <tr>
-                                    <td><input type="text" class="form-control" placeholder="code" value="0001"></td>
-                                    <td><input type="text" class="form-control" placeholder="Name" value="신한"></td>
-                                    <td><button data-node="AccountDel" type="button" class="btn btn-secondary">삭제</button></td>
+                                    <td><input data-node="AccountId" type="text" class="form-control" placeholder="code" value="0001"></td>
+                                    <td><input data-node="AccountName" type="text" class="form-control" placeholder="Name" value="신한"></td>
+                                    <td><button data-node="AccountDel" type="button" class="btn btn-secondary" onclick="javascript:SIPUCOMMON.delRow(this);">삭제</button></td>
                                 </tr>
                             </tbody>
                         </table>
