@@ -81,7 +81,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         this.setPushType = "SET"; // "ADD_"
         this.setHTML; // "{date}This is Dummy{amount}";
     }
-    FETCHER.prototype.RequestBodyGetter = function () {};
     FETCHER.prototype.fetch = function () {
         var self = this;
         if (self.RqMethod === "GET" && self.getDataObj !== undefined) {
@@ -155,6 +154,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         self.getNode.value = "";
         return self.getDataObj;
     }
+    FETCHER.prototype.RequestBodyGetter = function () {};
     FETCHER.prototype.nodeDataSet = function (data) {
         var self = this;
         self.setDataObj = data;
@@ -198,6 +198,8 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     }
 
     var DATA = {};
+    DATA.AccountHash = {};
+    DATA.CategoryHash = {};
 
     Workers.accountset = function () {
         var n = new FETCHER();
@@ -305,6 +307,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 return t;
             }).join('');
             $('SELECT[data-node="NewAccount"]').html(self.setDataObj.map((item, i) => `<option value="${item.id}" ${i===0?"selected":""}>${item.name}</option>`).join(''));
+            self.setDataObj.map(a=>{DATA.AccountHash[a.id] = a.name;});
         }
         n.RqADD_URL = "/budget/data/account";
         n.RqMethod = "GET";
@@ -335,7 +338,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 </tr>`;
                 return t;
             }).join('');
-            $('SELECT[data-node="NewCategory"]').html(self.setDataObj.map((item, i) => `<option value="${item.id}" ${i===0?"selected":""}>${item.name}</option>`).join(''));
+            $('SELECT[data-node="NewCategoryEx"]').html(self.setDataObj.filter(a=>!a.ttype).map((item, i) => `<option value="${item.id}" ${i===0?"selected":""}>${item.name}</option>`).join(''));
+            $('SELECT[data-node="NewCategoryIn"]').html(self.setDataObj.filter(a=>a.ttype).map((item, i) => `<option value="${item.id}" ${i===0?"selected":""}>${item.name}</option>`).join(''));
+            self.setDataObj.map(a=>{DATA.CategoryHash[a.id] = [a.ttype, a.name];});
         }
         n.RqADD_URL = "/budget/data/category";
         n.setPushType = "SET";
@@ -355,17 +360,36 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.triggerNode = NODES.BUTTON.NewData[0];
         n.getNode = NODES.INPUT.NewAmount[0];
         n.nodeDataGet = function () {
-            if (n.getNode.value.length > 0) {
-                 + (n.getNode.value).slice(0, 7);
-            }
+            var self = this;
+            var a = {};
+            a.seq = 0;
+            a.date = $("INPUT[data-node='NewDatePick']").val();
+            a.ttype = $("SELECT[data-node='NewType'] option:selected").val() === "false" ? false : true;
+            a.category_id = a.ttype ? $("SELECT[data-node='NewCategoryIn'] option:selected").val() : $("SELECT[data-node='NewCategoryEx'] option:selected").val();
+            a.account_id = $("SELECT[data-node='NewAccount'] option:selected").val();
+            a.amount = $("INPUT[data-node='NewAmount']").val();
+            self.getDataObj = a;
+            return a;
         };
-        n.setNode = NODES.TBODY.DataTable[0];
+        n.nodeDataSet = function (data) {
+            var self = this;
+            if (!self.getDataObj.ttype) {
+                self.setNode = $("INPUT[data-node='DataTableExpense']");
+            } else {
+                self.setNode = $("INPUT[data-node='DataTableIncome']");
+            }
+            $(self.setNode).append(`<TR>
+            <td>${self.getDataObj.date}</td>
+            <td>${DATA.AccountHash[self.getDataObj.account_id]}</td>
+            <td>${DATA.CategoryHash[self.getDataObj.category_id]}</td>
+            <td>${self.amount}</td>
+            <th scope="row"><button type="button" class="btn btn-secondary" onclick="javascript:SIPUCOMMON.delRow.setPage(this);">-</button></th>
+            </TR>`);
+        }
         n.setPushType = "ADD";
-        n.setHTML = "";
         n.RqADD_URL = "/budget/data";
         n.RqMethod = "POST";
         n.RequestBodyGetter = n.nodeDataGet;
-        n.setHTML = ``
         n.triggerfunc = n.fetch;
         n.binder();
     }
@@ -388,32 +412,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.triggerfunc = n.fetch;
         n.binder();
     }
-
-    //    pub seq: u64,
-    //    pub date: String,
-    //    pub ttype: bool,
-    //    pub category_id: String,
-    //    pub account_id: String,
-    //    pub amount: f64,
-    Workers.dataset = function () {
-        var n = new FETCHER();
-        n.triggerNode = NODES.BUTTON.NewData[0];
-        n.getNode = NODES.INPUT.NewAmount[0];
-        n.nodeDataGet = function () {
-            if (n.getNode.value.length > 0) {
-                n.RqADD_URL = "/budget/data/" + (n.getNode.value).slice(0, 7);
-            }
-        };
-        n.setNode = NODES.TBODY.DataTable[0];
-        n.setPushType = "ADD";
-        n.setHTML = "";
-        n.RqMethod = "GET"
-        n.RequestBodyGetter = n.nodeDataGet;
-        n.setHTML = ``
-        n.triggerfunc = n.fetch;
-        n.binder();
-    }
-
 
     function initCal() {
         var fp = flatpickr(".date-picker", {

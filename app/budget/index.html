@@ -70,17 +70,17 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <h3>New Item</h3>
-                    <input data-node="NewDatePick" class="date-picker" type="text" placeholder="Select Date.."
-                        data-id="datetime" readonly="readonly">
-                    <select data-node="NewAccount" class="custom-select">
-                        <option selected>aaa</option>
-                    </select>
-                    <select data-node="NewCategory" class="custom-select">
-                        <option selected>aaa</option>
-                    </select>
-                    <input data-node="NewAmount" type="text" class="form-control" placeholder="Amount"
-                        aria-label="Username" aria-describedby="basic-addon1">
                     <div class="modal-body border-0">
+                        <input data-node="NewDatePick" class="date-picker" type="text" placeholder="Select Date.."
+                            data-id="datetime" readonly="readonly">
+                        <select data-node="NewType" class="custom-select">
+                            <option value="false" selected>지출</option>
+                            <option value="true">수입</option>
+                        </select>
+                        <select data-node="NewAccount" class="custom-select"></select>
+                        <select data-node="NewCategoryEx" class="custom-select"></select>
+                        <select data-node="NewCategoryIn" class="custom-select"></select>
+                        <input data-node="NewAmount" type="text" class="form-control" placeholder="Amount">
                     </div>
                     <div class="modal-footer border-0">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -137,20 +137,6 @@
                                 <td>@mdo</td>
                                 <th scope="row"><button>-</button></th>
                             </tr>
-                            <tr>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                                <th scope="row"><button>-</button></th>
-                            </tr>
-                            <tr>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                                <th scope="row"><button>-</button></th>
-                            </tr>
                         </tbody>
                     </table>
                     <h4>Income</h4>
@@ -165,27 +151,27 @@
                             </tr>
                         </thead>
                         <tbody data-node="DataTableIncome"></tbody>
-                            <tr>
-                                <th scope="row"><button>-</button></th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                            </tr>
-                            <tr>
-                                <th scope="row"><button>-</button></th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                            </tr>
-                            <tr>
-                                <th scope="row"><button>-</button></th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                            </tr>
+                        <tr>
+                            <th scope="row"><button>-</button></th>
+                            <td>Mark</td>
+                            <td>Otto</td>
+                            <td>Otto</td>
+                            <td>@mdo</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><button>-</button></th>
+                            <td>Mark</td>
+                            <td>Otto</td>
+                            <td>Otto</td>
+                            <td>@mdo</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><button>-</button></th>
+                            <td>Mark</td>
+                            <td>Otto</td>
+                            <td>Otto</td>
+                            <td>@mdo</td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
@@ -234,9 +220,12 @@
                             </thead>
                             <tbody data-node="AccountTable">
                                 <tr>
-                                    <td><input data-node="AccountId" type="text" class="form-control" placeholder="code" value="0001"></td>
-                                    <td><input data-node="AccountName" type="text" class="form-control" placeholder="Name" value="신한"></td>
-                                    <td><button data-node="AccountDel" type="button" class="btn btn-secondary" onclick="javascript:SIPUCOMMON.delRow.setPage(this);">삭제</button></td>
+                                    <td><input data-node="AccountId" type="text" class="form-control" placeholder="code"
+                                            value="0001"></td>
+                                    <td><input data-node="AccountName" type="text" class="form-control"
+                                            placeholder="Name" value="신한"></td>
+                                    <td><button data-node="AccountDel" type="button" class="btn btn-secondary"
+                                            onclick="javascript:SIPUCOMMON.delRow.setPage(this);">삭제</button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -264,9 +253,12 @@
                                             <option value="false" selected>지출</option>
                                             <option value="true">수입</option>
                                         </select></td>
-                                    <td><input data-node="CategoryId" type="text" class="form-control" placeholder="code" value="0001"></td>
-                                    <td><input data-node="CategoryName" type="text" class="form-control" placeholder="Name" value="이체"></td>
-                                    <td><button data-node="CategoryDel" type="button" class="btn btn-secondary" onclick="javascript:SIPUCOMMON.delRow.setPage(this);">삭제</button></td>
+                                    <td><input data-node="CategoryId" type="text" class="form-control"
+                                            placeholder="code" value="0001"></td>
+                                    <td><input data-node="CategoryName" type="text" class="form-control"
+                                            placeholder="Name" value="이체"></td>
+                                    <td><button data-node="CategoryDel" type="button" class="btn btn-secondary"
+                                            onclick="javascript:SIPUCOMMON.delRow.setPage(this);">삭제</button></td>
                                 </tr>
                             </tbody>
                         </table>
