@@ -268,7 +268,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         n.setNode = NODES.TBODY.AccountTable[0];
         n.nodeDataSet = function (data) {
             var self = this;
-            self.setDataObj = data;;
+            self.setDataObj = data;
             self.setNode.innerHTML += self.setDataObj.map(item => {
                 var t = `<tr>
                 <td>
@@ -278,20 +278,20 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 <input type="text" class="form-control" placeholder="Name" value="${item.name}">
                 </td>
                 <td>
-                <button data-node="AccountDel" type="button" class="btn btn-secondary">삭제</button>
+                <button data-node="AccountDel" type="button" class="btn btn-secondary" onclick="javascript:SIPUCOMMON.delRow.setPage(this);>삭제</button>
                 </td>
                 </tr>`;
                 return t;
             }).join('');
         }
-        n.setPushType = "ADD";
+        n.setPushType = "SET";
         n.setHTML = "";
-        n.RqMethod = "POST"
+        n.RqMethod = "POST";
         n.RequestBodyGetter = n.nodeDataGet;
-        
         n.triggerfunc = n.fetch;
         n.binder();
     }
+
     function initCal() {
         var fp = flatpickr(".date-picker", {
             dateFormat: "Y-m-d",
@@ -300,30 +300,20 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     }
 
     function setPageButton() {
-        var tempAccount = `<tr><td><input type="text" class="form-control" placeholder="code" value="0001"></td><td><input type="text" class="form-control" placeholder="Name" value="신한"></td><td><button data-node="AccountDel" type="button" class="btn btn-secondary">삭제</button></td></tr>`;
-        var tempCategory = `<tr><td><input type="checkbox" checked></td><td><select class="custom-select"><option value="false" selected>지출</option><option value="true">수입</option></select></td><td><input type="text" class="form-control" placeholder="code" value="0001"></td><td><input type="text" class="form-control" placeholder="Name" value="이체"></td><td><button data-node="CategoryDel" type="button" class="btn btn-secondary">삭제</button></td></tr>`;
+        var tempAccount = `<tr><td><input type="text" class="form-control" placeholder="code" value="0001"></td><td><input type="text" class="form-control" placeholder="Name" value="신한"></td><td><button data-node="AccountDel" type="button" class="btn btn-secondary" onclick="javascript:SIPUCOMMON.delRow.setPage(this);">삭제</button></td></tr>`;
+        var tempCategory = `<tr><td><input type="checkbox" checked></td><td><select class="custom-select"><option value="false" selected>지출</option><option value="true">수입</option></select></td><td><input type="text" class="form-control" placeholder="code" value="0001"></td><td><input type="text" class="form-control" placeholder="Name" value="이체"></td><td><button data-node="CategoryDel" type="button" class="btn btn-secondary" onclick="javascript:SIPUCOMMON.delRow.setPage(this);">삭제</button></td></tr>`;
         $("BUTTON[data-node='AccountNew']").click(function () {
             $("TBODY[data-node='AccountTable']").append(tempAccount);
-            setPageDelButton();
         });
         $("BUTTON[data-node='CategoryNew']").click(function () {
             $("TBODY[data-node='CategoryTable']").append(tempCategory);
-            setPageDelButton();
         });
-        setPageDelButton();
     }
 
-    function setPageDelButton() {
-        $("BUTTON[data-node='AccountDel']").click(function () {
-            $(this).parent().parent().remove();
-        });
-        $("BUTTON[data-node='CategoryDel']").click(function () {
-            $(this).parent().parent().remove();
-        });
-    }
-    SIPUCOMMON.delRow = function (n) {
-        console.log(this);
-        console.log(n);
+    SIPUCOMMON.delRow = function () {
+        this.setPage = function (node) {
+            $(node).parent().parent().remove();
+        };
     }
 
     SIPUCOMMON.run = function () {
