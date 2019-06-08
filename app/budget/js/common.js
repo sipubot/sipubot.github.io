@@ -387,7 +387,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             </TR>`);
         }
         n.setPushType = "ADD";
-        n.RqADD_URL = "/budget/data";
+        n.RqADD_URL = "/budget/data/insert";
         n.RqMethod = "POST";
         n.RequestBodyGetter = n.nodeDataGet;
         n.triggerfunc = n.fetch;
