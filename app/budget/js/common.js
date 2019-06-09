@@ -336,7 +336,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 var a = {};
                 a.seq = 0;
                 a.date = $("INPUT[data-node='DATATRANS-GET-date']").val();
-                a.ttype = DATATRANSTO;
+                a.ttype = false;
                 a.category_id = "0000";
                 a.account_id = $("SELECT[data-node='DATATRANS-GET-account_id_from'] option:selected").val();
                 a.amount = +$("INPUT[data-node='DATATRANS-GET-amount']").val();
