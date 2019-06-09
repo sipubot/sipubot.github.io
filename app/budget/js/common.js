@@ -470,6 +470,11 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     }
 
  */  
+function initWORKER() {
+    WORKER(FEEDER.ACCOUNTGET);
+    WORKER(FEEDER.CATEGORYGET);
+   
+}
  function setPageButton() {
         var tempAccount = `<tr>
         <td><input data-node="ACCOUNTSET-GET-id" type="text" class="form-control" placeholder="code" value="0001"></td>
@@ -488,9 +493,11 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         </tr>`;
         $("BUTTON[data-node='AccountNew']").click(function () {
             $("TBODY[data-node='ACCOUNTSET-SET-tbody']").append(tempAccount);
+            WORKER(FEEDER.ACCOUNTSET);
         });
         $("BUTTON[data-node='CategoryNew']").click(function () {
             $("TBODY[data-node='CATEGORYSET-SET-tbody']").append(tempCategory);
+            WORKER(FEEDER.CATEGORYGET);
         });
         $("SELECT[data-node='DATANEW-GET-ttype']").change(function () {
             if ($("SELECT[data-node='DATANEW-GET-ttype'] option:selected").val() === "false") {
@@ -547,7 +554,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     }
 
     SIPUCOMMON.run = function () {
-        //initWORKER();
+        initWORKER();
         //initCal();
         setPageButton();
     };
