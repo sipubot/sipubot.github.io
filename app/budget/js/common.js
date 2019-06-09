@@ -459,7 +459,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             id: "CHARTGETYEAR"
         },
     }
-
+/* 
     function initCal() {
         var fp = flatpickr(".date-picker", {
             dateFormat: "Y-m-d",
@@ -467,7 +467,8 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         });
     }
 
-    function setPageButton() {
+ */  
+ function setPageButton() {
         var tempAccount = `<tr>
         <td><input data-node="ACCOUNTSET-GET-id" type="text" class="form-control" placeholder="code" value="0001"></td>
         <td><input data-node="ACCOUNTSET-GET-name" type="text" class="form-control" placeholder="Name" value="신한"></td>
@@ -557,7 +558,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
 
     SIPUCOMMON.run = function () {
         initWORKER();
-        initCal();
+        //initCal();
         setPageButton();
     };
     return SIPUCOMMON;
