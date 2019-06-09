@@ -338,6 +338,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 $("TBODY[data-node='DATAGET-SET-tbody_ex']").html("");
                 $("TBODY[data-node='DATAGET-SET-tbody_in']").html("");
                 DATA.data = data;
+                data = data.sort((a,b)=>a.date<b.date);
                 var node;
                 data.map(item => {
                     if (!item.ttype) {
