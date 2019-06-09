@@ -475,7 +475,7 @@ function initWORKER() {
     WORKER(FEEDER.CATEGORYGET);
    
 }
- function setPageButton() {
+ function UIWorker() {
         var tempAccount = `<tr>
         <td><input data-node="ACCOUNTSET-GET-id" type="text" class="form-control" placeholder="code" value="0001"></td>
         <td><input data-node="ACCOUNTSET-GET-name" type="text" class="form-control" placeholder="Name" value="신한"></td>
@@ -556,7 +556,7 @@ function initWORKER() {
     SIPUCOMMON.run = function () {
         initWORKER();
         //initCal();
-        setPageButton();
+        UIWorker();
     };
     return SIPUCOMMON;
 })(window.SIPUCOMMON || {}, jQuery);
