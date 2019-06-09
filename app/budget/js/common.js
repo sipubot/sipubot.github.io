@@ -307,6 +307,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             //rqContentType : "application/json",
             //rsContentType : "json",
             rqData :function () {
+                console.log(a);
                 var a = {};
                 a.seq = 0;
                 a.date = $("INPUT[data-node='DATANEW-GET-date']").val();
@@ -314,6 +315,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 a.category_id = a.ttype ? $("SELECT[data-node='DATANEW-GET-category_id_in'] option:selected").val() : $("SELECT[data-node='DATANEW-GET-category_id_ex'] option:selected").val();
                 a.account_id = $("SELECT[data-node='DATANEW-GET-account_id'] option:selected").val();
                 a.amount = +$("INPUT[data-node='DATANEW-GET-amount']").val();
+                console.log(a);
                 return a;
             },
             //setHTML: ``,
@@ -501,6 +503,10 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         });
         $("BUTTON[data-node='DATATRANS-EVT-button']").click(function () {
             WORKER(FEEDER.DATATRANSFROM);
+        });
+        $("BUTTON[data-node='DATAGET-EVT-button']").click(function () {
+            FEEDER.DATAGET.ADD_URL = $('INPUT[data-node="DATAGET-GET-date"]').val().slice(0,7);
+            WORKER(FEEDER.DATAGET);
         });
         $("BUTTON[data-node='DATAGET-EVT-button']").click(function () {
             FEEDER.DATAGET.ADD_URL = $('INPUT[data-node="DATAGET-GET-date"]').val().slice(0,7);
