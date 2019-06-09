@@ -547,7 +547,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     }
 
     SIPUCOMMON.run = function () {
-        initWORKER();
+        //initWORKER();
         //initCal();
         setPageButton();
     };
