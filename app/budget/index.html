@@ -69,7 +69,6 @@
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
-                    <h3>New Item</h3>
                     <div class="modal-body border-0">
                         <input data-node="DATANEW-GET-date" class="date-picker" type="text" placeholder="Select Date.."
                             data-id="datetime" readonly="readonly">
@@ -89,6 +88,24 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="data-trans-modal" tabindex="-1" role="dialog" aria-labelledby="New-Data"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body border-0">
+                        <input data-node="DATATRANS-GET-date" class="date-picker" type="text" placeholder="Select Date.."
+                            data-id="datetime" readonly="readonly">
+                        <select data-node="DATATRANS-GET-account_id_from" class="custom-select"></select>
+                        <select data-node="DATATRANS-GET-account_id_to" class="custom-select"></select>
+                        <input data-node="DATATRANS-GET-amount" type="text" class="form-control" placeholder="Amount">
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button data-node="DATATRANS-EVT-button" type="button" class="btn btn-primary">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="main-container">
         <div class="main wrapper clearfix">
@@ -100,6 +117,8 @@
                         <button data-node="DATAGET-EVT-button" type="button" class="btn btn-outline-light">SEARCH</button>
                         <button data-node="data-new-modal" data-toggle="modal" data-target="#data-new-modal"
                             type="button" class="btn btn-outline-light">NEW</button>
+                        <button data-node="data-trans-modal" data-toggle="modal" data-target="#data-trans-modal"
+                            type="button" class="btn btn-outline-light">이체</button>
                     </div>
                 </header>
                 <div class="section clearfix">

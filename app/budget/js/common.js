@@ -260,6 +260,8 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                     return t;
                 }).join('');
                 $('SELECT[data-node="DATANEW-GET-account_id"]').html(data.map((item, i) => `<option value="${item.id}" ${i===0?"selected":""}>${item.name}</option>`).join(''));
+                $('SELECT[data-node="DATATRANS-GET-account_id_from"]').html(data.map((item, i) => `<option value="${item.id}" ${i===0?"selected":""}>${item.name}</option>`).join(''));
+                $('SELECT[data-node="DATATRANS-GET-account_id_to"]').html(data.map((item, i) => `<option value="${item.id}" ${i===0?"selected":""}>${item.name}</option>`).join(''));
                 data.map(a => {
                     DATA.AccountHash[a.id] = a.name;
                 });
@@ -322,6 +324,56 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 $(NODES.DATAGET.EVT.button).click();
             },
             id: "DATANEW"
+        },
+        DATATRANSFROM: {
+            initSKIP : true,
+            //BASE_URL: "/data/app.json",
+            ADD_URL: "/budget/data/insert",
+            rqMethod: "POST",
+            //rqContentType : "application/json",
+            //rsContentType : "json",
+            rqData :function () {
+                var a = {};
+                a.seq = 0;
+                a.date = $("INPUT[data-node='DATATRANS-GET-date']").val();
+                a.ttype = DATATRANSTO;
+                a.category_id = "0000";
+                a.account_id = $("SELECT[data-node='DATATRANS-GET-account_id_from'] option:selected").val();
+                a.amount = +$("INPUT[data-node='DATATRANS-GET-amount']").val();
+                return a;
+            },
+            //setHTML: ``,
+            setPushType : "ADD",
+            //rsData : "",
+            rsFunc : function (data) {
+                WORKER(FEEDER.DATATRANSTO);
+            },
+            id: "DATATRANSFROM"
+        },
+        DATATRANSTO: {
+            initSKIP : true,
+            //BASE_URL: "/data/app.json",
+            ADD_URL: "/budget/data/insert",
+            rqMethod: "POST",
+            //rqContentType : "application/json",
+            //rsContentType : "json",
+            rqData :function () {
+                var a = {};
+                a.seq = 0;
+                a.date = $("INPUT[data-node='DATATRANS-GET-date']").val();
+                a.ttype = true;
+                a.category_id = "5000";
+                a.account_id = $("SELECT[data-node='DATATRANS-GET-account_id_to'] option:selected").val();
+                a.amount = +$("INPUT[data-node='DATATRANS-GET-amount']").val();
+                return a;
+            },
+            //setHTML: ``,
+            setPushType : "ADD",
+            //rsData : "",
+            rsFunc : function (data) {
+                $(NODES.DATAGET.EVT.button).click();
+            },
+            id: "DATATRANSTO"
         },
         DATAGET: {
             //BASE_URL: "/data/app.json",
@@ -447,10 +499,16 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 $("SELECT[data-node='DATANEW-GET-category_id_in']").show();
             }
         });
+        $("BUTTON[data-node='DATATRANS-EVT-button']").click(function () {
+            WORKER(FEEDER.DATATRANSFROM);
+        });
     }
 
     function initWORKER() {
         Object.entries(FEEDER).map(a => {
+            if (a.initSKIP !== undefined && a.initSKIP === true) {
+                return;
+            }
             if (!NODES[a[0]]) {
                 WORKER(a[1]);
                 return;
