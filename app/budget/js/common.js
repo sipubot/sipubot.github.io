@@ -69,7 +69,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     };
     //노드맵은 초기 생성필요
     NODES.init();
-    NODES.log();
+    //NODES.log();
 
     var DATA = {};
     DATA.AccountHash = {};
@@ -78,7 +78,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     DATA.delData = -1;
 
     function WORKER(obj) {
-        console.log(obj);
         var BASE_URL = obj.BASE_URL || "https://sipu.iptime.org";
         var ADD_URL = obj.ADD_URL || "";
         var rqMethod = obj.rqMethod || "POST";
