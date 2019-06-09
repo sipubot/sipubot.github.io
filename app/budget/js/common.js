@@ -150,7 +150,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             rqInit.body = rqBody;
         }
         var rqURL = BASE_URL + ADD_URL;
-        console.log(rqInit,rqURL);
         fetch(rqURL, rqInit)
             .then(response => {
                 if (!response.ok) {
@@ -199,7 +198,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             //rqContentType : "application/json",
             //rsContentType : "json",
             rqData :function () {
-                var data = [];console.log(NODES.ACCOUNTSET.SET.tbody);
+                var data = [];
                 $(NODES.ACCOUNTSET.SET.tbody).find("TR").each((i, tr) => {
                     var a = {};
                     a.id = $(tr).find("INPUT[data-node='ACCOUNTSET-GET-id']").val();
