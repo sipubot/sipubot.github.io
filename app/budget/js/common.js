@@ -501,6 +501,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         $("BUTTON[data-node='DATATRANS-EVT-button']").click(function () {
             WORKER(FEEDER.DATATRANSFROM);
         });
+        $("BUTTON[data-node='DATAGET-EVT-button']").click(function () {
+            WORKER(FEEDER.DATAGET);
+        });
     }
 
     function initWORKER() {
