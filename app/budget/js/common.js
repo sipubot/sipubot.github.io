@@ -511,28 +511,11 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         $("BUTTON[data-node='DATANEW-EVT-button']").click(function () {
             WORKER(FEEDER.DATANEW);
         });
-    }
-
-    function initWORKER() {
-        Object.entries(FEEDER).map(a => {
-            if (a.initSKIP !== undefined && a.initSKIP === true) {
-                return;
-            }
-            if (!NODES[a[0]]) {
-                WORKER(a[1]);
-                return;
-            }
-            var e = Object.entries(NODES[a[0]]["EVT"]);
-            if (e.length === 0) {
-                WORKER(a[1]);
-                return;
-            }
-            e.map(n => {
-                $(n[1]).click(function () {
-                    WORKER(a[1]);
-                },false);
-            });
+        $("BUTTON[data-node='STATGET-EVT-button']").click(function () {
+            WORKER(FEEDER.STATGET);
         });
+
+        
     }
 
     SIPUCOMMON.delRow = {
