@@ -547,8 +547,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                     //rqContentType : "application/json",
                     //rsContentType : "json",
                     rqData :function () {
-                        console.log(DATA.data,$(node).val());
-                        return DATA.data.filter(a=>a.seq === $(node).val())[0];
+                        return DATA.data[+($(node).val())];
                     },
                     //setHTML: ``,
                     setPushType : "SET",
