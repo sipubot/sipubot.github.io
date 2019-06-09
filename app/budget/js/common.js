@@ -520,7 +520,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             e.map(n => {
                 $(n[1]).click(function () {
                     WORKER(a[1]);
-                });
+                },false);
             });
         });
     }
