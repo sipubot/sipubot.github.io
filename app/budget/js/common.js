@@ -83,7 +83,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         var rqMethod = obj.rqMethod || "POST";
         var rqContentType = obj.rqContentType || "application/json";
         var rsContentType = obj.rsContentType || "json";
-        var rqData = typeof(obj.rqData) === "function" ? obj.rqData() : getrqData(NODES[obj.id]);
+        var rqData = typeof (obj.rqData) === "function" ? obj.rqData() : getrqData(NODES[obj.id]);
         var setHTML = obj.setHTML || "";
         var setPushType = obj.setPushType || "SET"; // "ADD_"
         var rsData = "";
@@ -196,7 +196,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             rqMethod: "POST",
             //rqContentType : "application/json",
             //rsContentType : "json",
-            rqData :function () {
+            rqData: function () {
                 var data = [];
                 $(NODES.ACCOUNTSET.SET.tbody).find("TR").each((i, tr) => {
                     var a = {};
@@ -207,7 +207,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 return data;
             },
             setHTML: ``,
-            setPushType : "ADD",
+            setPushType: "ADD",
             //rsData : "",
             //rsFunc : function (data) {},
             id: "ACCOUNTSET"
@@ -218,8 +218,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             rqMethod: "POST",
             //rqContentType : "application/json",
             //rsContentType : "json",
-            rqData :function () {
-                var data = []; console.log(NODES.CATEGORYSET.SET.tbody);
+            rqData: function () {
+                var data = [];
+                console.log(NODES.CATEGORYSET.SET.tbody);
                 $(NODES.CATEGORYSET.SET.tbody).find("TR").each((i, tr) => {
                     var a = {};
                     a.show = $(tr).find("INPUT[data-node='CATEGORYSET-GET-show']").is(":checked");
@@ -231,10 +232,10 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 return data;
             },
             setHTML: ``,
-            setPushType : "ADD.",
+            setPushType: "ADD.",
             //rsData : "",
-            rsFunc : function (data) {
-                
+            rsFunc: function (data) {
+
             },
             id: "CATEGORYSET"
         },
@@ -248,7 +249,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             //setHTML: ``,
             //setPushType : "SET",
             //rsData : "",
-            rsFunc : function (data) {
+            rsFunc: function (data) {
                 NODES.ACCOUNTSET.SET.tbody.innerHTML = "";
                 NODES.ACCOUNTSET.SET.tbody.innerHTML += data.map(item => {
                     var t = `<tr>
@@ -277,7 +278,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             //setHTML: ``,
             //setPushType : "SET",
             //rsData : "",
-            rsFunc : function (data) {
+            rsFunc: function (data) {
                 NODES.CATEGORYSET.SET.tbody.innerHTML = "";
                 NODES.CATEGORYSET.SET.tbody.innerHTML += data.map(item => {
                     var t = `<tr>
@@ -306,7 +307,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             rqMethod: "POST",
             //rqContentType : "application/json",
             //rsContentType : "json",
-            rqData :function () {
+            rqData: function () {
                 console.log(a);
                 var a = {};
                 a.seq = 0;
@@ -319,21 +320,21 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 return a;
             },
             //setHTML: ``,
-            setPushType : "ADD",
+            setPushType: "ADD",
             //rsData : "",
-            rsFunc : function (data) {
+            rsFunc: function (data) {
                 $(NODES.DATAGET.EVT.button).click();
             },
             id: "DATANEW"
         },
         DATATRANSFROM: {
-            initSKIP : true,
+            initSKIP: true,
             //BASE_URL: "/data/app.json",
             ADD_URL: "/budget/data/insert",
             rqMethod: "POST",
             //rqContentType : "application/json",
             //rsContentType : "json",
-            rqData :function () {
+            rqData: function () {
                 var a = {};
                 a.seq = 0;
                 a.date = $("INPUT[data-node='DATATRANS-GET-date']").val();
@@ -344,21 +345,21 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 return a;
             },
             //setHTML: ``,
-            setPushType : "ADD",
+            setPushType: "ADD",
             //rsData : "",
-            rsFunc : function (data) {
+            rsFunc: function (data) {
                 WORKER(FEEDER.DATATRANSTO);
             },
             id: "DATATRANSFROM"
         },
         DATATRANSTO: {
-            initSKIP : true,
+            initSKIP: true,
             //BASE_URL: "/data/app.json",
             ADD_URL: "/budget/data/insert",
             rqMethod: "POST",
             //rqContentType : "application/json",
             //rsContentType : "json",
-            rqData :function () {
+            rqData: function () {
                 var a = {};
                 a.seq = 0;
                 a.date = $("INPUT[data-node='DATATRANS-GET-date']").val();
@@ -369,9 +370,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 return a;
             },
             //setHTML: ``,
-            setPushType : "ADD",
+            setPushType: "ADD",
             //rsData : "",
-            rsFunc : function (data) {
+            rsFunc: function (data) {
                 $(NODES.DATAGET.EVT.button).click();
             },
             id: "DATATRANSTO"
@@ -384,13 +385,13 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             //rsContentType : "json",
             //rqData :function () {},
             //setHTML: ``,
-            setPushType : "SET",
+            setPushType: "SET",
             //rsData : "",
-            rsFunc : function (data) {
+            rsFunc: function (data) {
                 $("TBODY[data-node='DATAGET-SET-tbody_ex']").html("");
                 $("TBODY[data-node='DATAGET-SET-tbody_in']").html("");
                 DATA.data = data;
-                data = data.sort((a,b)=>a.date<b.date);
+                data = data.sort((a, b) => a.date < b.date);
                 var node;
                 data.map(item => {
                     if (!item.ttype) {
@@ -417,9 +418,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             //rsContentType : "json",
             //rqData :function () {},
             //setHTML: ``,
-            setPushType : "SET",
+            setPushType: "SET",
             //rsData : "",
-            rsFunc : function (data) {
+            rsFunc: function (data) {
                 $("TBODY[data-node='STATGET-SET-tbody']").html("");
                 data.map(item => {
                     $("TBODY[data-node='STATGET-SET-tbody']").append(`<TR>
@@ -432,36 +433,36 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         },
         CHARTGETMONTH: {
             //BASE_URL: "/data/app.json",
-            ADD_URL: "/budget/stat/category/"+ $('INPUT[data-node="CHARTGET-GET-date"]').val().slice(0,7),
+            ADD_URL: "/budget/stat/category/" + $('INPUT[data-node="CHARTGET-GET-date"]').val().slice(0, 7),
             rqMethod: "GET",
             //rqContentType : "application/json",
             //rsContentType : "json",
             //rqData :function () {},
             //setHTML: ``,
-            setPushType : "SET",
+            setPushType: "SET",
             //rsData : "",
-            rsFunc : function (data) {
+            rsFunc: function (data) {
                 console.log(data);
             },
             id: "CHARTGETMONTH"
         },
         CHARTGETYEAR: {
             //BASE_URL: "/data/app.json",
-            ADD_URL: "/budget/stat/category/"+ $('INPUT[data-node="CHARTGET-GET-date"]').val().slice(0,4),
+            ADD_URL: "/budget/stat/category/" + $('INPUT[data-node="CHARTGET-GET-date"]').val().slice(0, 4),
             rqMethod: "GET",
             //rqContentType : "application/json",
             //rsContentType : "json",
             //rqData :function () {},
             //setHTML: ``,
-            setPushType : "SET",
+            setPushType: "SET",
             //rsData : "",
-            rsFunc : function (data) {
+            rsFunc: function (data) {
                 console.log(data);
             },
             id: "CHARTGETYEAR"
         },
     }
-/* 
+
     function initCal() {
         var fp = flatpickr(".date-picker", {
             dateFormat: "Y-m-d",
@@ -469,13 +470,13 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         });
     }
 
- */  
-function initWORKER() {
-    WORKER(FEEDER.ACCOUNTGET);
-    WORKER(FEEDER.CATEGORYGET);
-   
-}
- function UIWorker() {
+    function initWORKER() {
+        WORKER(FEEDER.ACCOUNTGET);
+        WORKER(FEEDER.CATEGORYGET);
+
+    }
+
+    function UIWorker() {
         var tempAccount = `<tr>
         <td><input data-node="ACCOUNTSET-GET-id" type="text" class="form-control" placeholder="code" value="0001"></td>
         <td><input data-node="ACCOUNTSET-GET-name" type="text" class="form-control" placeholder="Name" value="신한"></td>
@@ -512,7 +513,7 @@ function initWORKER() {
             WORKER(FEEDER.DATATRANSFROM);
         });
         $("BUTTON[data-node='DATAGET-EVT-button']").click(function () {
-            FEEDER.DATAGET.ADD_URL = $('INPUT[data-node="DATAGET-GET-date"]').val().slice(0,7);
+            FEEDER.DATAGET.ADD_URL = $('INPUT[data-node="DATAGET-GET-date"]').val().slice(0, 7);
             WORKER(FEEDER.DATAGET);
         });
         $("BUTTON[data-node='DATANEW-EVT-button']").click(function () {
@@ -521,8 +522,12 @@ function initWORKER() {
         $("BUTTON[data-node='STATGET-EVT-button']").click(function () {
             WORKER(FEEDER.STATGET);
         });
-
-        
+        $("BUTTON[data-node='ACCOUNTSET-EVT-button']").click(function () {
+            WORKER(FEEDER.ACCOUNTSET);
+        });
+        $("BUTTON[data-node='CATEGORYSET-EVT-button']").click(function () {
+            WORKER(FEEDER.CATEGORYSET);
+        });
     }
 
     SIPUCOMMON.delRow = {
@@ -531,23 +536,23 @@ function initWORKER() {
         },
         dataPage: function (node) {
             var delobj = {
-                    //BASE_URL: "/data/app.json",
-                    ADD_URL: "/budget/data/delete",
-                    rqMethod: "POST",
-                    //rqContentType : "application/json",
-                    //rsContentType : "json",
-                    rqData :function () {
-                        console.log(DATA.data,$(node).val());
-                        return DATA.data.filter(a=>a.seq == $(node).val())[0];
-                    },
-                    //setHTML: ``,
-                    setPushType : "SET",
-                    //rsData : "",
-                    rsFunc : function (data) {
-                        console.log(data);
-                    },
-                    id: "DATADEL"
-                }
+                //BASE_URL: "/data/app.json",
+                ADD_URL: "/budget/data/delete",
+                rqMethod: "POST",
+                //rqContentType : "application/json",
+                //rsContentType : "json",
+                rqData: function () {
+                    console.log(DATA.data, $(node).val());
+                    return DATA.data.filter(a => a.seq == $(node).val())[0];
+                },
+                //setHTML: ``,
+                setPushType: "SET",
+                //rsData : "",
+                rsFunc: function (data) {
+                    console.log(data);
+                },
+                id: "DATADEL"
+            }
             WORKER(delobj);
             $(node).parent().parent().remove();
         }
@@ -555,7 +560,7 @@ function initWORKER() {
 
     SIPUCOMMON.run = function () {
         initWORKER();
-        //initCal();
+        initCal();
         UIWorker();
     };
     return SIPUCOMMON;
