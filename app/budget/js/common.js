@@ -311,7 +311,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 a.seq = 0;
                 a.date = $("INPUT[data-node='DATANEW-GET-date']").val();
                 a.ttype = $("SELECT[data-node='DATANEW-GET-ttype'] option:selected").val() === "false" ? false : true;
-                a.category_id = a.ttype ? $("SELECT[data-node='DATANEW-GET-category_id_in'] option:selected").val() : $("SELECT[data-node='DATANEW-GET-category_ex'] option:selected").val();
+                a.category_id = a.ttype ? $("SELECT[data-node='DATANEW-GET-category_id_in'] option:selected").val() : $("SELECT[data-node='DATANEW-GET-category_id_ex'] option:selected").val();
                 a.account_id = $("SELECT[data-node='DATANEW-GET-account_id'] option:selected").val();
                 a.amount = +$("INPUT[data-node='DATANEW-GET-amount']").val();
                 return a;
