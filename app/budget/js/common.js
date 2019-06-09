@@ -375,8 +375,8 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             id: "DATATRANSTO"
         },
         DATAGET: {
-            //BASE_URL: "/data/app.json",
-            ADD_URL: "/budget/data/" + $('INPUT[data-node="DATAGET-GET-date"]').val().slice(0,7),
+            BASE_URL: "https://sipu.iptime.org/budget/data/",
+            ADD_URL: "",
             rqMethod: "GET",
             //rqContentType : "application/json",
             //rsContentType : "json",
@@ -503,6 +503,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             WORKER(FEEDER.DATATRANSFROM);
         });
         $("BUTTON[data-node='DATAGET-EVT-button']").click(function () {
+            FEEDER.DATAGET.ADD_URL = $('INPUT[data-node="DATAGET-GET-date"]').val().slice(0,7);
             WORKER(FEEDER.DATAGET);
         });
     }
