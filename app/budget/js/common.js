@@ -376,7 +376,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         },
         DATAGET: {
             //BASE_URL: "/data/app.json",
-            ADD_URL: "/budget/data/" + $(NODES.DATAGET.GET.date).val().slice(0,7),
+            ADD_URL: "/budget/data/" + $('INPUT[data-node="DATAGET-GET-date"]').val().slice(0,7),
             rqMethod: "GET",
             //rqContentType : "application/json",
             //rsContentType : "json",
