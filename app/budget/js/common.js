@@ -463,13 +463,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         },
     }
 
-    function initCal() {
-        var fp = flatpickr(".date-picker", {
-            dateFormat: "Y-m-d",
-            defaultDate: ["today"]
-        });
-    }
-
     function initWORKER() {
         WORKER(FEEDER.ACCOUNTGET);
         WORKER(FEEDER.CATEGORYGET);
@@ -528,6 +521,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         $("BUTTON[data-node='CATEGORYSET-EVT-button']").click(function () {
             WORKER(FEEDER.CATEGORYSET);
         });
+        $(".date-picker").each(function (i, node) {
+            $(node).val(new Date().toISOString().slice(0, 10));
+        });
     }
 
     SIPUCOMMON.delRow = {
@@ -560,7 +556,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
 
     SIPUCOMMON.run = function () {
         initWORKER();
-        initCal();
         UIWorker();
     };
     return SIPUCOMMON;
