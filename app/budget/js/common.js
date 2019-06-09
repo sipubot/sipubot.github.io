@@ -508,9 +508,8 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             FEEDER.DATAGET.ADD_URL = $('INPUT[data-node="DATAGET-GET-date"]').val().slice(0,7);
             WORKER(FEEDER.DATAGET);
         });
-        $("BUTTON[data-node='DATAGET-EVT-button']").click(function () {
-            FEEDER.DATAGET.ADD_URL = $('INPUT[data-node="DATAGET-GET-date"]').val().slice(0,7);
-            WORKER(FEEDER.DATAGET);
+        $("BUTTON[data-node='DATANEW-EVT-button']").click(function () {
+            WORKER(FEEDER.DATANEW);
         });
     }
 
