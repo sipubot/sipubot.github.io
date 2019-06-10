@@ -556,7 +556,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             $(node).val(new Date().toISOString().slice(0, 10));
         });
         initWK();
-        life();
     };
     return SIPUCOMMON;
 })(window.SIPUCOMMON || {}, jQuery);
