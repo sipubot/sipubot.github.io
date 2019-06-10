@@ -427,7 +427,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             setPushType: "SET",
             //rsData : "",
             rsFunc: function (data) {
-                RS_DATA.DATA = data;
+                RS_DATA.DATA = data.slice();
                 var obj1 = DATANODES.DATAGET.tbody_ex;
                 var obj2 = DATANODES.DATAGET.tbody_in;
                 var format = DATANODES.DATAGET.template;
