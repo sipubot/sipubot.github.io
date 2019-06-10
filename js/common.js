@@ -206,6 +206,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             init: () => {
                 UI_WK.setEvent(DATANODES.LOGIN.summit, () => {
                     RQ_WK(JOB_WK.LOGIN);
+                    $('#login-modal').modal('toggle');
                 });
             }
         },
