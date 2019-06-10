@@ -143,31 +143,34 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             return false;
         },
         setNodeValue: function (obj, format, data, reset) {
-            if (!UI_WK.isHTML(obj)) return;
-            if (reset) {
-                obj.innerHTML = "";
-            }
-            var sethtml = "";
-            if (typeof (data) !== "object" && !Array.isArray(data)) {
-                console.log(data);
-                data = [];
-            }
-            if (!Array.isArray(data)) {
-                data = [data];
-            }
-            sethtml = data.reduce((st, item) => {
-                var t = "";
-                if (UI_WK.isHTML(format)) {
-                    t = format.cloneNode(true).innerHTML;
-                } else {
-                    t = format;
+            try {
+                if (!UI_WK.isHTML(obj)) return;
+                if (reset) {
+                    obj.innerHTML = "";
                 }
-                Object.entries(item).map(a => {
-                    t = t.replace(`{${a[0]}}`, a[1]);
-                });
-                return st + t;
-            }, "");
-            obj.innerHTML += sethtml;
+                var sethtml = "";
+                if (typeof (data) !== "object" && !Array.isArray(data)) {
+                    data = [];
+                }
+                if (!Array.isArray(data)) {
+                    data = [data];
+                }
+                sethtml = data.reduce((st, item) => {
+                    var t = "";
+                    if (UI_WK.isHTML(format)) {
+                        t = format.cloneNode(true).innerHTML;
+                    } else {
+                        t = format;
+                    }
+                    Object.entries(item).map(a => {
+                        t = t.replace(`{${a[0]}}`, a[1]);
+                    });
+                    return st + t;
+                }, "");
+                obj.innerHTML += sethtml;
+            } catch (e) {
+                console.log(obj, format, data, reset, e);
+            }
         },
         getNodeValue: function (obj) {
             if (!UI_WK.isHTML(obj)) return;

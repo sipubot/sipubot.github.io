@@ -142,30 +142,34 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             return false;
         },
         setNodeValue: function (obj, format, data, reset) {
-            if (!UI_WK.isHTML(obj)) return;
-            if (reset) {
-                obj.innerHTML = "";
-            }
-            var sethtml = "";
-            if (typeof (data) !== "object" && !Array.isArray(data)) {
-                data = [];
-            }
-            if (!Array.isArray(data)) {
-                data = [data];
-            }
-            sethtml = data.reduce((st, item) => {
-                var t = "";
-                if (UI_WK.isHTML(format)) {
-                    t = format.cloneNode(true).innerHTML;
-                } else {
-                    t = format;
+            try {
+                if (!UI_WK.isHTML(obj)) return;
+                if (reset) {
+                    obj.innerHTML = "";
                 }
-                Object.entries(item).map(a => {
-                    t = t.replace(`{${a[0]}}`, a[1]);
-                });
-                return st + t;
-            }, "");
-            obj.innerHTML += sethtml;
+                var sethtml = "";
+                if (typeof (data) !== "object" && !Array.isArray(data)) {
+                    data = [];
+                }
+                if (!Array.isArray(data)) {
+                    data = [data];
+                }
+                sethtml = data.reduce((st, item) => {
+                    var t = "";
+                    if (UI_WK.isHTML(format)) {
+                        t = format.cloneNode(true).innerHTML;
+                    } else {
+                        t = format;
+                    }
+                    Object.entries(item).map(a => {
+                        t = t.replace(`{${a[0]}}`, a[1]);
+                    });
+                    return st + t;
+                }, "");
+                obj.innerHTML += sethtml;
+            } catch(e) {
+                console.log(obj, format, data, reset,e);
+            }
         },
         getNodeValue: function (obj) {
             if (!UI_WK.isHTML(obj)) return;
@@ -421,12 +425,12 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 data = data.sort((a, b) => a.date < b.date);
                 var data1 = data.filter(a => a.ttype === false).map(a => {
                     a.account_id = RS_DATA.ACCOUNTHASH[a.account_id];
-                    a.category_id = RS_DATA.CATEGORYHASH[a.category_id];
+                    a.category_id = RS_DATA.CATEGORYHASH[a.category_id][1];
                     return a;
                 });
                 var data2 = data.filter(a => a.ttype === true).map(a => {
                     a.account_id = RS_DATA.ACCOUNTHASH[a.account_id];
-                    a.category_id = RS_DATA.CATEGORYHASH[a.category_id];
+                    a.category_id = RS_DATA.CATEGORYHASH[a.category_id][1];
                     return a;
                 });
                 UI_WK.setNodeValue(obj1, format, data1, true);
