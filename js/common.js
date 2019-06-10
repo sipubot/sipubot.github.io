@@ -316,7 +316,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             },
             doOnload: false,
             init: () => {
-                RQ_WK(JOB_WK.STAT);
+                //RQ_WK(JOB_WK.STAT);
             }
         }
     }
