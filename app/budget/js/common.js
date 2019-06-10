@@ -454,6 +454,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 var format = DATANODES.STATGET.template;
                 data = data.map(a => {
                     a.account_id = RS_DATA.ACCOUNTHASH[a.account_id];
+                    return a;
                 });
                 UI_WK.setNodeValue(obj, format, data, true);
             },
