@@ -143,7 +143,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             return false;
         },
         setNodeValue: function (obj, format, data, reset) {
-            console.log(data);
             if (!UI_WK.isHTML(obj)) return;
             if (reset) {
                 obj.innerHTML = "";
@@ -168,7 +167,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 });
                 return st + t;
             }, "");
-            console.log(sethtml);
             obj.innerHTML += sethtml;
         },
         getNodeValue: function (obj) {
@@ -230,8 +228,8 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             //BASE_URL = "https://sipu.iptime.org",
             ADD_URL: "/qut",
             rqMethod: "POST",
-            rqData: {
-                message: UI_WK.getNodeValue(DATANODES.QUT.sendmessage)
+            rqData: function () {
+                return {message: UI_WK.getNodeValue(DATANODES.QUT.sendmessage)};
             },
             //rsData : "",
             rsFunc: function (data) {
