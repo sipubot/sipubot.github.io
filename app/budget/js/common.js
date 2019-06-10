@@ -380,7 +380,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 a.ttype = false;
                 a.category_id = "0000";
                 a.account_id = UI_WK.getNodeValue(DATANODES.TRANS.account_from);
-                a.amount = UI_WK.getNodeValue(DATANODES.TRANS.amount);
+                a.amount = +(UI_WK.getNodeValue(DATANODES.TRANS.amount));
                 return a;
             },
             rsFunc: function (data) {
@@ -407,7 +407,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 a.ttype = true;
                 a.category_id = "5000";
                 a.account_id = UI_WK.getNodeValue(DATANODES.TRANS.account_to);
-                a.amount = UI_WK.getNodeValue(DATANODES.TRANS.amount);
+                a.amount = +(UI_WK.getNodeValue(DATANODES.TRANS.amount));
                 return a;
             },
             //rsFunc : function (data) {},
