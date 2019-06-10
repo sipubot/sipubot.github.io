@@ -356,8 +356,8 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 a.seq = 0;
                 a.date = UI_WK.getNodeValue(DATANODES.DATANEW.date);
                 a.ttype = UI_WK.getNodeValue(DATANODES.DATANEW.ttype) === "false" ? false : true;
-                a.category_id = a.ttype ? UI_WK.getNodeValue(DATANODES.DATANEW.select_income) : UI_WK.getNodeValue(DATANODES.DATANEW.select_expense);
-                a.account_id = UI_WK.getNodeValue(DATANODES.DATANEW.selectnew);
+                a.category_id = a.ttype ? UI_WK.getNodeValue(DATANODES.CATEGORY.select_income) : UI_WK.getNodeValue(DATANODES.CATEGORY.select_expense);
+                a.account_id = UI_WK.getNodeValue(DATANODES.ACCOUNT.selectnew);
                 a.amount = +UI_WK.getNodeValue(DATANODES.DATANEW.amount);
                 return a;
             },
