@@ -154,9 +154,11 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 data = [data];
             }
             sethtml = data.reduce((st, item) => {
-                var t = format;
+                var t = "";
                 if (UI_WK.isHTML(format)) {
                     t = format.cloneNode(true).innerHTML;
+                } else {
+                    t = format;
                 }
                 Object.entries(item).map(a => {
                     t = t.replace(`{${a[0]}}`, a[1]);
