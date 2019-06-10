@@ -320,9 +320,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 }
                 UI_WK.setNodeValue(obj2, format2, data2, true);
                 UI_WK.setNodeValue(obj3, format2, data3, true);
-                DATANODES.CATEGORYHASH = {};
+                RS_DATA.CATEGORYHASH = {};
                 data.map(a => {
-                    DATANODES.CATEGORYHASH[a.id] = [a.ttype, a.name];
+                    RS_DATA.CATEGORYHASH[a.id] = [a.ttype, a.name];
                 });
             },
             doOnload: false,
