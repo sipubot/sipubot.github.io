@@ -143,6 +143,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             return false;
         },
         setNodeValue: function (obj, format, data, reset) {
+            console.log(data);
             if (!UI_WK.isHTML(obj)) return;
             if (reset) {
                 obj.innerHTML = "";
@@ -156,9 +157,11 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 data = [data];
             }
             sethtml = data.reduce((st, item) => {
-                var t = format;
+                var t = "";
                 if (UI_WK.isHTML(format)) {
                     t = format.cloneNode(true).innerHTML;
+                } else {
+                    t = format;
                 }
                 return st + Object.entries(item).map(a => {
                     t = t.replace(`{${a[0]}}`, a[1]);
@@ -355,7 +358,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             sp.innerHTML = startval + Math.floor(addval / 1000);
             sp2.innerHTML = getPlace(nowHour);
         };
-
         function getPlace(h) {
             var weekNumber = (new Date()).getDay();
             if (0 < weekNumber && 5 >= weekNumber) {
