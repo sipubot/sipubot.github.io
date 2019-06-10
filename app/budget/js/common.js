@@ -110,7 +110,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                     });
                 } else if (rsContentType === "json") {
                     response.json().then((data) => {
-                        rsData = data;
+                        rsData = data; 
                         RS_DATA[obj.id] = rsData;
                         rsFunc(rsData);
                     });
@@ -135,7 +135,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 if (obj instanceof HTMLElement) {
                     return true;
                 }
-                console.log("not a elements");
+                console.log("not a elements",obj);
             } catch (e) {
                 console.log(e);
             }
@@ -148,7 +148,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             }
             var sethtml = "";
             if (typeof (data) !== "object" && !Array.isArray(data)) {
-                console.log(data);
                 data = [];
             }
             if (!Array.isArray(data)) {
@@ -226,14 +225,14 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             rsFunc: function (data) {
                 var obj = DATANODES.ACCOUNT.settbody;
                 var format = DATANODES.ACCOUNT.template;
-                UI_WK(obj, format, data, true);
+                UI_WK.setNodeValue(obj, format, data, true);
                 //modal select defalut
                 var data2 = data.map(a => {
                     a.select = ""
                     return a;
                 });
-                if (data[0]) {
-                    data[0].select == "selected";
+                if (data2[0]) {
+                    data2[0].select == "selected";
                 }
                 var obj2 = DATANODES.ACCOUNT.selectnew;
                 var format2 = DATANODES.ACCOUNT.templatenew;
@@ -301,6 +300,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                     item.show = item.show ? "checked" : "";
                     item.ttypefalse = !item.ttype ? "selected" : "";
                     item.ttypetrue = item.ttype ? "selected" : "";
+                    return item;
                 });
                 UI_WK.setNodeValue(obj, format, data1, true);
                 var obj2 = DATANODES.CATEGORY.select_expense;

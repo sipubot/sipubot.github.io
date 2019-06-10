@@ -231,9 +231,9 @@
                             <template data-node="ACCOUNT-template">
                                 <tr>
                                     <td><input data-node="ACCOUNT-id" type="text" class="form-control"
-                                            placeholder="code" value=""></td>
+                                            placeholder="code" value="{id}"></td>
                                     <td><input data-node="ACCOUNT-name" type="text" class="form-control"
-                                            placeholder="Name" value=""></td>
+                                            placeholder="Name" value="{name}"></td>
                                     <td><button type="button" class="btn btn-secondary"
                                             onclick="javascript:SIPUCOMMON.delRow.setPage(this);">삭제</button></td>
                                 </tr>
@@ -266,9 +266,9 @@
                                             <option value="true" {ttypetrue}>수입</option>
                                         </select></td>
                                     <td><input data-node="CATEGORY-id" type="text" class="form-control"
-                                            placeholder="code" value="{item.id}"></td>
+                                            placeholder="code" value="{id}"></td>
                                     <td><input data-node="CATEGORY-name" type="text" class="form-control"
-                                            placeholder="Name" value="{item.name}"></td>
+                                            placeholder="Name" value="{name}"></td>
                                     <td><button type="button" class="btn btn-secondary"
                                             onclick="javascript:SIPUCOMMON.delRow.setPage(this);">삭제</button></td>
                                 </tr>
