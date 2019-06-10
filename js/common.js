@@ -235,6 +235,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             rsFunc: function (data) {
                 DATANODES.QUT.sendmessage.value = "";
                 data.map(a => {
+                    console.log(a);
                     var str = a["message"];
                     var len = str.length < 10 ? 1 : str.length * 0.1;
                     len = Math.floor(len);
