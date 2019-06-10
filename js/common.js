@@ -105,19 +105,16 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 } else if (rsContentType === "blob") {
                     response.blob().then((data) => {
                         rsData = data;
-                        RS_DATA[obj.id] = rsData;
                         rsFunc(rsData);
                     });
                 } else if (rsContentType === "json") {
                     response.json().then((data) => {
                         rsData = data;
-                        RS_DATA[obj.id] = rsData;
                         rsFunc(rsData);
                     });
                 } else if (rsContentType === "text") {
                     response.text().then((data) => {
                         rsData = data;
-                        RS_DATA[obj.id] = rsData;
                         rsFunc(rsData);
                     });
                 }

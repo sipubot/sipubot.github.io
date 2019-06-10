@@ -105,19 +105,16 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 } else if (rsContentType === "blob") {
                     response.blob().then((data) => {
                         rsData = data;
-                        RS_DATA[obj.constructor.name] = rsData;
                         rsFunc(rsData);
                     });
                 } else if (rsContentType === "json") {
                     response.json().then((data) => {
                         rsData = data;
-                        RS_DATA[obj.constructor.name] = rsData;
                         rsFunc(rsData);
                     });
                 } else if (rsContentType === "text") {
                     response.text().then((data) => {
                         rsData = data;
-                        RS_DATA[obj.constructor.name] = rsData;
                         rsFunc(rsData);
                     });
                 }
@@ -430,6 +427,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             setPushType: "SET",
             //rsData : "",
             rsFunc: function (data) {
+                RS_DATA.DATA = data;
                 var obj1 = DATANODES.DATAGET.tbody_ex;
                 var obj2 = DATANODES.DATAGET.tbody_in;
                 var format = DATANODES.DATAGET.template;
@@ -548,12 +546,13 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 ADD_URL: "/budget/data/delete",
                 rqMethod: "POST",
                 rqData: function () {
-                    return RS_DATA.DATAGET.filter(a => a.seq == $(node).val())[0];
+                    return RS_DATA.DATA.filter(a => a.seq == $(node).val())[0];
                 },
                 //rsFunc: () => {},
                 doOnload: false,
                 init: () => {}
             }
+            console.log(RS_DATA);
             RQ_WK(delobj);
             $(node).parent().parent().remove();
         }
