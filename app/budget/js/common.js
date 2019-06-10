@@ -504,7 +504,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     function initWK() {
         Object.entries(JOB_WK).map(a => {
             if (a.doOnload) {
-                WORKER(a[1]);
+                RQ_WK(a[1]);
                 return;
             }
             a.init();
