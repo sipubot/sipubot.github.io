@@ -46,7 +46,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                     if (attrValue.indexOf('-') < 1) {
                         console.log('data node Error');
                         console.log(node[i]);
+                        return;
                     }
+                    attrValue = attrValue.split("-");
                     if (!DATANODES[attrValue[0]]) {
                         DATANODES[attrValue[0]] = {};
                         DATANODES[attrValue[0]][attrValue[1]] = node[i];
