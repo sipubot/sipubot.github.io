@@ -124,6 +124,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             })
             .catch(function (error) {
                 console.log(rqData);
+                console.log(obj);
                 console.log('There has been a problem with your fetch operation: ' + error.message);
             });
     }
@@ -201,7 +202,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             },
             doOnload: false,
             init: () => {
-                UI_WK.setEvent(DATANODES.LOGIN.summit, RQ_WK(JOB_WK.LOGIN));
+                UI_WK.setEvent(DATANODES.LOGIN.summit, ()=>{
+                    RQ_WK(JOB_WK.LOGIN);
+                });
             }
         },
         LOGOUT: {
@@ -214,7 +217,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             },
             doOnload: false,
             init: () => {
-                UI_WK.setEvent(DATANODES.LOGOUT.summit, RQ_WK(JOB_WK.LOGOUT));
+                UI_WK.setEvent(DATANODES.LOGOUT.summit, () =>{
+                    RQ_WK(JOB_WK.LOGOUT);
+                });
             }
         },
         QUTSET: {
@@ -238,7 +243,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             },
             doOnload: false,
             init: () => {
-                UI_WK.setEvent(DATANODES.QUT.summit, RQ_WK(JOB_WK.QUTSET));
+                UI_WK.setEvent(DATANODES.QUT.summit, () => {
+                    RQ_WK(JOB_WK.QUTSET);
+                });
             }
         },
         QUTGET: {
@@ -247,7 +254,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             rqMethod: "GET",
             //rqData : 
             rsFunc: function (data) {
-                DATANODES.QUTSET.GET.message.value = "";
+                DATANODES.QUT.sendmessage.value = "";
                 data.map(a => {
                     var str = a["message"];
                     var len = str.length < 10 ? 1 : str.length * 0.1;
