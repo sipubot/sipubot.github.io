@@ -99,12 +99,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                     console.log(rqData, response.text());
                     return;
                 } else if (rqMethod === "POST") {
-                    response.blob().then(data => {
-                        rsFunc([rqData, data]);
-                    });
-                    response.json().then(data => {
-                        rsFunc([rqData, data]);
-                    });
                     response.text().then(data => {
                         rsFunc([rqData, data]);
                     });
