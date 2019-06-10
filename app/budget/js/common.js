@@ -490,7 +490,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 var monthGet = DATANODES.CHARTGET.submit_month;
                 var yearGet = DATANODES.CHARTGET.submit_year;
                 UI_WK.setEvent(monthGet, () => {
-                    console.log(DATANODES.CHARTGET.date);
                     UI_WK.getNodeValue(DATANODES.CHARTGET.date).slice(0, 7);
                 });
                 UI_WK.setEvent(yearGet, () => {
