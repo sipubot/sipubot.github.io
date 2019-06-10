@@ -489,11 +489,12 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             init: () => {
                 var monthGet = DATANODES.CHARTGET.submit_month;
                 var yearGet = DATANODES.CHARTGET.submit_year;
-                UI_WK.setEvent(DATANODES.CHARTGET.submit_month, () => {
-                    UI_WK.getNodeValue(monthGet).slice(0, 7);
+                UI_WK.setEvent(monthGet, () => {
+                    console.log(DATANODES.CHARTGET.date);
+                    UI_WK.getNodeValue(DATANODES.CHARTGET.date).slice(0, 7);
                 });
-                UI_WK.setEvent(DATANODES.CHARTGET.submit_year, () => {
-                    UI_WK.getNodeValue(yearGet).slice(0, 4);
+                UI_WK.setEvent(yearGet, () => {
+                    UI_WK.getNodeValue(DATANODES.CHARTGET.date).slice(0, 4);
                 });
             }
         },
