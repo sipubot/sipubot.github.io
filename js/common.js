@@ -204,7 +204,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             },
             doOnload: false,
             init: () => {
-                UI_WK.setEvent(DATANODES.LOGIN.summit, ()=>{
+                UI_WK.setEvent(DATANODES.LOGIN.summit, () => {
                     RQ_WK(JOB_WK.LOGIN);
                 });
             }
@@ -219,7 +219,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             },
             doOnload: false,
             init: () => {
-                UI_WK.setEvent(DATANODES.LOGOUT.summit, () =>{
+                UI_WK.setEvent(DATANODES.LOGOUT.summit, () => {
                     RQ_WK(JOB_WK.LOGOUT);
                 });
             }
@@ -229,20 +229,19 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             ADD_URL: "/qut",
             rqMethod: "POST",
             rqData: function () {
-                return {message: UI_WK.getNodeValue(DATANODES.QUT.sendmessage)};
+                return {
+                    message: UI_WK.getNodeValue(DATANODES.QUT.sendmessage)
+                };
             },
             //rsData : "",
             rsFunc: function (data) {
                 DATANODES.QUT.sendmessage.value = "";
-                data.map(a => {
-                    console.log(a);
-                    var str = a["message"];
-                    var len = str.length < 10 ? 1 : str.length * 0.1;
-                    len = Math.floor(len);
-                    str = chunkString(str, len);
-                    var s = str.map(c => `<span>${c}</span>`).join('');
-                    DATANODES.QUT.setul.innerHTML += `<li class="list-group-item"><h4>${s}</h4></li>`;
-                });
+                var str = DATANODES.QUT.sendmessage;
+                var len = str.length < 10 ? 1 : str.length * 0.1;
+                len = Math.floor(len);
+                str = chunkString(str, len);
+                var s = str.map(c => `<span>${c}</span>`).join('');
+                DATANODES.QUT.setul.innerHTML += `<li class="list-group-item"><h4>${s}</h4></li>`;
             },
             doOnload: false,
             init: () => {
@@ -358,6 +357,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             sp.innerHTML = startval + Math.floor(addval / 1000);
             sp2.innerHTML = getPlace(nowHour);
         };
+
         function getPlace(h) {
             var weekNumber = (new Date()).getDay();
             if (0 < weekNumber && 5 >= weekNumber) {
