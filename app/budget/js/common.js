@@ -376,7 +376,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             rqData: function () {
                 var a = {};
                 a.seq = 0;
-                a.date = UI_WK.getNodeValue(DATANODES.DATATRANS.date);
+                a.date = UI_WK.getNodeValue(DATANODES.TRANS.date);
                 a.ttype = false;
                 a.category_id = "0000";
                 a.account_id = UI_WK.getNodeValue(DATANODES.TRANS.account_from);
