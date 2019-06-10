@@ -190,7 +190,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 var evobj = DATANODES.ACCOUNT.add;
                 var obj = DATANODES.ACCOUNT.settbody
                 var format = DATANODES.ACCOUNT.template;
-                UI_WK.setEvent(evobj, UI_WK.setNodeValue(obj, format, [], false));
+                UI_WK.setEvent(evobj, ()=>{
+                    UI_WK.setNodeValue(obj, format, [], false);
+                });
             }
         },
         ACCOUNTSET: {
@@ -210,8 +212,10 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             //rsFunc : function (data) {},
             doOnload: false,
             init: () => {
-                UI_WK.setEvent(DATANODES.ACCOUNT.summit, RQ_WK(JOB_WK.ACCOUNTSET));
-                RQ_WK(JOB_WK.ACCOUNTGET);
+                UI_WK.setEvent(DATANODES.ACCOUNT.summit, () =>{
+                    RQ_WK(JOB_WK.ACCOUNTSET);
+                    RQ_WK(JOB_WK.ACCOUNTGET);
+                });
             }
         },
         ACCOUNTGET: {
@@ -255,7 +259,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 var evobj = DATANODES.CATEGORY.add;
                 var obj = DATANODES.CATEGORY.settbody
                 var format = DATANODES.CATEGORY.template;
-                UI_WK.setEvent(evobj, UI_WK.setNodeValue(obj, format, [], false));
+                UI_WK.setEvent(evobj, ()=>{
+                    UI_WK.setNodeValue(obj, format, [], false);
+                });
             }
         },
         CATEGORYSET: {
@@ -277,8 +283,10 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             //rsFunc : function (data) {},
             doOnload: false,
             init: () => {
-                UI_WK.setEvent(DATANODES.CATEGORY.submit, RQ_WK(JOB_WK.CATEGORYSET));
-                RQ_WK(JOB_WK.CATEGORYGET);
+                UI_WK.setEvent(DATANODES.CATEGORY.submit, ()=>{
+                    RQ_WK(JOB_WK.CATEGORYSET);
+                    RQ_WK(JOB_WK.CATEGORYGET);
+                });
             }
         },
         CATEGORYGET: {
@@ -342,7 +350,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             },
             doOnload: false,
             init: () => {
-                UI_WK.setEvent(DATANODES.DATANEW.submit, RQ_WK(JOB_WK.DATANEW));
+                UI_WK.setEvent(DATANODES.DATANEW.submit, ()=>{
+                    RQ_WK(JOB_WK.DATANEW);
+                });
             }
         },
         TRANSFROM: {
@@ -364,7 +374,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             },
             doOnload: false,
             init: () => {
-                UI_WK.setEvent(DATANODES.TRANS.submit, RQ_WK(JOB_WK.TRANSFROM));
+                UI_WK.setEvent(DATANODES.TRANS.submit, ()=>{
+                    RQ_WK(JOB_WK.TRANSFROM);
+                });
             }
         },
         TRANSTO: {
@@ -387,7 +399,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             //rsFunc : function (data) {},
             doOnload: false,
             init: () => {
-                UI_WK.setEvent(DATANODES.TRANS.submit, RQ_WK(JOB_WK.TRANSFROM));
+                UI_WK.setEvent(DATANODES.TRANS.submit, ()=>{
+                    RQ_WK(JOB_WK.TRANSFROM);
+                });
             }
         },
         DATAGET: {
@@ -418,11 +432,10 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             },
             doOnload: false,
             init: () => {
-                function getdata() {
+                UI_WK.setEvent(DATANODES.DATAGET.submit, ()=>{
                     JOB_WK.DATAGET.ADD_URL = UI_WK.getNodeValue(DATANODES.DATAGET.date).slice(0, 7);
                     RQ_WK(JOB_WK.DATAGET);
-                }
-                UI_WK.setEvent(DATANODES.DATAGET.submit, getdata);
+                });
             }
         },
         STATGET: {
@@ -440,7 +453,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             },
             doOnload: false,
             init: () => {
-                UI_WK.setEvent(DATANODES.STATGET.submit, RQ_WK(JOB_WK.STATGET));
+                UI_WK.setEvent(DATANODES.STATGET.submit, ()=>{
+                    RQ_WK(JOB_WK.STATGET);
+                });
             }
         },
         CHARTGET: {
@@ -456,8 +471,12 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             init: () => {
                 var monthGet = DATANODES.CHARTGET.submit_month;
                 var yearGet = DATANODES.CHARTGET.submit_year;
-                UI_WK.setEvent(DATANODES.CHARTGET.submit_month, UI_WK.getNodeValue(monthGet).slice(0, 7));
-                UI_WK.setEvent(DATANODES.CHARTGET.submit_year, UI_WK.getNodeValue(yearGet).slice(0, 4));
+                UI_WK.setEvent(DATANODES.CHARTGET.submit_month, ()=>{
+                    UI_WK.getNodeValue(monthGet).slice(0, 7);
+                });
+                UI_WK.setEvent(DATANODES.CHARTGET.submit_year, ()=>{
+                    UI_WK.getNodeValue(yearGet).slice(0, 4);
+                });
             }
         },
         MODALNEW: {
@@ -474,8 +493,12 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 });
                 var monthGet = DATANODES.CHARTGET.submit_month;
                 var yearGet = DATANODES.CHARTGET.submit_year;
-                UI_WK.setEvent(DATANODES.CHARTGET.submit_month, UI_WK.getNodeValue(monthGet).slice(0, 7));
-                UI_WK.setEvent(DATANODES.CHARTGET.submit_year, UI_WK.getNodeValue(yearGet).slice(0, 4));
+                UI_WK.setEvent(DATANODES.CHARTGET.submit_month, ()=>{
+                    UI_WK.getNodeValue(monthGet).slice(0, 7);
+                });
+                UI_WK.setEvent(DATANODES.CHARTGET.submit_year, ()=>{
+                    UI_WK.getNodeValue(yearGet).slice(0, 4);
+                });
             }
         },
         SETPAGE: {
