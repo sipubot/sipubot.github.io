@@ -51,8 +51,8 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                     attrValue = attrValue.split("-");
                     if (!DATANODES[attrValue[0]]) {
                         DATANODES[attrValue[0]] = {};
-                        DATANODES[attrValue[0]][attrValue[1]] = node[i];
                     }
+                    DATANODES[attrValue[0]][attrValue[1]] = node[i];
                 }
             }
         },
@@ -326,7 +326,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 RQ_WK(a[1]);
                 return;
             }
-            a.init();
+            a[1].init();
         });
     }
 
