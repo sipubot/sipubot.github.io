@@ -394,16 +394,13 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             }
         },
         TRANSTO: {
-            initSKIP: true,
             //BASE_URL: "/data/app.json",
             ADD_URL: "/budget/data/insert",
             rqMethod: "POST",
-            //rqContentType : "application/json",
-            //rsContentType : "json",
             rqData: function () {
                 var a = {};
                 a.seq = 0;
-                a.date = UI_WK.getNodeValue(DATANODES.DATATRANS.date);
+                a.date = UI_WK.getNodeValue(DATANODES.TRANS.date);
                 a.ttype = true;
                 a.category_id = "5000";
                 a.account_id = UI_WK.getNodeValue(DATANODES.TRANS.account_to);
