@@ -415,18 +415,18 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             setPushType: "SET",
             //rsData : "",
             rsFunc: function (data) {
-                var obj1 = DATANODES.DATAGET.tbody_in;
-                var obj2 = DATANODES.DATAGET.tbody_ex;
+                var obj1 = DATANODES.DATAGET.tbody_ex;
+                var obj2 = DATANODES.DATAGET.tbody_in;
                 var format = DATANODES.DATAGET.template;
                 data = data.sort((a, b) => a.date < b.date);
-                var data1 = data.filter(a => a.ttype === true).map(a => {
-                    a.category_id = RS_DATA.CATEGORYHASH[a.account_id];
+                var data1 = data.filter(a => a.ttype === false).map(a => {
                     a.account_id = RS_DATA.ACCOUNTHASH[a.account_id];
+                    a.category_id = RS_DATA.CATEGORYHASH[a.category_id];
                     return a;
                 });
                 var data2 = data.filter(a => a.ttype === true).map(a => {
-                    a.category_id = RS_DATA.CATEGORYHASH[a.account_id];
                     a.account_id = RS_DATA.ACCOUNTHASH[a.account_id];
+                    a.category_id = RS_DATA.CATEGORYHASH[a.category_id];
                     return a;
                 });
                 UI_WK.setNodeValue(obj1, format, data1, true);
