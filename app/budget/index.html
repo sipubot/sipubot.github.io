@@ -70,19 +70,26 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-body border-0">
-                        <input class="date-picker" data-node="DATANEW-GET-date" placeholder="Select Date.." data-id="datetime" >
-                        <select data-node="DATANEW-GET-ttype" class="custom-select">
+                        <input class="date-picker" data-node="DATANEW-date" placeholder="Select Date.."
+                            data-id="datetime">
+                        <select data-node="DATANEW-ttype" class="custom-select">
                             <option value="false" selected>지출</option>
                             <option value="true">수입</option>
                         </select>
-                        <select data-node="DATANEW-GET-account_id" class="custom-select"></select>
-                        <select data-node="DATANEW-GET-category_id_ex" class="custom-select"></select>
-                        <select data-node="DATANEW-GET-category_id_in" class="custom-select" style="display:none;"></select>
-                        <input data-node="DATANEW-GET-amount" type="text" class="form-control" placeholder="Amount">
+                        <template data-node="ACCOUNT-templatenew">
+                            <option value="{id}" {select}>{name}</option>
+                        </template>
+                        <select data-node="ACCOUNT-selectnew" class="custom-select"></select>
+                        <template data-node="CATEGORY-templatenew">
+                            <option value="{id}" {select}>{name}</option>
+                        </template>
+                        <select data-node="CATEGORY-select_expense" class="custom-select"></select>
+                        <select data-node="CATEGORY-select_income" class="custom-select" style="display:none;"></select>
+                        <input data-node="DATANEW-amount" type="number" class="form-control" placeholder="Amount">
                     </div>
                     <div class="modal-footer border-0">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button data-node="DATANEW-EVT-button" type="button" class="btn btn-primary">OK</button>
+                        <button data-node="DATANEW-submit" type="button" class="btn btn-primary">OK</button>
                     </div>
                 </div>
             </div>
@@ -92,14 +99,14 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-body border-0">
-                        <input class="date-picker" data-node="DATATRANS-GET-date" type="text" placeholder="Select Date..">
-                        <select data-node="DATATRANS-GET-account_id_from" class="custom-select"></select>
-                        <select data-node="DATATRANS-GET-account_id_to" class="custom-select"></select>
-                        <input data-node="DATATRANS-GET-amount" type="text" class="form-control" placeholder="Amount">
+                        <input class="date-picker" data-node="TRANS-date" type="text" placeholder="Select Date..">
+                        <select data-node="TRANS-account_from" class="custom-select"></select>
+                        <select data-node="TRANS-account_to" class="custom-select"></select>
+                        <input data-node="TRANS-amount" type="text" class="form-control" placeholder="Amount">
                     </div>
                     <div class="modal-footer border-0">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button data-node="DATATRANS-EVT-button" type="button" class="btn btn-primary">OK</button>
+                        <button data-node="TRANS-submit" type="button" class="btn btn-primary">OK</button>
                     </div>
                 </div>
             </div>
@@ -110,8 +117,8 @@
             <section id="data">
                 <header class="wrapper clearfix">
                     <div class="text-right">
-                        <input class="date-picker" data-node="DATAGET-GET-date" type="text" placeholder="Select Date..">
-                        <button data-node="DATAGET-EVT-button" type="button" class="btn btn-outline-light">SEARCH</button>
+                        <input class="date-picker" data-node="DATAGET-date" type="text" placeholder="Select Date..">
+                        <button data-node="DATAGET-submit" type="button" class="btn btn-outline-light">SEARCH</button>
                         <button data-node="data-new-modal" data-toggle="modal" data-target="#data-new-modal"
                             type="button" class="btn btn-outline-light">NEW</button>
                         <button data-node="data-trans-modal" data-toggle="modal" data-target="#data-trans-modal"
@@ -120,6 +127,16 @@
                 </header>
                 <div class="section clearfix">
                     <h4>Expense</h4>
+                    <template>
+                        <TR>
+                            <td>{date}</td>
+                            <td>{account_id]}</td>
+                            <td>{category_id}</td>
+                            <td>{amount}</td>
+                            <th scope="row"><button value="{seq}" type="button" class="btn btn-secondary"
+                                    onclick="javascript:SIPUCOMMON.delRow.dataPage(this);">-</button></th>
+                        </TR>
+                    </template>
                     <table class="table table-striped table-dark">
                         <thead>
                             <tr>
@@ -130,7 +147,7 @@
                                 <th scope="col">DEL</th>
                             </tr>
                         </thead>
-                        <tbody data-node="DATAGET-SET-tbody_ex">
+                        <tbody data-node="DATAGET-tbody_ex">
                         </tbody>
                     </table>
                     <h4>Income</h4>
@@ -144,7 +161,7 @@
                                 <th scope="col">DEL</th>
                             </tr>
                         </thead>
-                        <tbody data-node="DATAGET-SET-tbody_in"></tbody>
+                        <tbody data-node="DATAGET-tbody_in"></tbody>
                         </tbody>
                     </table>
                 </div>
@@ -152,7 +169,7 @@
             <section id="stat">
                 <header class="wrapper clearfix">
                     <div class="text-right">
-                        <button data-node="STATGET-EVT-button" type="button" class="btn btn-outline-light">TOTAL</button>
+                        <button data-node="STATGET-submit" type="button" class="btn btn-outline-light">TOTAL</button>
                     </div>
                 </header>
                 <div class="section clearfix">
@@ -164,7 +181,13 @@
                                 <th scope="col">AMOUNT</th>
                             </tr>
                         </thead>
-                        <tbody data-node="STATGET-SET-tbody">
+                        <template data-node="STATGET-template">
+                            <TR>
+                                <td>{account_id}</td>
+                                <td>{amount}</td>
+                            </TR>
+                        </template>
+                        <tbody data-node="STATGET-tbody">
                         </tbody>
                     </table>
                 </div>
@@ -172,10 +195,14 @@
             <section id="chart">
                 <header class="wrapper clearfix">
                     <div class="text-right">
-                        <input class="date-picker" data-node="CHARTGET-GET-date"type="text" placeholder="Select Date.." >
-                        <button data-node="CHARTGETMONTH-EVT-button" type="button" class="btn btn-outline-light">DAY</button>
-                        <button data-node="CHARTGETYEAR-EVT-button" type="button" class="btn btn-outline-light">MONTH</button>
-                        <button data-node="CHARTGET-EVT-button" type="button" class="btn btn-outline-light">YEAR</button>
+                        <input class="date-picker" data-node="CHARTGET-GET-date" type="text"
+                            placeholder="Select Date..">
+                        <button data-node="CHARTGET-submit_day" type="button"
+                            class="btn btn-outline-light">DAY</button>
+                        <button data-node="CHARTGET-submit_month" type="button"
+                            class="btn btn-outline-light">MONTH</button>
+                        <button data-node="CHARTGET-submit_year" type="button"
+                            class="btn btn-outline-light">YEAR</button>
                     </div>
                 </header>
                 <div class="section clearfix">
@@ -186,8 +213,8 @@
             <section id="set">
                 <header class="wrapper clearfix">
                     <div class="text-right">
-                        <button data-node="set-account" type="button" class="btn btn-outline-light">ACCOUNT</button>
-                        <button data-node="set-category" type="button" class="btn btn-outline-light">CATEGORY</button>
+                        <button data-node="SET-account_button" type="button" class="btn btn-outline-light">ACCOUNT</button>
+                        <button data-node="SET-category_button" type="button" class="btn btn-outline-light">CATEGORY</button>
                         <button data-node="set-tax" type="button" class="btn btn-outline-light">TAX</button>
                     </div>
                 </header>
@@ -201,20 +228,22 @@
                                     <th scope="col"></th>
                                 </tr>
                             </thead>
-                            <tbody data-node="ACCOUNTSET-SET-tbody">
+                            <template data-node="ACCOUNT-template">
                                 <tr>
-                                    <td><input data-node="ACCOUNTSET-GET-id" type="text" class="form-control" placeholder="code"
-                                            value="0001"></td>
-                                    <td><input data-node="ACCOUNTSET-GET-name" type="text" class="form-control"
-                                            placeholder="Name" value="신한"></td>
-                                    <td><button data-node="AccountDel" type="button" class="btn btn-secondary"
+                                    <td><input data-node="ACCOUNT-id" type="text" class="form-control"
+                                            placeholder="code" value=""></td>
+                                    <td><input data-node="ACCOUNT-name" type="text" class="form-control"
+                                            placeholder="Name" value=""></td>
+                                    <td><button type="button" class="btn btn-secondary"
                                             onclick="javascript:SIPUCOMMON.delRow.setPage(this);">삭제</button></td>
                                 </tr>
+                            </template>
+                            <tbody data-node="ACCOUNT-settbody">
                             </tbody>
                         </table>
                         <div class="text-right">
-                            <button data-node="AccountNew" type="button" class="btn btn-outline-light">New</button>
-                            <button data-node="ACCOUNTSET-EVT-button" type="button" class="btn btn-outline-light">Save</button>
+                            <button data-node="ACCOUNT-add" type="button" class="btn btn-outline-light">New</button>
+                            <button data-node="ACCOUNT-summit" type="button" class="btn btn-outline-light">Save</button>
                         </div>
                     </div>
                     <div data-node="category-table">
@@ -229,25 +258,28 @@
                                     <th scope="col"></th>
                                 </tr>
                             </thead>
-                            <tbody data-node="CATEGORYSET-SET-tbody">
+                            <template data-node="CATEGORY-template">
                                 <tr>
-                                    <td><input data-node="CATEGORYSET-GET-show" type="checkbox" checked></td>
-                                    <td><select data-node="CATEGORYSET-GET-ttype" class="custom-select">
-                                            <option value="false" selected>지출</option>
-                                            <option value="true">수입</option>
+                                    <td><input data-node="CATEGORY-show" type="checkbox" {show}></td>
+                                    <td><select data-node="CATEGORY-ttype" class="custom-select">
+                                            <option value="false" {ttypefalse}>지출</option>
+                                            <option value="true" {ttypetrue}>수입</option>
                                         </select></td>
-                                    <td><input data-node="CATEGORYSET-GET-id" type="text" class="form-control"
-                                            placeholder="code" value="0001"></td>
-                                    <td><input data-node="CATEGORYSET-GET-name" type="text" class="form-control"
-                                            placeholder="Name" value="이체"></td>
-                                    <td><button data-node="CategoryDel" type="button" class="btn btn-secondary"
+                                    <td><input data-node="CATEGORY-id" type="text" class="form-control"
+                                            placeholder="code" value="{item.id}"></td>
+                                    <td><input data-node="CATEGORY-name" type="text" class="form-control"
+                                            placeholder="Name" value="{item.name}"></td>
+                                    <td><button type="button" class="btn btn-secondary"
                                             onclick="javascript:SIPUCOMMON.delRow.setPage(this);">삭제</button></td>
                                 </tr>
+                            </template>
+                            <tbody data-node="CATEGORY-settbody">
                             </tbody>
                         </table>
                         <div class="text-right">
-                            <button data-node="CategoryNew" type="button" class="btn btn-outline-light">New</button>
-                            <button data-node="CATEGORYSET-EVT-button" type="button" class="btn btn-outline-light">Save</button>
+                            <button data-node="CATEGORY-add" type="button" class="btn btn-outline-light">New</button>
+                            <button data-node="CATEGORY-submit" type="button"
+                                class="btn btn-outline-light">Save</button>
                         </div>
                     </div>
                 </div>
@@ -279,7 +311,6 @@
             m.parentNode.insertBefore(a, m)
         })(window, document, 'script',
             'https://www.google-analytics.com/analytics.js', 'ga');
-
         ga('create', 'UA-39498193-6', 'auto');
         ga('send', 'pageview');
     </script>

@@ -27,14 +27,13 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             return obj.replace(urlRegex, function (url) {
                 return '<a href="' + url + '" target="_blank">&#128279</a>';
             });
+        },
+        Length: function (obj) {
+            return typeof (obj) === "string" && obj.length > 3;
         }
     };
 
-    function isinsertNode(node) {
-        return (node.tagName == "INPUT" || node.tagName == "SELECT" || node.tagName == "TEXTAREA")
-    }
-
-    var NODES = {
+    var DATANODES = {
         init: function () {
             var node = document.getElementsByTagName("*");
             var datatag = "data-node";
@@ -42,23 +41,15 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             var tag = "";
             for (var i = 0; i < node.length; i++) {
                 if (node[i].hasAttribute(datatag) || node[i].getAttribute(datatag) !== null) {
-                    if (node[i].getAttribute(datatag).length > 0) {
-                        attrValue = node[i].getAttribute(datatag).split('-');
-                        if (!NODES[attrValue[0]]) {
-                            NODES[attrValue[0]] = {};
-                            NODES[attrValue[0]]["GET"] = {};
-                            NODES[attrValue[0]]["SET"] = {};
-                            NODES[attrValue[0]]["EVT"] = {};
-                        }
+                    if (node[i].getAttribute(datatag).length < 1) return;
+                    attrValue = node[i].getAttribute(datatag);
+                    if (attrValue.indexOf('-') < 1) {
+                        console.log('data node Error');
+                        console.log(node[i]);
                     }
-                    if (attrValue[1] === "GET") {
-                        NODES[attrValue[0]]["GET"][attrValue[2]] = node[i];
-                    }
-                    if (attrValue[1] === "SET") {
-                        NODES[attrValue[0]]["SET"][attrValue[2]] = node[i];
-                    }
-                    if (attrValue[1] === "EVT") {
-                        NODES[attrValue[0]]["EVT"][attrValue[2]] = node[i];
+                    if (!DATANODES[attrValue[0]]) {
+                        DATANODES[attrValue[0]] = {};
+                        DATANODES[attrValue[0]][attrValue[1]] = node[i];
                     }
                 }
             }
@@ -68,73 +59,24 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         }
     };
     //노드맵은 초기 생성필요
-    NODES.init();
-    //NODES.log();
+    DATANODES.init();
+    DATANODES.log();
 
-    var DATA = {};
-    DATA.AccountHash = {};
-    DATA.CategoryHash = {};
-    DATA.data = [];
-    DATA.delData = -1;
+    var RS_DATA = {};
 
-    function WORKER(obj) {
+    function RQ_WK(obj) {
         var BASE_URL = obj.BASE_URL || "https://sipu.iptime.org";
         var ADD_URL = obj.ADD_URL || "";
         var rqMethod = obj.rqMethod || "POST";
         var rqContentType = obj.rqContentType || "application/json";
         var rsContentType = obj.rsContentType || "json";
-        var rqData = typeof (obj.rqData) === "function" ? obj.rqData() : getrqData(NODES[obj.id]);
-        var setHTML = obj.setHTML || "";
-        var setPushType = obj.setPushType || "SET"; // "ADD_"
+        var rqData = typeof (obj.rqData) === "function" ? obj.rqData() : obj.rqData;
         var rsData = "";
-        var rsFunc = obj.rsFunc || setrsData;
-
-        function getrqData(nodes) {
-            if (nodes === undefined) {
-                return;
-            }
-            nodes = nodes["GET"];
-            if (rqMethod === "GET") {
-                return;
-            }
-            var re = {};
-            Object.entries(nodes).map(a => {
-                if (a[1].tagName === "INPUT") {
-                    re[a[0]] = $(a[1]).val();
-                }
-                if (a[1].tagName === "SELECT") {
-                    re[a[0]] = $(a[1]).find(":selected").val();
-                }
-                if (a[1].tagName === "TEXTAREA") {
-                    re[a[0]] = $(a[1]).val();
-                }
-            });
-            return re;
-        }
-
-        function setrsData(data) {
-            if (Object.entries(NODES[obj.id]["SET"]).length < 1 || setHTML == undefined) {
-                return;
-            }
-            if (!Array.isArray(data)) {
-                data = [data];
-            }
-            if (setPushType !== "ADD") {
-                Object.entries(NODES[obj.id]["SET"]).map(a => {
-                    a[1].innerHTML = "";
-                });
-            }
-            data.map(item => {
-                var t = setHTML;
-                Object.entries(item).map(a => {
-                    t = t.replace(`{${a[0]}}`, a[1]);
-                });
-                Object.entries(NODES[obj.id]["SET"]).map(a => {
-                    a[1].innerHTML += t;
-                });
-            })
+        var rsFunc = obj.rsFunc || function (re) {
+            console.log(re);
         };
         //ajax
+        var rqURL = BASE_URL + ADD_URL;
         var rqHEADER = new Headers();
         rqHEADER.append("Content-Type", rqContentType);
         var rqBody = JSON.stringify(rqData);
@@ -148,211 +90,288 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         if (rqMethod !== "GET") {
             rqInit.body = rqBody;
         }
-        var rqURL = BASE_URL + ADD_URL;
         fetch(rqURL, rqInit)
             .then(response => {
                 if (!response.ok) {
                     console.log("request fail");
+                    console.log(rqData, response.text());
                     return;
-                }
-                if (rqMethod === "POST") {
+                } else if (rqMethod === "POST") {
+                    response.blob().then(data => {
+                        rsFunc([rqData, data]);
+                    });
+                    response.json().then(data => {
+                        rsFunc([rqData, data]);
+                    });
                     response.text().then(data => {
-                        console.log(data);
-                        if (Array.isArray(rqData)) {
-                            rsFunc(rqData);
-                        } else {
-                            rsFunc([rqData]);
-                        }
+                        rsFunc([rqData, data]);
                     });
                 } else if (rsContentType === "blob") {
                     response.blob().then((data) => {
                         rsData = data;
-                        DATA[obj.id] = rsData;
+                        RS_DATA[obj.id] = rsData;
                         rsFunc(rsData);
                     });
                 } else if (rsContentType === "json") {
                     response.json().then((data) => {
                         rsData = data;
-                        DATA[obj.id] = rsData;
+                        RS_DATA[obj.id] = rsData;
                         rsFunc(rsData);
                     });
                 } else if (rsContentType === "text") {
                     response.text().then((data) => {
                         rsData = data;
-                        DATA[obj.id] = rsData;
+                        RS_DATA[obj.id] = rsData;
                         rsFunc(rsData);
                     });
                 }
             })
             .catch(function (error) {
+                console.log(rqData);
                 console.log('There has been a problem with your fetch operation: ' + error.message);
             });
     }
 
-    var FEEDER = {
+    var UI_WK = {
+        isHTML: function (obj) {
+            try {
+                //Using W3 DOM2 (works for FF, Opera and Chrome)
+                if (obj instanceof HTMLElement) {
+                    return true;
+                }
+                console.log("not a elements");
+            } catch (e) {
+                console.log(e);
+            }
+            return false;
+        },
+        setNodeValue: function (obj, format, data, reset) {
+            if (!UI_WK.isHTML(obj)) return;
+            if (reset) {
+                obj.innerHTML = "";
+            }
+            var sethtml = "";
+            if (typeof (data) !== "object" && !Array.isArray(data)) {
+                console.log(data);
+                data = [];
+            }
+            if (!Array.isArray(data)) {
+                data = [data];
+            }
+            sethtml = data.reduce((st, item) => {
+                var t = format;
+                if (UI_WK.isHTML(format)) {
+                    t = format.cloneNode(true).innerHTML;
+                }
+                return st + Object.entries(item).map(a => {
+                    t = t.replace(`{${a[0]}}`, a[1]);
+                    return t;
+                });
+            }, "");
+            obj.innerHTML += sethtml;
+        },
+        getNodeValue: function (obj) {
+            if (!UI_WK.isHTML(obj)) return;
+            if (obj.tagName == "INPUT" || obj.tagName == "TEXTAREA") {
+                return obj.value;
+            }
+            if (obj.tagName == "SELECT") {
+                return obj[obj.selectedIndex].value;
+            }
+            console.log("some thing Wrong");
+            return false;
+        },
+        setEvent: function (obj, func) {
+            if (!UI_WK.isHTML(obj) || typeof (func) !== "function") return;
+            obj.addEventListener("click", func, false);
+            obj.addEventListener("touchstart", func, false);
+        }
+    }
+    var JOB_WK = {
+        ACCOUNTADD: {
+            doOnload: false,
+            init: () => {
+                var evobj = DATANODES.ACCOUNT.add;
+                var obj = DATANODES.ACCOUNT.settbody
+                var format = DATANODES.ACCOUNT.template;
+                UI_WK.setEvent(evobj, UI_WK.setNodeValue(obj, format, [], false));
+            }
+        },
         ACCOUNTSET: {
             //BASE_URL: "/data/app.json",
             ADD_URL: "/budget/account",
-            rqMethod: "POST",
-            //rqContentType : "application/json",
-            //rsContentType : "json",
+            //rqMethod: "POST",
             rqData: function () {
                 var data = [];
-                $(NODES.ACCOUNTSET.SET.tbody).find("TR").each((i, tr) => {
+                $(DATANODES.ACCOUNT.settbody).find("TR").each((i, tr) => {
                     var a = {};
-                    a.id = $(tr).find("INPUT[data-node='ACCOUNTSET-GET-id']").val();
-                    a.name = $(tr).find("INPUT[data-node='ACCOUNTSET-GET-name']").val();
+                    a.id = $(tr).find("INPUT[data-node='ACCOUNT-id']").val();
+                    a.name = $(tr).find("INPUT[data-node='ACCOUNT-name']").val();
                     data.push(a);
                 });
                 return data;
             },
-            setHTML: ``,
-            setPushType: "ADD",
-            //rsData : "",
             //rsFunc : function (data) {},
-            id: "ACCOUNTSET"
-        },
-        CATEGORYSET: {
-            //BASE_URL: "/data/app.json",
-            ADD_URL: "/budget/category",
-            rqMethod: "POST",
-            //rqContentType : "application/json",
-            //rsContentType : "json",
-            rqData: function () {
-                var data = [];
-                console.log(NODES.CATEGORYSET.SET.tbody);
-                $(NODES.CATEGORYSET.SET.tbody).find("TR").each((i, tr) => {
-                    var a = {};
-                    a.show = $(tr).find("INPUT[data-node='CATEGORYSET-GET-show']").is(":checked");
-                    a.ttype = $(tr).find("SELECT[data-node='CATEGORYSET-GET-ttype'] option:selected").val() === "false" ? false : true;
-                    a.id = $(tr).find("INPUT[data-node='CATEGORYSET-GET-id']").val();
-                    a.name = $(tr).find("INPUT[data-node='CATEGORYSET-GET-name']").val();
-                    data.push(a);
-                });
-                return data;
-            },
-            setHTML: ``,
-            setPushType: "ADD.",
-            //rsData : "",
-            rsFunc: function (data) {
-
-            },
-            id: "CATEGORYSET"
+            doOnload: false,
+            init: () => {
+                UI_WK.setEvent(DATANODES.ACCOUNT.summit, RQ_WK(JOB_WK.ACCOUNTSET));
+                RQ_WK(JOB_WK.ACCOUNTGET);
+            }
         },
         ACCOUNTGET: {
             //BASE_URL: "/data/app.json",
             ADD_URL: "/budget/data/account",
             rqMethod: "GET",
-            //rqContentType : "application/json",
-            //rsContentType : "json",
             //rqData :function () {},
-            //setHTML: ``,
-            //setPushType : "SET",
-            //rsData : "",
             rsFunc: function (data) {
-                NODES.ACCOUNTSET.SET.tbody.innerHTML = "";
-                NODES.ACCOUNTSET.SET.tbody.innerHTML += data.map(item => {
-                    var t = `<tr>
-                        <td><input data-node="ACCOUNTSET-GET-id" type="text" class="form-control" placeholder="code" value="${item.id}"></td>
-                        <td><input data-node="ACCOUNTSET-GET-name" type="text" class="form-control" placeholder="Name" value="${item.name}"></td>
-                        <td><button data-node="AccountDel" type="button" class="btn btn-secondary" onclick="javascript:SIPUCOMMON.delRow.setPage(this);">삭제</button></td>
-                    </tr>`;
-                    return t;
-                }).join('');
-                $('SELECT[data-node="DATANEW-GET-account_id"]').html(data.map((item, i) => `<option value="${item.id}" ${i===0?"selected":""}>${item.name}</option>`).join(''));
-                $('SELECT[data-node="DATATRANS-GET-account_id_from"]').html(data.map((item, i) => `<option value="${item.id}" ${i===0?"selected":""}>${item.name}</option>`).join(''));
-                $('SELECT[data-node="DATATRANS-GET-account_id_to"]').html(data.map((item, i) => `<option value="${item.id}" ${i===0?"selected":""}>${item.name}</option>`).join(''));
+                var obj = DATANODES.ACCOUNT.settbody;
+                var format = DATANODES.ACCOUNT.template;
+                UI_WK(obj, format, data, true);
+                //modal select defalut
+                var data2 = data.map(a => {
+                    a.select = ""
+                    return a;
+                });
+                if (data[0]) {
+                    data[0].select == "selected";
+                }
+                var obj2 = DATANODES.ACCOUNT.selectnew;
+                var format2 = DATANODES.ACCOUNT.templatenew;
+                UI_WK.setNodeValue(obj2, format2, data2, true);
+                var obj3 = DATANODES.ACCOUNT.account_from;
+                UI_WK.setNodeValue(obj3, format2, data2, true);
+                var obj4 = DATANODES.ACCOUNT.account_to;
+                UI_WK.setNodeValue(obj4, format2, data2, true);
+                RS_DATA.ACCOUNTHASH = {}
                 data.map(a => {
-                    DATA.AccountHash[a.id] = a.name;
+                    RS_DATA.ACCOUNTHASH[a.id] = a.name;
                 });
             },
-            id: "ACCOUNTGET"
+            //rsFunc : function (data) {},
+            doOnload: true,
+            init: () => {
+                RQ_WK(JOB_WK.ACCOUNTGET);
+            }
+        },
+        CATEGORYADD: {
+            doOnload: false,
+            init: () => {
+                var evobj = DATANODES.CATEGORY.add;
+                var obj = DATANODES.CATEGORY.settbody
+                var format = DATANODES.CATEGORY.template;
+                UI_WK.setEvent(evobj, UI_WK.setNodeValue(obj, format, [], false));
+            }
+        },
+        CATEGORYSET: {
+            //BASE_URL: "/data/app.json",
+            ADD_URL: "/budget/category",
+            //rqMethod: "POST",
+            rqData: function () {
+                var data = [];
+                $(DATANODES.CATEGORY.settbody).find("TR").each((i, tr) => {
+                    var a = {};
+                    a.show = $(tr).find("INPUT[data-node='CATEGORY-show']").is(":checked");
+                    a.ttype = $(tr).find("SELECT[data-node='CATEGORY-ttype'] option:selected").val() === "false" ? false : true;
+                    a.id = $(tr).find("INPUT[data-node='CATEGORY-id']").val();
+                    a.name = $(tr).find("INPUT[data-node='CATEGORY-name']").val();
+                    data.push(a);
+                });
+                return data;
+            },
+            //rsFunc : function (data) {},
+            doOnload: false,
+            init: () => {
+                UI_WK.setEvent(DATANODES.CATEGORY.submit, RQ_WK(JOB_WK.CATEGORYSET));
+                RQ_WK(JOB_WK.CATEGORYGET);
+            }
         },
         CATEGORYGET: {
             //BASE_URL: "/data/app.json",
             ADD_URL: "/budget/data/category",
             rqMethod: "GET",
-            //rqContentType : "application/json",
-            //rsContentType : "json",
             //rqData :function () {},
-            //setHTML: ``,
-            //setPushType : "SET",
-            //rsData : "",
             rsFunc: function (data) {
-                NODES.CATEGORYSET.SET.tbody.innerHTML = "";
-                NODES.CATEGORYSET.SET.tbody.innerHTML += data.map(item => {
-                    var t = `<tr>
-                    <td><input data-node="CATEGORYSET-GET-show" type="checkbox" ${item.show?"checked":""}></td>
-                    <td><select data-node="CATEGORYSET-GET-ttype" class="custom-select">
-                            <option value="false" ${item.ttype?"":"selected"}>지출</option>
-                            <option value="true" ${!item.ttype?"":"selected"}>수입</option>
-                        </select></td>
-                    <td><input data-node="CATEGORYSET-GET-id" type="text" class="form-control" placeholder="code" value="${item.id}"></td>
-                    <td><input data-node="CATEGORYSET-GET-name" type="text" class="form-control" placeholder="Name" value="${item.name}"></td>
-                    <td><button data-node="CategoryDel" type="button" class="btn btn-secondary" onclick="javascript:SIPUCOMMON.delRow.setPage(this);">삭제</button></td>
-                    </tr>`;
-                    return t;
-                }).join('');
-                $('SELECT[data-node="DATANEW-GET-category_id_ex"]').html(data.filter(a => !a.ttype).map((item, i) => `<option value="${item.id}" ${i===0?"selected":""}>${item.name}</option>`).join(''));
-                $('SELECT[data-node="DATANEW-GET-category_id_in"]').html(data.filter(a => a.ttype).map((item, i) => `<option value="${item.id}" ${i===0?"selected":""}>${item.name}</option>`).join(''));
+                var obj = DATANODES.CATEGORY.settbody;
+                var format = DATANODES.CATEGORY.template;
+                var data1 = data.map(item => {
+                    item.show = item.show ? "checked" : "";
+                    item.ttypefalse = !item.ttype ? "selected" : "";
+                    item.ttypetrue = item.ttype ? "selected" : "";
+                });
+                UI_WK.setNodeValue(obj, format, data1, true);
+                var obj2 = DATANODES.CATEGORY.select_expense;
+                var obj3 = DATANODES.CATEGORY.select_income;
+                var format2 = DATANODES.CATEGORY.templatenew;
+                var data2 = data.filter(a => a.ttype === false).map(a => {
+                    a.select = "";
+                    return a;
+                });
+                var data3 = data.filter(a => a.ttype === true).map(a => {
+                    a.select = "";
+                    return a;
+                });
+                if (data2.length > 0 && data3.length > 0) {
+                    data2[0].select = "selected";
+                    data3[0].select = "selected";
+                }
+                UI_WK.setNodeValue(obj2, format2, data2, true);
+                UI_WK.setNodeValue(obj3, format2, data3, true);
+                DATANODES.CATEGORYHASH = {};
                 data.map(a => {
-                    DATA.CategoryHash[a.id] = [a.ttype, a.name];
+                    DATANODES.CATEGORYHASH[a.id] = [a.ttype, a.name];
                 });
             },
-            id: "CATEGORYGET"
+            doOnload: false,
+            init: () => {
+                RQ_WK(JOB_WK.CATEGORYGET);
+            }
         },
         DATANEW: {
             //BASE_URL: "/data/app.json",
             ADD_URL: "/budget/data/insert",
             rqMethod: "POST",
-            //rqContentType : "application/json",
-            //rsContentType : "json",
             rqData: function () {
-                console.log(a);
                 var a = {};
                 a.seq = 0;
-                a.date = $("INPUT[data-node='DATANEW-GET-date']").val();
-                a.ttype = $("SELECT[data-node='DATANEW-GET-ttype'] option:selected").val() === "false" ? false : true;
-                a.category_id = a.ttype ? $("SELECT[data-node='DATANEW-GET-category_id_in'] option:selected").val() : $("SELECT[data-node='DATANEW-GET-category_id_ex'] option:selected").val();
-                a.account_id = $("SELECT[data-node='DATANEW-GET-account_id'] option:selected").val();
-                a.amount = +$("INPUT[data-node='DATANEW-GET-amount']").val();
-                console.log(a);
+                a.date = UI_WK.getNodeValue(DATANODES.DATANEW.date);
+                a.ttype = UI_WK.getNodeValue(DATANODES.DATANEW.ttype) === "false" ? false : true;
+                a.category_id = a.ttype ? UI_WK.getNodeValue(DATANODES.DATANEW.select_income) : UI_WK.getNodeValue(DATANODES.DATANEW.select_expense);
+                a.account_id = UI_WK.getNodeValue(DATANODES.DATANEW.selectnew);
+                a.amount = +UI_WK.getNodeValue(DATANODES.DATANEW.amount);
                 return a;
             },
-            //setHTML: ``,
-            setPushType: "ADD",
-            //rsData : "",
             rsFunc: function (data) {
-                $(NODES.DATAGET.EVT.button).click();
+                JOB_WK.DATAGET.date.value = UI_WK.getNodeValue(DATANODES.DATANEW.date);
+                RQ_WK(JOB_WK.DATAGET);
             },
-            id: "DATANEW"
+            doOnload: false,
+            init: () => {
+                UI_WK.setEvent(DATANODES.DATANEW.submit, RQ_WK(JOB_WK.DATANEW));
+            }
         },
-        DATATRANSFROM: {
-            initSKIP: true,
+        TRANSFROM: {
             //BASE_URL: "/data/app.json",
             ADD_URL: "/budget/data/insert",
             rqMethod: "POST",
-            //rqContentType : "application/json",
-            //rsContentType : "json",
             rqData: function () {
                 var a = {};
                 a.seq = 0;
-                a.date = $("INPUT[data-node='DATATRANS-GET-date']").val();
+                a.date = UI_WK.getNodeValue(DATANODES.DATATRANS.date);
                 a.ttype = false;
                 a.category_id = "0000";
-                a.account_id = $("SELECT[data-node='DATATRANS-GET-account_id_from'] option:selected").val();
-                a.amount = +$("INPUT[data-node='DATATRANS-GET-amount']").val();
+                a.account_id = UI_WK.getNodeValue(DATANODES.TRANS.account_from);
+                a.amount = UI_WK.getNodeValue(DATATRANS.TRANS.amount);
                 return a;
             },
-            //setHTML: ``,
-            setPushType: "ADD",
-            //rsData : "",
             rsFunc: function (data) {
-                WORKER(FEEDER.DATATRANSTO);
+                RQ_WK(JOB_WK.DATATRANSTO);
             },
-            id: "DATATRANSFROM"
+            doOnload: false,
+            init: () => {
+                UI_WK.setEvent(DATANODES.TRANS.submit, RQ_WK(JOB_WK.TRANSFROM));
+            }
         },
-        DATATRANSTO: {
+        TRANSTO: {
             initSKIP: true,
             //BASE_URL: "/data/app.json",
             ADD_URL: "/budget/data/insert",
@@ -362,167 +381,131 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             rqData: function () {
                 var a = {};
                 a.seq = 0;
-                a.date = $("INPUT[data-node='DATATRANS-GET-date']").val();
+                a.date = UI_WK.getNodeValue(DATANODES.DATATRANS.date);
                 a.ttype = true;
                 a.category_id = "5000";
-                a.account_id = $("SELECT[data-node='DATATRANS-GET-account_id_to'] option:selected").val();
-                a.amount = +$("INPUT[data-node='DATATRANS-GET-amount']").val();
+                a.account_id = UI_WK.getNodeValue(DATANODES.TRANS.account_to);
+                a.amount = UI_WK.getNodeValue(DATATRANS.TRANS.amount);
                 return a;
             },
-            //setHTML: ``,
-            setPushType: "ADD",
-            //rsData : "",
-            rsFunc: function (data) {
-                $(NODES.DATAGET.EVT.button).click();
-            },
-            id: "DATATRANSTO"
+            //rsFunc : function (data) {},
+            doOnload: false,
+            init: () => {
+                UI_WK.setEvent(DATANODES.TRANS.submit, RQ_WK(JOB_WK.TRANSFROM));
+            }
         },
         DATAGET: {
             BASE_URL: "https://sipu.iptime.org/budget/data/",
             ADD_URL: "",
             rqMethod: "GET",
-            //rqContentType : "application/json",
-            //rsContentType : "json",
             //rqData :function () {},
             //setHTML: ``,
             setPushType: "SET",
             //rsData : "",
             rsFunc: function (data) {
-                $("TBODY[data-node='DATAGET-SET-tbody_ex']").html("");
-                $("TBODY[data-node='DATAGET-SET-tbody_in']").html("");
-                DATA.data = data;
+                var obj1 = DATANODES.DATAGET.tbody_in;
+                var obj2 = DATANODES.DATAGET.tbody_ex;
+                var format = DATANODES.DATAGET.template;
                 data = data.sort((a, b) => a.date < b.date);
-                var node;
-                data.map(item => {
-                    if (!item.ttype) {
-                        node = $("TBODY[data-node='DATAGET-SET-tbody_ex']");
-                    } else {
-                        node = $("TBODY[data-node='DATAGET-SET-tbody_in']");
-                    }
-                    $(node).append(`<TR>
-                    <td>${item.date}</td>
-                    <td>${DATA.AccountHash[item.account_id]}</td>
-                    <td>${DATA.CategoryHash[item.category_id][1]}</td>
-                    <td>${item.amount}</td>
-                    <th scope="row"><button value="${item.seq}" type="button" class="btn btn-secondary" onclick="javascript:SIPUCOMMON.delRow.dataPage(this);">-</button></th>
-                    </TR>`);
+                var data1 = data.filter(a => a.ttype === true).map(a => {
+                    a.category_id = RS_DATA.CATEGORYHASH[a.account_id];
+                    a.account_id = RS_DATA.ACCOUNTHASH[a.account_id];
+                    return a;
                 });
+                var data2 = data.filter(a => a.ttype === true).map(a => {
+                    a.category_id = RS_DATA.CATEGORYHASH[a.account_id];
+                    a.account_id = RS_DATA.ACCOUNTHASH[a.account_id];
+                    return a;
+                });
+                UI_WK.setNodeValue(obj1, format, data1, true);
+                UI_WK.setNodeValue(obj2, format, data2, true);
             },
-            id: "DATAGET"
+            doOnload: false,
+            init: () => {
+                function getdata() {
+                    JOB_WK.DATAGET.ADD_URL = UI_WK.getNodeValue(DATANODES.DATAGET.date).slice(0, 7);
+                    RQ_WK(JOB_WK.DATAGET);
+                }
+                UI_WK.setEvent(DATANODES.DATAGET.submit, getdata);
+            }
         },
         STATGET: {
             //BASE_URL: "/data/app.json",
             ADD_URL: "/budget/stat/account/0000",
             rqMethod: "GET",
-            //rqContentType : "application/json",
-            //rsContentType : "json",
             //rqData :function () {},
-            //setHTML: ``,
-            setPushType: "SET",
-            //rsData : "",
             rsFunc: function (data) {
-                $("TBODY[data-node='STATGET-SET-tbody']").html("");
-                data.map(item => {
-                    $("TBODY[data-node='STATGET-SET-tbody']").append(`<TR>
-                    <td>${DATA.AccountHash[item.account_id]}</td>
-                    <td>${item.amount}</td>
-                    </TR>`);
+                var obj = DATANODES.STATGET.tbody;
+                var format = DATANODES.STATGET.template;
+                data = data.map(a => {
+                    a.account_id = RS_DATA.ACCOUNTHASH[a.account_id];
                 });
+                UI_WK.setNodeValue(obj, format, data, true);
             },
-            id: "STATGET"
-        },
-        CHARTGETMONTH: {
-            //BASE_URL: "/data/app.json",
-            ADD_URL: "/budget/stat/category/" + $('INPUT[data-node="CHARTGET-GET-date"]').val().slice(0, 7),
-            rqMethod: "GET",
-            //rqContentType : "application/json",
-            //rsContentType : "json",
-            //rqData :function () {},
-            //setHTML: ``,
-            setPushType: "SET",
-            //rsData : "",
-            rsFunc: function (data) {
-                console.log(data);
-            },
-            id: "CHARTGETMONTH"
-        },
-        CHARTGETYEAR: {
-            //BASE_URL: "/data/app.json",
-            ADD_URL: "/budget/stat/category/" + $('INPUT[data-node="CHARTGET-GET-date"]').val().slice(0, 4),
-            rqMethod: "GET",
-            //rqContentType : "application/json",
-            //rsContentType : "json",
-            //rqData :function () {},
-            //setHTML: ``,
-            setPushType: "SET",
-            //rsData : "",
-            rsFunc: function (data) {
-                console.log(data);
-            },
-            id: "CHARTGETYEAR"
-        },
-    }
-
-    function initWORKER() {
-        WORKER(FEEDER.ACCOUNTGET);
-        WORKER(FEEDER.CATEGORYGET);
-
-    }
-
-    function UIWorker() {
-        var tempAccount = `<tr>
-        <td><input data-node="ACCOUNTSET-GET-id" type="text" class="form-control" placeholder="code" value="0001"></td>
-        <td><input data-node="ACCOUNTSET-GET-name" type="text" class="form-control" placeholder="Name" value="신한"></td>
-        <td><button data-node="AccountDel" type="button" class="btn btn-secondary" onclick="javascript:SIPUCOMMON.delRow.setPage(this);">삭제</button></td>
-        </tr>`;
-        var tempCategory = `<tr>
-        <td><input data-node="CATEGORYSET-GET-show" type="checkbox" checked></td>
-        <td><select data-node="CATEGORYSET-GET-ttype" class="custom-select">
-                <option value="false" selected>지출</option>
-                <option value="true">수입</option>
-            </select></td>
-        <td><input data-node="CATEGORYSET-GET-id" type="text" class="form-control" placeholder="code" value="0001"></td>
-        <td><input data-node="CATEGORYSET-GET-name" type="text" class="form-control" placeholder="Name" value="이체"></td>
-        <td><button data-node="CategoryDel" type="button" class="btn btn-secondary" onclick="javascript:SIPUCOMMON.delRow.setPage(this);">삭제</button></td>
-        </tr>`;
-        $("BUTTON[data-node='AccountNew']").click(function () {
-            $("TBODY[data-node='ACCOUNTSET-SET-tbody']").append(tempAccount);
-            WORKER(FEEDER.ACCOUNTSET);
-        });
-        $("BUTTON[data-node='CategoryNew']").click(function () {
-            $("TBODY[data-node='CATEGORYSET-SET-tbody']").append(tempCategory);
-            WORKER(FEEDER.CATEGORYGET);
-        });
-        $("SELECT[data-node='DATANEW-GET-ttype']").change(function () {
-            if ($("SELECT[data-node='DATANEW-GET-ttype'] option:selected").val() === "false") {
-                $("SELECT[data-node='DATANEW-GET-category_id_ex']").show();
-                $("SELECT[data-node='DATANEW-GET-category_id_in']").hide();
-            } else {
-                $("SELECT[data-node='DATANEW-GET-category_id_ex']").hide();
-                $("SELECT[data-node='DATANEW-GET-category_id_in']").show();
+            doOnload: false,
+            init: () => {
+                UI_WK.setEvent(DATANODES.STATGET.submit, RQ_WK(JOB_WK.STATGET));
             }
-        });
-        $("BUTTON[data-node='DATATRANS-EVT-button']").click(function () {
-            WORKER(FEEDER.DATATRANSFROM);
-        });
-        $("BUTTON[data-node='DATAGET-EVT-button']").click(function () {
-            FEEDER.DATAGET.ADD_URL = $('INPUT[data-node="DATAGET-GET-date"]').val().slice(0, 7);
-            WORKER(FEEDER.DATAGET);
-        });
-        $("BUTTON[data-node='DATANEW-EVT-button']").click(function () {
-            WORKER(FEEDER.DATANEW);
-        });
-        $("BUTTON[data-node='STATGET-EVT-button']").click(function () {
-            WORKER(FEEDER.STATGET);
-        });
-        $("BUTTON[data-node='ACCOUNTSET-EVT-button']").click(function () {
-            WORKER(FEEDER.ACCOUNTSET);
-        });
-        $("BUTTON[data-node='CATEGORYSET-EVT-button']").click(function () {
-            WORKER(FEEDER.CATEGORYSET);
-        });
-        $(".date-picker").each(function (i, node) {
-            $(node).val(new Date().toISOString().slice(0, 10));
+        },
+        CHARTGET: {
+            //BASE_URL: "/data/app.json",
+            ADD_URL: "/budget/stat/category/",
+            rqMethod: "GET",
+            //rqData :function () {},
+            rsFunc: function (data) {
+                //drawchart
+                console.log(data);
+            },
+            doOnload: false,
+            init: () => {
+                var monthGet = DATANODES.CHARTGET.submit_month;
+                var yearGet = DATANODES.CHARTGET.submit_year;
+                UI_WK.setEvent(DATANODES.CHARTGET.submit_month, UI_WK.getNodeValue(monthGet).slice(0, 7));
+                UI_WK.setEvent(DATANODES.CHARTGET.submit_year, UI_WK.getNodeValue(yearGet).slice(0, 4));
+            }
+        },
+        MODALNEW: {
+            doOnload: false,
+            init: () => {
+                $(DATANODES.DATANEW.ttype).change(function () {
+                    if (UI_WK.getNodeValue(DATANODES.DATANEW.ttype) === "false") {
+                        $(DATANODES.CATEGORY.select_expense).show();
+                        $(DATANODES.CATEGORY.select_income).hide();
+                    } else {
+                        $(DATANODES.CATEGORY.select_expense).hide();
+                        $(DATANODES.CATEGORY.select_income).show();
+                    }
+                });
+                var monthGet = DATANODES.CHARTGET.submit_month;
+                var yearGet = DATANODES.CHARTGET.submit_year;
+                UI_WK.setEvent(DATANODES.CHARTGET.submit_month, UI_WK.getNodeValue(monthGet).slice(0, 7));
+                UI_WK.setEvent(DATANODES.CHARTGET.submit_year, UI_WK.getNodeValue(yearGet).slice(0, 4));
+            }
+        },
+        SETPAGE: {
+            doOnload: false,
+            init: () => {
+                var acct = DATANODES.SET.account_button;
+                var cate = DATANODES.SET.category_button;
+                UI_WK.setEvent(acct, function () {
+                    $('TABLE[data-node="account-table"]').show();
+                    $('TABLE[data-node="category-table"]').hide();
+                });
+                UI_WK.setEvent(cate, function () {
+                    $('TABLE[data-node="account-table"]').hide();
+                    $('TABLE[data-node="category-table"]').show();
+                });
+            }
+        }
+    }
+
+    function initWK() {
+        Object.entries(JOB_WK).map(a => {
+            if (a.doOnload) {
+                WORKER(a[1]);
+                return;
+            }
+            a.init();
         });
     }
 
@@ -535,28 +518,26 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 //BASE_URL: "/data/app.json",
                 ADD_URL: "/budget/data/delete",
                 rqMethod: "POST",
-                //rqContentType : "application/json",
-                //rsContentType : "json",
                 rqData: function () {
-                    console.log(DATA.data, $(node).val());
                     return DATA.data.filter(a => a.seq == $(node).val())[0];
                 },
-                //setHTML: ``,
-                setPushType: "SET",
-                //rsData : "",
-                rsFunc: function (data) {
-                    console.log(data);
-                },
-                id: "DATADEL"
+                //rsFunc: () => {},
+                doOnload: false,
+                init: () => {
+                }
             }
-            WORKER(delobj);
+            RQ_WK(delobj);
             $(node).parent().parent().remove();
         }
     }
 
     SIPUCOMMON.run = function () {
-        initWORKER();
-        UIWorker();
+        //달력 대체 하기
+        $(".date-picker").each(function (i, node) {
+            $(node).val(new Date().toISOString().slice(0, 10));
+        });
+        initWK();
+        life();
     };
     return SIPUCOMMON;
 })(window.SIPUCOMMON || {}, jQuery);
