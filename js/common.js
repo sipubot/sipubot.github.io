@@ -163,11 +163,12 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 } else {
                     t = format;
                 }
-                return st + Object.entries(item).map(a => {
+                Object.entries(item).map(a => {
                     t = t.replace(`{${a[0]}}`, a[1]);
-                    return t;
                 });
+                return st + t;
             }, "");
+            console.log(sethtml);
             obj.innerHTML += sethtml;
         },
         getNodeValue: function (obj) {

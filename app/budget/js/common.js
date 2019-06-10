@@ -159,10 +159,10 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 if (UI_WK.isHTML(format)) {
                     t = format.cloneNode(true).innerHTML;
                 }
-                return st + Object.entries(item).map(a => {
+                Object.entries(item).map(a => {
                     t = t.replace(`{${a[0]}}`, a[1]);
-                    return t;
                 });
+                return st + t;
             }, "");
             obj.innerHTML += sethtml;
         },
