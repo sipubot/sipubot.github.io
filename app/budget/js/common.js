@@ -509,14 +509,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                         $(DATANODES.CATEGORY.select_income).show();
                     }
                 });
-                var monthGet = DATANODES.CHARTGET.submit_month;
-                var yearGet = DATANODES.CHARTGET.submit_year;
-                UI_WK.setEvent(DATANODES.CHARTGET.submit_month, () => {
-                    UI_WK.getNodeValue(monthGet).slice(0, 7);
-                });
-                UI_WK.setEvent(DATANODES.CHARTGET.submit_year, () => {
-                    UI_WK.getNodeValue(yearGet).slice(0, 4);
-                });
             }
         },
         SETPAGE: {
