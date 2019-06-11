@@ -209,7 +209,7 @@ canvas {
 
 .header-container {
   margin: 0 auto;
-  padding: 2em;
+  padding: 2rem, 3rem, 0, 2rem;
   max-width: 800px;
 }
 
@@ -223,7 +223,6 @@ canvas {
 
 .main-container {
   margin: 0 auto;
-  margin-top: 3em;
   max-width: 800px;
   position: relative;
 }
@@ -276,10 +275,6 @@ canvas {
 /* ==============
   MOBILE: Main
  ============== */
-
-.main {
-  padding: 30px 0;
-}
 
 .main article h1 {
   font-size: 2em;
