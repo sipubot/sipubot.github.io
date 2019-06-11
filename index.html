@@ -78,7 +78,6 @@
         <div class="main wrapper clearfix">
             <section id="home">
                 <div class="section clearfix">
-                    <h5>Profile</h5>
                     <div class="card-columns">
                         <div class="card text-light">
                             <img class="card-img-top"
@@ -135,7 +134,6 @@
             <section id="stat">
                 <div class="section clearfix">
                     <i class="fa fa-id-badge fa-2x"></i>
-                    <h6>STAT</h6>
                     <ul class="now Stat clearfix">
                         <li>
                             <p>🎭</p>
@@ -151,27 +149,26 @@
             </section>
             <section id="app">
                 <div class="section clearfix">
-                        <i class="fa fa-bookmark fa-2x"></i>
-                        <H6>LINK</H6>
+                    <i class="fa fa-bookmark fa-2x"></i>
+                    <h5>Apps</h5>
+                    <template data-node="APP-template">
+                        <a href="{href}" target="_blank">
+                            <li class="Icon" style="background-image : url({imageurl})">
+                                <p>{picon}</p>
+                            </li>
+                        </a>
+                    </template>
                     <ul class="app Icon clearfix" data-node="APP-setul">
-                        <h5>Apps</h5>
-                        <template data-node="APP-template">
-                            <a href="{href}" target="_blank">
-                                <li class="Icon" style="background-image : url({imageurl})">
-                                    <p>{picon}</p>
-                                </li>
-                            </a>
-                        </template>
-                        <h5>Links</h5>
-                        <template data-node="LINK-template">
-                            <a href="{href}" target="_blank">
-                                <li class="Icon" style="background-image : url({imageurl})">
-                                    <p>{picon}</p>
-                                </li>
-                            </a>
-                        </template>
-                        <ul class="link Icon clearfix" data-node="LINK-setul">
-                        </ul>
+                    </ul>
+                    <h5>Links</h5>
+                    <template data-node="LINK-template">
+                        <a href="{href}" target="_blank">
+                            <li class="Icon" style="background-image : url({imageurl})">
+                                <p>{picon}</p>
+                            </li>
+                        </a>
+                    </template>
+                    <ul class="link Icon clearfix" data-node="LINK-setul">
                     </ul>
                 </div>
             </section>
