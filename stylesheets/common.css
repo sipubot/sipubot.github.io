@@ -28,7 +28,7 @@ a:hover {
   position: fixed;
   top: 20px;
   right: 3px;
-  z-index: 1;
+  z-index: 1000;
 
   -webkit-user-select: none;
   user-select: none;
