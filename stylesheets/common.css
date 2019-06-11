@@ -25,7 +25,7 @@ a:hover {
 
 #menuToggle {
   display: block;
-  position: absolute;
+  position: fixed;
   top: 20px;
   right: 3px;
   z-index: 1;
@@ -161,7 +161,7 @@ section {
   visibility: hidden;
   opacity: 0;
   transition: visibility 0s linear 0.33s, opacity 0.33s linear;
-  margin-top: 5rem;
+  margin-top: 1rem;
 }
 
 section:target {
