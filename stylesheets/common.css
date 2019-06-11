@@ -209,7 +209,7 @@ canvas {
  
 .header-container {
   margin: 0 auto;
-  padding-right: 3.5rem;
+  padding-right: 1rem;
   padding-top: 1rem;
   padding-left: 1rem;
   max-width: 800px;
@@ -326,12 +326,6 @@ canvas {
     margin-bottom: 0;
   }
 
-  .header-container {
-    margin: 0 auto;
-    padding-right: 0rem;
-    padding-top: 1em;
-    padding-left: 1em;
-  }
 }
 
 @media only screen and (min-width: 1140px) {
