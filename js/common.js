@@ -355,8 +355,8 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             } else {
                 nowHour = nowHour - 15;
             }
-            sp.innerHTML = startval + Math.floor(addval / 1000);
-            sp2.innerHTML = getPlace(nowHour);
+            sp.html(startval + Math.floor(addval / 1000));
+            sp2.html(getPlace(nowHour));
         };
 
         function getPlace(h) {
