@@ -210,7 +210,8 @@ canvas {
 .header-container {
   margin: 0 auto;
   padding-right: 3.5rem;
-  padding-top: 2rem;
+  padding-top: 1rem;
+  padding-left: 1rem;
   max-width: 800px;
 }
 
