@@ -157,18 +157,9 @@ a:hover {
 */
 
 section {
-  position: absolute;
-  visibility: hidden;
   opacity: 0;
   transition: visibility 0s linear 0.33s, opacity 0.33s linear;
   margin-top: 1rem;
-}
-
-section:target {
-  width: 100%;
-  visibility: visible;
-  opacity: 1;
-  transition-delay: 0s;
 }
 
 .section.clearfix {
