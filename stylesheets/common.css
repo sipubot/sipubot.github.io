@@ -26,7 +26,6 @@ a:hover {
 */
 
 section {
-  opacity: 0;
   transition: visibility 0s linear 0.33s, opacity 0.33s linear;
   margin-top: 1rem;
 }
