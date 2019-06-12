@@ -26,6 +26,7 @@ a:hover {
 * main css
 */
 section {
+  max-width: 800px;
   max-height: 0;
   transition: max-height 0.15s ease-out, opacity 0.33s linear;  
   visibility: hidden;
@@ -111,33 +112,6 @@ nav ul li a{
 nav ul li:first-child {
   border-left: none;
 }
-/* ==============
-  MOBILE: Main
- ============== */
-.main {
-  max-width: 800px;
-}
-
-.main article h1 {
-  font-size: 2em;
-}
-
-.main h2 {
-  margin-bottom: 0;
-}
-
-/* ===============
-  ALL: IE Fixes
- =============== */
-
-.ie7 .title {
-  padding-top: 20px;
-}
-
-/* ==========================================================================
- Media Queries
- ========================================================================== */
-
 @media only screen and (min-width: 480px) {
   /* ========================
   INTERMEDIATE: IE Fixes
@@ -147,25 +121,6 @@ nav ul li:first-child {
     width: 8em;
     height: 8em;
   }
-}
-
-@media only screen and (min-width: 768px) {
-
-  /* ============
-  WIDE: Menu
- ============ */
-
-  /* ============
-  WIDE: Main
- ============ */
-  .main article {
-    width: 100%;
-  }
-
-  .main h2 {
-    margin-bottom: 0;
-  }
-
 }
 
 @media only screen and (min-width: 1140px) {

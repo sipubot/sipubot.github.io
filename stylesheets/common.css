@@ -58,6 +58,7 @@ nav ul li:first-child {
 */
 
 section {
+  max-width: 800px;
   max-height: 0;
   transition: max-height 0.15s ease-out, opacity 0.33s linear;  
   visibility: hidden;
@@ -177,26 +178,6 @@ canvas {
 }
 
 
-/* ==============
-  MOBILE: Main
- ============== */
-
-.main article h1 {
-  font-size: 2em;
-}
-
-.main h2 {
-  margin-bottom: 0;
-}
-
-/* ===============
-  ALL: IE Fixes
- =============== */
-
-.ie7 .title {
-  padding-top: 20px;
-}
-
 /* ==========================================================================
  Media Queries
  ========================================================================== */
@@ -210,25 +191,6 @@ canvas {
     width: 8em;
     height: 8em;
   }
-}
-
-@media only screen and (min-width: 768px) {
-
-  /* ============
-  WIDE: Menu
- ============ */
-
-  /* ============
-  WIDE: Main
- ============ */
-  .main article {
-    width: 100%;
-  }
-
-  .main h2 {
-    margin-bottom: 0;
-  }
-
 }
 
 @media only screen and (min-width: 1140px) {
