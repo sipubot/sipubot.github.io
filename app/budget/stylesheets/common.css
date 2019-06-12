@@ -114,6 +114,14 @@ nav ul li:first-child {
   border-left: none;
 }
 
+.header {
+  margin: 0 auto;
+  max-width: 800px;
+}
+.main {
+  margin: 0 auto;
+}
+
 @media only screen and (min-width: 480px) {
   /* ========================
   INTERMEDIATE: IE Fixes
