@@ -201,7 +201,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             },
             rsFunc: (data) => {
                 //remove modal
-                if (data.result && data.result === "SUCCESS") {
+                if (data[1].result && data[1].result === "SUCCESS") {
                     $('#login-modal').modal('toggle');
                 }
             },
