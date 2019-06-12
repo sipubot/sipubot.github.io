@@ -199,14 +199,16 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                     }).toString()
                 }
             },
-            rsFunc: () => {
+            rsFunc: (data) => {
                 //remove modal
+                if (data.result && data.result === "SUCCESS") {
+                    $('#login-modal').modal('toggle');
+                }
             },
             doOnload: false,
             init: () => {
                 UI_WK.setEvent(DATANODES.LOGIN.summit, () => {
                     RQ_WK(JOB_WK.LOGIN);
-                    $('#login-modal').modal('toggle');
                 });
             }
         },

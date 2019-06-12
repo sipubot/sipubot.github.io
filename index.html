@@ -26,6 +26,15 @@
     <div class="header-container">
         <header class="wrapper clearfix">
             <a href="https://sipu.iptime.org"><img class="profileImage" src="icon/profile.png" alt="Profile" /></a>
+            <nav>
+                <ul>
+                    <li><a href="#home"> <i class="fa fa-home fa-2x"></i></a></li>
+                    <li><a href="#stat"> <i class="fa fa-id-badge fa-2x"></i></a></li>
+                    <li><a href="#app"> <i class="fa fa-briefcase fa-2x"></i> </a></li>
+                    <li><a href="#quot"><i class="fas fa-quote-right fa-2x"></i> </a></li>
+                    <li><a href="#set"><i class="fas fa-key fa-2x"></i></a></li>
+                </ul>
+            </nav>
         </header>
     </div>
     <div class="modal-container">
@@ -133,7 +142,6 @@
             </section>
             <section id="stat">
                 <div class="section clearfix">
-                    <i class="fa fa-id-badge fa-2x"></i>
                     <ul class="now Stat clearfix">
                         <li>
                             <p>🎭</p>
@@ -149,7 +157,6 @@
             </section>
             <section id="app">
                 <div class="section clearfix">
-                    <i class="fa fa-briefcase fa-2x"></i>
                     <template data-node="APP-template">
                         <a href="{href}" target="_blank">
                             <li class="Icon" style="background-image : url({imageurl})">
@@ -172,7 +179,6 @@
                 </div>
             </section>
             <section id="quot">
-                <i class="fa fa-quote-right fa-2x"></i>
                 <div class="section clearfix">
                     <div class="input-group mb-3">
                         <input data-node="QUT-sendmessage" type="text" class="form-control" placeholder="Say Some..."
@@ -187,7 +193,7 @@
                 </div>
             </section>
             <section id="set">
-                <div class="section clearfix" style="margin-top:10rem;">
+                <div class="section clearfix">
                     <div class="text-center">
                         <button data-toggle="modal" data-target="#login-modal" type="button"
                             class="btn btn-outline-light">LOGIN</button>
@@ -230,4 +236,5 @@
         ga('send', 'pageview');
     </script>
 </body>
+
 </html>
