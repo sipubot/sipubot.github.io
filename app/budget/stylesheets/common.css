@@ -28,7 +28,7 @@ a:hover {
 section {
   max-width: 800px;
   max-height: 0;
-  transition: max-height 0.15s ease-out, opacity 0.33s linear;  
+  transition: max-height 0.15s ease-out, opacity 0.33s linear;
   visibility: hidden;
 }
 
@@ -83,6 +83,7 @@ table td {
   font-size: 0.9rem;
   text-align: right;
 }
+
 /* ===================
   ALL: Nav
  =================== */
@@ -99,12 +100,12 @@ nav ul {
 nav ul li {
   display: inline-block;
   font: bold 12px Dotum;
-  width:24%;
+  width: 24%;
   margin: 0 auto;
-  margin-top : 1rem;
+  margin-top: 1rem;
 }
 
-nav ul li a{
+nav ul li a {
   display: table;
   margin: 0 auto;
 }
@@ -112,6 +113,7 @@ nav ul li a{
 nav ul li:first-child {
   border-left: none;
 }
+
 @media only screen and (min-width: 480px) {
   /* ========================
   INTERMEDIATE: IE Fixes
