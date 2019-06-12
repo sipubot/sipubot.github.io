@@ -81,173 +81,181 @@
             </div>
         </div>
     </div>
-    <div class="main wrapper clearfix">
-        <section id="data">
-            <header class="wrapper clearfix">
-                <div class="text-right">
-                    <input class="date-picker col-4" data-node="DATAGET-date" type="text" placeholder="Select Date..">
-                    <button data-node="DATAGET-submit" type="button" class="btn btn-outline-light">SEARCH</button>
-                    <button data-node="data-new-modal" data-toggle="modal" data-target="#data-new-modal" type="button"
-                        class="btn btn-outline-light">NEW</button>
-                    <button data-node="data-trans-modal" data-toggle="modal" data-target="#data-trans-modal"
-                        type="button" class="btn btn-outline-light">이체</button>
-                </div>
-            </header>
-            <div class="section clearfix">
-                <h4>Expense</h4>
-                <template data-node="DATAGET-template">
-                    <TR>
-                        <td>{date}</td>
-                        <td>{account_id}</td>
-                        <td>{category_id}</td>
-                        <td>{amount}</td>
-                        <th scope="row"><button value="{seq}" type="button" class="btn btn-secondary"
-                                onclick="javascript:SIPUCOMMON.delRow.dataPage(this);">-</button></th>
-                    </TR>
-                </template>
-                <table class="table table-striped table-dark">
-                    <thead>
-                        <tr>
-                            <th scope="col">DATE</th>
-                            <th scope="col">ACCOUNT</th>
-                            <th scope="col">CATEGORY</th>
-                            <th scope="col">AMOUNT</th>
-                            <th scope="col">DEL</th>
-                        </tr>
-                    </thead>
-                    <tbody data-node="DATAGET-tbody_ex">
-                    </tbody>
-                </table>
-                <h4>Income</h4>
-                <table class="table table-striped table-dark">
-                    <thead>
-                        <tr>
-                            <th scope="col">DATE</th>
-                            <th scope="col">ACCOUNT</th>
-                            <th scope="col">CATEGORY</th>
-                            <th scope="col">AMOUNT</th>
-                            <th scope="col">DEL</th>
-                        </tr>
-                    </thead>
-                    <tbody data-node="DATAGET-tbody_in"></tbody>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-        <section id="stat">
-            <header class="wrapper clearfix">
-                <div class="text-right">
-                    <button data-node="STATGET-submit" type="button" class="btn btn-outline-light">TOTAL</button>
-                </div>
-            </header>
-            <div class="section clearfix">
-                <h4>Stat</h4>
-                <table class="table table-striped table-dark">
-                    <thead>
-                        <tr>
-                            <th scope="col">ACCOUNT</th>
-                            <th scope="col">AMOUNT</th>
-                        </tr>
-                    </thead>
-                    <template data-node="STATGET-template">
+    <div class="main-container">
+        <div class="main wrapper clearfix">
+            <section id="data">
+                <header class="wrapper clearfix">
+                    <div class="text-right">
+                        <input class="date-picker col-4" data-node="DATAGET-date" type="text"
+                            placeholder="Select Date..">
+                        <button data-node="DATAGET-submit" type="button" class="btn btn-outline-light">SEARCH</button>
+                        <button data-node="data-new-modal" data-toggle="modal" data-target="#data-new-modal"
+                            type="button" class="btn btn-outline-light">NEW</button>
+                        <button data-node="data-trans-modal" data-toggle="modal" data-target="#data-trans-modal"
+                            type="button" class="btn btn-outline-light">이체</button>
+                    </div>
+                </header>
+                <div class="section clearfix">
+                    <h4>Expense</h4>
+                    <template data-node="DATAGET-template">
                         <TR>
+                            <td>{date}</td>
                             <td>{account_id}</td>
+                            <td>{category_id}</td>
                             <td>{amount}</td>
+                            <th scope="row"><button value="{seq}" type="button" class="btn btn-secondary"
+                                    onclick="javascript:SIPUCOMMON.delRow.dataPage(this);">-</button></th>
                         </TR>
                     </template>
-                    <tbody data-node="STATGET-tbody">
-                    </tbody>
-                </table>
-            </div>
-        </section>
-        <section id="chart">
-            <header class="wrapper clearfix">
-                <div class="text-right">
-                    <input class="date-picker col-4" data-node="CHARTGET-date" type="text" placeholder="Select Date..">
-                    <button data-node="CHARTGET-submit_day" type="button" class="btn btn-outline-light">DAY</button>
-                    <button data-node="CHARTGET-submit_month" type="button" class="btn btn-outline-light">MONTH</button>
-                    <button data-node="CHARTGET-submit_year" type="button" class="btn btn-outline-light">YEAR</button>
-                </div>
-            </header>
-            <div class="section clearfix">
-                <div id="myPieChart"></div>
-                <div id="mybarChart"></div>
-            </div>
-        </section>
-        <section id="set">
-            <header class="wrapper clearfix">
-                <div class="text-right">
-                    <button data-node="SET-account_button" type="button" class="btn btn-outline-light">ACCOUNT</button>
-                    <button data-node="SET-category_button" type="button"
-                        class="btn btn-outline-light">CATEGORY</button>
-                    <button data-node="set-tax" type="button" class="btn btn-outline-light">TAX</button>
-                </div>
-            </header>
-            <div class="section clearfix">
-                <div data-node="account-table">
-                    <table class="table">
+                    <table class="table table-striped table-dark">
                         <thead>
                             <tr>
-                                <th scope="col">Code</th>
-                                <th scope="col">Name</th>
-                                <th scope="col"></th>
+                                <th scope="col">DATE</th>
+                                <th scope="col">ACCOUNT</th>
+                                <th scope="col">CATEGORY</th>
+                                <th scope="col">AMOUNT</th>
+                                <th scope="col">DEL</th>
                             </tr>
                         </thead>
-                        <template data-node="ACCOUNT-template">
-                            <tr>
-                                <td><input data-node="ACCOUNT-id" type="text" class="form-control" placeholder="code"
-                                        value="{id}"></td>
-                                <td><input data-node="ACCOUNT-name" type="text" class="form-control" placeholder="Name"
-                                        value="{name}"></td>
-                                <td><button type="button" class="btn btn-secondary"
-                                        onclick="javascript:SIPUCOMMON.delRow.setPage(this);">삭제</button></td>
-                            </tr>
-                        </template>
-                        <tbody data-node="ACCOUNT-settbody">
+                        <tbody data-node="DATAGET-tbody_ex">
                         </tbody>
                     </table>
-                    <div class="text-right">
-                        <button data-node="ACCOUNT-add" type="button" class="btn btn-outline-light">New</button>
-                        <button data-node="ACCOUNT-summit" type="button" class="btn btn-outline-light">Save</button>
-                    </div>
-                </div>
-                <div data-node="category-table">
-                    <table class="table">
+                    <h4>Income</h4>
+                    <table class="table table-striped table-dark">
                         <thead>
-                            <!--Type true income-->
                             <tr>
-                                <th scope="col">Show</th>
-                                <th scope="col" class="col-2">Type</th>
-                                <th scope="col">Code</th>
-                                <th scope="col">Name</th>
-                                <th scope="col"></th>
+                                <th scope="col">DATE</th>
+                                <th scope="col">ACCOUNT</th>
+                                <th scope="col">CATEGORY</th>
+                                <th scope="col">AMOUNT</th>
+                                <th scope="col">DEL</th>
                             </tr>
                         </thead>
-                        <template data-node="CATEGORY-template">
-                            <tr>
-                                <td><input data-node="CATEGORY-show" type="checkbox" {show}></td>
-                                <td><select data-node="CATEGORY-ttype" class="custom-select">
-                                        <option value="false" {ttypefalse}>지출</option>
-                                        <option value="true" {ttypetrue}>수입</option>
-                                    </select></td>
-                                <td><input data-node="CATEGORY-id" type="text" class="form-control" placeholder="code"
-                                        value="{id}"></td>
-                                <td><input data-node="CATEGORY-name" type="text" class="form-control" placeholder="Name"
-                                        value="{name}"></td>
-                                <td><button type="button" class="btn btn-secondary"
-                                        onclick="javascript:SIPUCOMMON.delRow.setPage(this);">삭제</button></td>
-                            </tr>
-                        </template>
-                        <tbody data-node="CATEGORY-settbody">
+                        <tbody data-node="DATAGET-tbody_in">
                         </tbody>
                     </table>
+                </div>
+            </section>
+            <section id="stat">
+                <header class="wrapper clearfix">
                     <div class="text-right">
-                        <button data-node="CATEGORY-add" type="button" class="btn btn-outline-light">New</button>
-                        <button data-node="CATEGORY-submit" type="button" class="btn btn-outline-light">Save</button>
+                        <button data-node="STATGET-submit" type="button" class="btn btn-outline-light">TOTAL</button>
+                    </div>
+                </header>
+                <div class="section clearfix">
+                    <h4>Stat</h4>
+                    <table class="table table-striped table-dark">
+                        <thead>
+                            <tr>
+                                <th scope="col">ACCOUNT</th>
+                                <th scope="col">AMOUNT</th>
+                            </tr>
+                        </thead>
+                        <template data-node="STATGET-template">
+                            <TR>
+                                <td>{account_id}</td>
+                                <td>{amount}</td>
+                            </TR>
+                        </template>
+                        <tbody data-node="STATGET-tbody">
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            <section id="chart">
+                <header class="wrapper clearfix">
+                    <div class="text-right">
+                        <input class="date-picker col-4" data-node="CHARTGET-date" type="text"
+                            placeholder="Select Date..">
+                        <button data-node="CHARTGET-submit_day" type="button" class="btn btn-outline-light">DAY</button>
+                        <button data-node="CHARTGET-submit_month" type="button"
+                            class="btn btn-outline-light">MONTH</button>
+                        <button data-node="CHARTGET-submit_year" type="button"
+                            class="btn btn-outline-light">YEAR</button>
+                    </div>
+                </header>
+                <div class="section clearfix">
+                    <div id="myPieChart"></div>
+                    <div id="mybarChart"></div>
+                </div>
+            </section>
+            <section id="set">
+                <header class="wrapper clearfix">
+                    <div class="text-right">
+                        <button data-node="SET-account_button" type="button"
+                            class="btn btn-outline-light">ACCOUNT</button>
+                        <button data-node="SET-category_button" type="button"
+                            class="btn btn-outline-light">CATEGORY</button>
+                        <button data-node="set-tax" type="button" class="btn btn-outline-light">TAX</button>
+                    </div>
+                </header>
+                <div class="section clearfix">
+                    <div data-node="account-table">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Code</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <template data-node="ACCOUNT-template">
+                                <tr>
+                                    <td><input data-node="ACCOUNT-id" type="text" class="form-control"
+                                            placeholder="code" value="{id}"></td>
+                                    <td><input data-node="ACCOUNT-name" type="text" class="form-control"
+                                            placeholder="Name" value="{name}"></td>
+                                    <td><button type="button" class="btn btn-secondary"
+                                            onclick="javascript:SIPUCOMMON.delRow.setPage(this);">삭제</button></td>
+                                </tr>
+                            </template>
+                            <tbody data-node="ACCOUNT-settbody">
+                            </tbody>
+                        </table>
+                        <div class="text-right">
+                            <button data-node="ACCOUNT-add" type="button" class="btn btn-outline-light">New</button>
+                            <button data-node="ACCOUNT-summit" type="button" class="btn btn-outline-light">Save</button>
+                        </div>
+                    </div>
+                    <div data-node="category-table">
+                        <table class="table">
+                            <thead>
+                                <!--Type true income-->
+                                <tr>
+                                    <th scope="col">Show</th>
+                                    <th scope="col" class="col-2">Type</th>
+                                    <th scope="col">Code</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <template data-node="CATEGORY-template">
+                                <tr>
+                                    <td><input data-node="CATEGORY-show" type="checkbox" {show}></td>
+                                    <td><select data-node="CATEGORY-ttype" class="custom-select">
+                                            <option value="false" {ttypefalse}>지출</option>
+                                            <option value="true" {ttypetrue}>수입</option>
+                                        </select></td>
+                                    <td><input data-node="CATEGORY-id" type="text" class="form-control"
+                                            placeholder="code" value="{id}"></td>
+                                    <td><input data-node="CATEGORY-name" type="text" class="form-control"
+                                            placeholder="Name" value="{name}"></td>
+                                    <td><button type="button" class="btn btn-secondary"
+                                            onclick="javascript:SIPUCOMMON.delRow.setPage(this);">삭제</button></td>
+                                </tr>
+                            </template>
+                            <tbody data-node="CATEGORY-settbody">
+                            </tbody>
+                        </table>
+                        <div class="text-right">
+                            <button data-node="CATEGORY-add" type="button" class="btn btn-outline-light">New</button>
+                            <button data-node="CATEGORY-submit" type="button"
+                                class="btn btn-outline-light">Save</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </div>
     </div>
     <link rel="stylesheet" href="stylesheet/bootstrap.css"
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
