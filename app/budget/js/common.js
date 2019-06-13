@@ -589,8 +589,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 },
                 chartArea: {
                     top: 20,
-                    width: "95%",
-                    height: "95%"
+                    width: "70%"
                 }
             };
         }
@@ -599,8 +598,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 title: "",
                 chartArea: {
                     top: 20,
-                    width: "95%",
-                    height: "95%"
+                    width: "70%"
                 },
                 isStacked: true
             };
