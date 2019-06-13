@@ -584,6 +584,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         if (chartKind === "BarChart") {
             var options = {
                 title: "",
+                hAxis: {
+                    minValue: 0
+                },
                 chartArea: {
                     top: 20,
                     width: "95%",
