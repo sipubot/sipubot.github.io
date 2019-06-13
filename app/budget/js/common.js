@@ -480,8 +480,8 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             rsFunc: function (data) {
                 //drawchart
                 var d = makeSumData(data);
-                UI_WK.setNodeValue(DATANODES.CHART.tbodysum, DATANODES.CHART.templatesum,d,true);
-                drawGraph(DATANODES.CHART.sum, "BarChart", d.map(a=>[a.data,a.income,a.expense,a.differ]), ["date","income","expense","total"]);
+                UI_WK.setNodeValue(DATANODES.CHART.tbodysum, DATANODES.CHART.templatesum, d, true);
+                drawGraph(DATANODES.CHART.sum, "BarChart", d.map(a => [a.data, a.income, a.expense, a.differ]), ["date", "income", "expense", "total"]);
             },
             doOnload: false,
             init: () => {
@@ -536,34 +536,31 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         });
     }
 
-    function makeSumData(datas) {
-        var datasum = {};
-        datas.map(data => {
-            data.map(a => {
-                if (!datesum[a.date]) {
-                    datesum[a.date] = {};
-                    datesum[a.date].income = 0;
-                    datesum[a.date].tranincome = 0;
-                    datesum[a.date].expense = 0;
-                    datesum[a.date].tranexpense = 0;
-                    datesum[a.date].differ = 0;
-                }
-                if (!RS_DATA.CATEGORYHASH[a.category_id][2] && a.ttype) {
-                    datesum[a.date].tranincome += a.amount;
-                } else if (!!RS_DATA.CATEGORYHASH[a.category_id][2] && !a.ttype) {
-                    datesum[a.date].tranexpense += a.amount;
-                } else if (a.ttype) {
-                    datesum[a.date].income += a.amount;
-                } else {
-                    datesum[a.date].expense += a.amount;
-                }
-            });
+    function makeSumData(data) {
+        data.map(a => {
+            if (!datesum[a.date]) {
+                datesum[a.date] = {};
+                datesum[a.date].income = 0;
+                datesum[a.date].tranincome = 0;
+                datesum[a.date].expense = 0;
+                datesum[a.date].tranexpense = 0;
+                datesum[a.date].differ = 0;
+            }
+            if (!RS_DATA.CATEGORYHASH[a.category_id][2] && a.ttype) {
+                datesum[a.date].tranincome += a.amount;
+            } else if (!!RS_DATA.CATEGORYHASH[a.category_id][2] && !a.ttype) {
+                datesum[a.date].tranexpense += a.amount;
+            } else if (a.ttype) {
+                datesum[a.date].income += a.amount;
+            } else {
+                datesum[a.date].expense += a.amount;
+            }
         });
         datasum = datasum.map(a => {
             a.differ = a.income - a.expense;
             return a;
         });
-        var re = Object.entries(datasum).map(a=>a[0].concat(a[1]))
+        var re = Object.entries(datasum).map(a => a[0].concat(a[1]))
         return re;
     }
 
