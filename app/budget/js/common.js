@@ -480,7 +480,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             rsFunc: function (data) {
                 //drawchart
                 var d = makeSumData(data);
-                UI_WK.setNodeValue(DATANODES.CHART.tbodysum, DATANODES.CHART.templatesum, d, true);
+                var objsum = DATANODES.CHART.tbodysum;
+                var formatsum = DATANODES.CHART.templatesum;
+                UI_WK.setNodeValue(objsum, formatsum, d, true);
                 drawGraph(DATANODES.CHART.sum, "BarChart", d.map(a => [a.data, a.income, a.expense, a.differ]), ["date", "income", "expense", "total"]);
             },
             doOnload: false,
