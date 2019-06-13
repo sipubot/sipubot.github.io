@@ -582,7 +582,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         var Paramdata = google.visualization.arrayToDataTable(graphdata);
         var options;
         if (chartKind === "BarChart") {
-            var options = {
+            options = {
                 title: "",
                 hAxis: {
                     minValue: 0
@@ -595,7 +595,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             };
         }
         if (chartKind === "BarChartStacked") {
-            var options = {
+            options = {
                 title: "",
                 chartArea: {
                     top: 20,
