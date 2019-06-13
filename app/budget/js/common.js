@@ -336,7 +336,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 UI_WK.setNodeValue(obj3, format2, data3, true);
                 RS_DATA.CATEGORYHASH = {};
                 data.map(a => {
-                    RS_DATA.CATEGORYHASH[a.id] = [a.ttype, a.name];
+                    RS_DATA.CATEGORYHASH[a.id] = [a.ttype, a.name, a.show];
                 });
             },
             doOnload: false,
@@ -530,6 +530,36 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             }
             a[1].init();
         });
+    }
+    
+    function makeSumData (datas){
+        var datasum = {};
+        datas.map(data=>{
+            data.map(a=>{
+                if (!datesum[a.date]) {
+                    datesum[a.date] = {};
+                    datesum[a.date].income = 0;
+                    datesum[a.date].tranincome = 0;
+                    datesum[a.date].expense = 0;
+                    datesum[a.date].tranexpense = 0;
+                    datesum[a.date].differ = 0;
+                }
+                if (!RS_DATA.CATEGORYHASH[a.category_id][2] && a.ttype) {
+                    datesum[a.date].tranincome += a.amount;
+                } else if (!!RS_DATA.CATEGORYHASH[a.category_id][2] && !a.ttype) {
+                    datesum[a.date].tranexpense += a.amount;
+                } else if (a.ttype) {
+                    datesum[a.date].income += a.amount;
+                } else {
+                    datesum[a.date].expense += a.amount;
+                }
+            });
+        });
+        datasum = datasum.map(a=>{
+            a.differ = a.income - a.expense;
+            return a;
+        });
+        return datasum;
     }
 
     SIPUCOMMON.delRow = {
