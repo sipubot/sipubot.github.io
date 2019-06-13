@@ -479,15 +479,19 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             //rqData :function () {},
             rsFunc: function (data) {
                 //drawchart
-                console.log(data);
+                var d = makeSumData(data);
+                UI_WK.setNodeValue(DATANODES.CHART.tbodysum, DATANODES.CHART.templatesum,d,true);
+                drawGraph(DATANODES.CHART.sum, "BarChart", d.map(a=>[a.data,a.income,a.expense,a.differ]), ["date","income","expense","total"]);
             },
             doOnload: false,
             init: () => {
                 UI_WK.setEvent(DATANODES.CHARTGET.submit_month, () => {
-                    return UI_WK.getNodeValue(DATANODES.CHARTGET.date).slice(0, 7);
+                    JOB_WK.CHARTGET.ADD_URL = "/budget/stat/category/" + UI_WK.getNodeValue(DATANODES.CHARTGET.date).slice(0, 7);
+                    RQ_WK(JOB_WK.CHARTGET);
                 });
                 UI_WK.setEvent(DATANODES.CHARTGET.submit_year, () => {
-                    return UI_WK.getNodeValue(DATANODES.CHARTGET.date).slice(0, 4);
+                    JOB_WK.CHARTGET.ADD_URL = "/budget/stat/category/" + UI_WK.getNodeValue(DATANODES.CHARTGET.date).slice(0, 4);
+                    RQ_WK(JOB_WK.CHARTGET);
                 });
             }
         },
@@ -531,11 +535,11 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             a[1].init();
         });
     }
-    
-    function makeSumData (datas){
+
+    function makeSumData(datas) {
         var datasum = {};
-        datas.map(data=>{
-            data.map(a=>{
+        datas.map(data => {
+            data.map(a => {
                 if (!datesum[a.date]) {
                     datesum[a.date] = {};
                     datesum[a.date].income = 0;
@@ -555,11 +559,12 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 }
             });
         });
-        datasum = datasum.map(a=>{
+        datasum = datasum.map(a => {
             a.differ = a.income - a.expense;
             return a;
         });
-        return datasum;
+        var re = Object.entries(datasum).map(a=>a[0].concat(a[1]))
+        return re;
     }
 
     function drawGraph(node, chartKind, data, header) {
