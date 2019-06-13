@@ -562,6 +562,47 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         return datasum;
     }
 
+    function drawGraph(node, chartKind, data, header) {
+        var graphdata = header.concat(data);
+        var Paramdata = google.visualization.arrayToDataTable(graphdata);
+        var options;
+        if (chartKind === "BarChart") {
+            var options = {
+                title: "",
+                chartArea: {
+                    top: 20,
+                    width: "95%",
+                    height: "95%"
+                }
+            };
+        }
+        if (chartKind === "BarChartStacked") {
+            var options = {
+                title: "",
+                chartArea: {
+                    top: 20,
+                    width: "95%",
+                    height: "95%"
+                },
+                isStacked: true
+            };
+        }
+        if (chartKind === "PieChart") {
+            options = {
+                title: "",
+                chartArea: {
+                    top: 20,
+                    width: "95%",
+                    height: "95%"
+                }
+            }
+        }
+        if (options === undefined) return;
+        var chart = new google.visualization[chartKind](document.getElementById(node));
+        chart.draw(Paramdata, options);
+    }
+
+
     SIPUCOMMON.delRow = {
         setPage: function (node) {
             $(node).parent().parent().remove();
