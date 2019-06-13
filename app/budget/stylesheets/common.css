@@ -125,6 +125,10 @@ nav ul li:first-child {
   max-width: 800px;
 }
 
+.chart {
+  height: 600px;
+}
+
 @media only screen and (min-width: 480px) {
   /* ========================
   INTERMEDIATE: IE Fixes
