@@ -487,7 +487,10 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 var objsum = DATANODES.CHART.tbodysum;
                 var formatsum = DATANODES.CHART.templatesum;
                 UI_WK.setNodeValue(objsum, formatsum, d, true);
-                SIPUCOMMON.drawGraph(DATANODES.CHART.sum, "BarChart", d.map(a => [a.data, a.income, a.expense, a.differ]), ["date", "income", "expense", "total"]);
+                var chartdata = [
+                    ["date", "income", "expense", "total"]
+                ].concat(d.map(a => [a.date, a.income, a.expense, a.differ]));
+                SIPUCOMMON.drawGraph(DATANODES.CHART.sum, "BarChart", chartdata);
             },
             doOnload: false,
             init: () => {
@@ -559,11 +562,11 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 datasum[a.date].tranexpense += a.amount;
             } else if (a.ttype) {
                 datasum[a.date].income += a.amount;
-            } else if (!a.ttype){
+            } else if (!a.ttype) {
                 datasum[a.date].expense += a.amount;
             }
         });
-        Object.entries(datasum).map(a=>{
+        Object.entries(datasum).map(a => {
             datasum[a[0]].differ = a[1].income - a[1].expense;
         });
         var re = Object.entries(datasum).map(a => {
@@ -573,8 +576,8 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         return re;
     }
 
-    SIPUCOMMON.drawGraph = function (node, chartKind, data, header) {
-        var graphdata = header.concat(data);
+    SIPUCOMMON.drawGraph = function (node, chartKind, data) {
+        var graphdata = data;
         var Paramdata = google.visualization.arrayToDataTable(graphdata);
         var options;
         if (chartKind === "BarChart") {
