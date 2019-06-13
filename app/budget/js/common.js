@@ -560,7 +560,10 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         Object.entries(datasum).map(a=>{
             datasum[a[0]].differ = a[1].income - a[1].expense;
         });
-        var re = Object.entries(datasum).map(a => a[0].concat(a[1]))
+        var re = Object.entries(datasum).map(a => {
+            a[1].date = a[0];
+            return a[1];
+        });
         return re;
     }
 
