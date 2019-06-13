@@ -569,7 +569,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         return re;
     }
 
-    COMMON.drawGraph = function (node, chartKind, data, header) {
+    SIPUCOMMON.drawGraph = function (node, chartKind, data, header) {
         var graphdata = header.concat(data);
         var Paramdata = google.visualization.arrayToDataTable(graphdata);
         var options;
