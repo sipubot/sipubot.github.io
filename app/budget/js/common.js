@@ -539,22 +539,22 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     function makeSumData(data) {
         var datasum = {};
         data.map(a => {
-            if (!datesum[a.date]) {
-                datesum[a.date] = {};
-                datesum[a.date].income = 0;
-                datesum[a.date].tranincome = 0;
-                datesum[a.date].expense = 0;
-                datesum[a.date].tranexpense = 0;
-                datesum[a.date].differ = 0;
+            if (!datasum[a.date]) {
+                datasum[a.date] = {};
+                datasum[a.date].income = 0;
+                datasum[a.date].tranincome = 0;
+                datasum[a.date].expense = 0;
+                datasum[a.date].tranexpense = 0;
+                datasum[a.date].differ = 0;
             }
             if (!RS_DATA.CATEGORYHASH[a.category_id][2] && a.ttype) {
-                datesum[a.date].tranincome += a.amount;
+                datasum[a.date].tranincome += a.amount;
             } else if (!!RS_DATA.CATEGORYHASH[a.category_id][2] && !a.ttype) {
-                datesum[a.date].tranexpense += a.amount;
+                datasum[a.date].tranexpense += a.amount;
             } else if (a.ttype) {
-                datesum[a.date].income += a.amount;
+                datasum[a.date].income += a.amount;
             } else {
-                datesum[a.date].expense += a.amount;
+                datasum[a.date].expense += a.amount;
             }
         });
         datasum = datasum.map(a => {
