@@ -1,7 +1,7 @@
 var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     "use strict";
     google.charts.load("current", {
-        packages: ["corechart"]
+        packages: ["corechart","bar"]
     });
     google.charts.setOnLoadCallback(SIPUCOMMON.drawGraph);
     //util here
