@@ -551,11 +551,11 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             }
             if (!RS_DATA.CATEGORYHASH[a.category_id][2] && a.ttype) {
                 datasum[a.date].tranincome += a.amount;
-            } else if (!!RS_DATA.CATEGORYHASH[a.category_id][2] && !a.ttype) {
+            } else if (!RS_DATA.CATEGORYHASH[a.category_id][2] && !a.ttype) {
                 datasum[a.date].tranexpense += a.amount;
             } else if (a.ttype) {
                 datasum[a.date].income += a.amount;
-            } else {
+            } else if (!a.ttype){
                 datasum[a.date].expense += a.amount;
             }
         });
