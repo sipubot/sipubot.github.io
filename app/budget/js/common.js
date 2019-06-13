@@ -484,10 +484,10 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             doOnload: false,
             init: () => {
                 UI_WK.setEvent(DATANODES.CHARTGET.submit_month, () => {
-                    UI_WK.getNodeValue(DATANODES.CHARTGET.date).slice(0, 7);
+                    return UI_WK.getNodeValue(DATANODES.CHARTGET.date).slice(0, 7);
                 });
                 UI_WK.setEvent(DATANODES.CHARTGET.submit_year, () => {
-                    UI_WK.getNodeValue(DATANODES.CHARTGET.date).slice(0, 4);
+                    return UI_WK.getNodeValue(DATANODES.CHARTGET.date).slice(0, 4);
                 });
             }
         },
