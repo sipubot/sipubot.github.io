@@ -490,7 +490,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 var chartdata = [
                     ["date", "income", "expense", "total"]
                 ].concat(d.map(a => [a.date, a.income, a.expense, a.differ]));
-                SIPUCOMMON.drawGraph(DATANODES.CHART.sum, "BarChart", chartdata);
+                SIPUCOMMON.drawGraph(DATANODES.CHART.sumchart, "BarChart", chartdata);
             },
             doOnload: false,
             init: () => {
