@@ -1,5 +1,9 @@
 var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     "use strict";
+    google.charts.load("current", {
+        packages: ["corechart"]
+    });
+    google.charts.setOnLoadCallback(SIPUCOMMON.drawGraph);
     //util here
     var VERIFY = {
         OnlyChar: function (obj) {
