@@ -483,7 +483,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 var objsum = DATANODES.CHART.tbodysum;
                 var formatsum = DATANODES.CHART.templatesum;
                 UI_WK.setNodeValue(objsum, formatsum, d, true);
-                drawGraph(DATANODES.CHART.sum, "BarChart", d.map(a => [a.data, a.income, a.expense, a.differ]), ["date", "income", "expense", "total"]);
+                COMMON.drawGraph(DATANODES.CHART.sum, "BarChart", d.map(a => [a.data, a.income, a.expense, a.differ]), ["date", "income", "expense", "total"]);
             },
             doOnload: false,
             init: () => {
@@ -569,7 +569,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         return re;
     }
 
-    function drawGraph(node, chartKind, data, header) {
+    COMMON.drawGraph = function (node, chartKind, data, header) {
         var graphdata = header.concat(data);
         var Paramdata = google.visualization.arrayToDataTable(graphdata);
         var options;
