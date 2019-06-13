@@ -537,6 +537,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     }
 
     function makeSumData(data) {
+        var datasum = {};
         data.map(a => {
             if (!datesum[a.date]) {
                 datesum[a.date] = {};
