@@ -612,7 +612,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             }
         }
         if (options === undefined) return;
-        var chart = new google.visualization[chartKind](document.getElementById(node));
+        var chart = new google.visualization[chartKind](node);
         chart.draw(Paramdata, options);
     }
 
