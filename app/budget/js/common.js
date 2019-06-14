@@ -679,7 +679,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             google.visualization.events.addListener(chart, 'select', function (a) {
                 var select = chart.getSelection()[0];
                 if (select) {
-                    var items = Paramdata.getValue(select.row);
+                    var items = Paramdata.rows[select.row];
                     console.log(items);
                 }
             });
