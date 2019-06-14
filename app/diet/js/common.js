@@ -315,6 +315,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 return a;
             },
             rsFunc: function (data) {
+                JOB_WK.WEIGHTGET.ADD_URL = "day";
                 RQ_WK(JOB_WK.WEIGHTGET);
             },
             doOnload: false,
