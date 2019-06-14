@@ -614,7 +614,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         var rein = Object.entries(dataincate).map(a => {
             return [a[0]].concat(Object.entries(a[1]).map(b => b[1]));
         });
-        rein = hd.concat(rein);
+        rein = [hd].concat(rein);
         //category ex
         var dataexcate = {};
         data.map(a => {
@@ -630,7 +630,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         var reex = Object.entries(dataexcate).map(a => {
             return [a[0]].concat(Object.entries(a[1]).map(b => b[1]));
         });
-        reex = hd2.concat(reex);
+        reex = [hd2].concat(reex);
         return [rein, reex];
     }
 
