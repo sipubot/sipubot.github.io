@@ -677,8 +677,11 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         chart.draw(Paramdata, options);
         if (chartKind === "BarChartStacked") {
             google.visualization.events.addListener(chart, 'select', function (a) {
-                console.log(a);
-                console.log(this);
+                var select = chart.getSelection()[0];
+                if (select) {
+                    var items = Paramdata.getValue(select.row);
+                    console.log(items);
+                }
             });
         }
     }
