@@ -86,7 +86,9 @@ table td {
 
 table th .btn{
   margin: 0 auto;
-  padding: 0 !important;
+  padding-top: 0;
+  padding-bottom: 0;
+  height: 22px;
 }
 
 /* ===================
