@@ -637,7 +637,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     SIPUCOMMON.drawGraph = function (node, chartKind, data) {
         var graphdata = data;
         var Paramdata = google.visualization.arrayToDataTable(graphdata);
-        var options;
+        var options, chart;
         if (chartKind === "BarChart") {
             options = {
                 title: "",
@@ -649,6 +649,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                     width: "70%"
                 }
             };
+            chart = new google.visualization.BarChart(node);
         }
         if (chartKind === "BarChartStacked") {
             options = {
@@ -659,6 +660,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 },
                 isStacked: true
             };
+            chart = new google.visualization.BarChart(node);
         }
         if (chartKind === "PieChart") {
             options = {
@@ -669,18 +671,17 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                     height: "95%"
                 }
             }
+            chart = new google.visualization.PieChart(node);
         }
         if (options === undefined) return;
-        var chart = new google.visualization[chartKind](node);
         chart.draw(Paramdata, options);
         if (chartKind === "BarChartStacked") {
-            google.visualization.events.addListener(chart, 'select', function(a) {
+            google.visualization.events.addListener(chart, 'select', function (a) {
                 console.log(a);
                 console.log(this);
             });
         }
     }
-
 
     SIPUCOMMON.delRow = {
         setPage: function (node) {
