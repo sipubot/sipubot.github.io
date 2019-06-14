@@ -377,27 +377,38 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             doOnload: false,
             init: () => {}
         },
-        //CHARTGET: {
-        //    //BASE_URL: "/data/app.json",
-        //    ADD_URL: "/diet/stat/category/",
-        //    rqMethod: "GET",
-        //    //rqData :function () {},
-        //    rsFunc: function (data) {
-        //        //drawsumchart
-        //        console.log(data);
-        //    },
-        //    doOnload: false,
-        //    init: () => {
-        //        UI_WK.setEvent(DATANODES.CHARTGET.submit_month, () => {
-        //            JOB_WK.CHARTGET.ADD_URL = "/diet/stat/category/" + UI_WK.getNodeValue(DATANODES.CHARTGET.date).slice(0, 7);
-        //            RQ_WK(JOB_WK.CHARTGET);
-        //        });
-        //        UI_WK.setEvent(DATANODES.CHARTGET.submit_year, () => {
-        //            JOB_WK.CHARTGET.ADD_URL = "/diet/stat/category/" + UI_WK.getNodeValue(DATANODES.CHARTGET.date).slice(0, 4);
-        //            RQ_WK(JOB_WK.CHARTGET);
-        //        });
-        //    }
-        //},
+        CHARTGET: {
+            BASE_URL: "https://sipu.iptime.org/diet/weight/",
+            ADD_URL: "",
+            rqMethod: "GET",
+            //rqData :function () {},
+            rsFunc: function (data) {
+                //drawsumchart
+                var obj = DATANODES.CHART.weight;
+                var obj2 = DATANODES.CHART.calorie;
+                data = dataChart(data);
+                if (JOB_WK.CHARTGET.ADD_URL === "day") {
+                    var data2 = dataDayChart(data);
+                    SIPUCOMMON.drawGraph(obj2, "BarChart", data2);
+                } 
+                SIPUCOMMON.drawGraph(obj, "BarChart", data);
+            },
+            doOnload: false,
+            init: () => {
+                UI_WK.setEvent(DATANODES.CHARTGET.submit_month, () => {
+                    JOB_WK.CHARTGET.ADD_URL = "day";
+                    RQ_WK(JOB_WK.CHARTGET);
+                });
+                UI_WK.setEvent(DATANODES.CHARTGET.submit_month, () => {
+                    JOB_WK.CHARTGET.ADD_URL = "month";
+                    RQ_WK(JOB_WK.CHARTGET);
+                });
+                UI_WK.setEvent(DATANODES.CHARTGET.submit_year, () => {
+                    JOB_WK.CHARTGET.ADD_URL = "year";
+                    RQ_WK(JOB_WK.CHARTGET);
+                });
+            }
+        },
         MODALNEW: {
             doOnload: false,
             init: () => {
@@ -422,6 +433,34 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             }
             a[1].init();
         });
+    }
+
+    function dataDayChart (data) {
+        var hd = ["DATE","GAIN","LOSS","SUM"];
+        data = data.sort((a,b)=> a.date < b.date);
+        var d = data.map(a=>{
+            var t = [
+                a.date,
+                a.gain_cal,
+                a.loss_cal + a.base_cal,
+                a.gain_cal - (a.loss_cal + a.base_cal)
+            ];
+            return t;
+        });
+        return [hd].concat(d);
+    }
+
+    function dataChart (data) {
+        var hd = ["DATE", "WEIGHT"];
+        data = data.sort((a,b)=> a.date < b.date);
+        var d = data.map(a=>{
+            var t = [
+                a.date,
+                a.weight
+            ];
+            return t;
+        });
+        return [hd].concat(d);
     }
 
     SIPUCOMMON.drawGraph = function (node, chartKind, data) {
