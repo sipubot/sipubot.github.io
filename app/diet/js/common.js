@@ -314,7 +314,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             },
             doOnload: false,
             init: () => {
-                UI_WK.setEvent(DATANODES.TRANS.submit, () => {
+                UI_WK.setEvent(DATANODES.WEIGHT.submit, () => {
                     RQ_WK(JOB_WK.WEIGHTGET);
                 });
             }
