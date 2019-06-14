@@ -610,7 +610,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             dataincate[a.date][RS_DATA.CATEGORYHASH[a.category_id][1]] = a.amount;
         });
         //category in
-        var hd = ['DATE'].concat(Object.entries(Object.entries(dataincate)[0][1]).map(a => a[0])[0]);
+        var hd = ['DATE'].concat(Object.entries(Object.entries(dataincate)[0][1]).map(a => a[0]));
         var rein = Object.entries(dataincate).map(a => {
             return [a[0]].concat(Object.entries(a[1]).map(b => b[1]));
         });
@@ -626,14 +626,14 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             }
             dataexcate[a.date][RS_DATA.CATEGORYHASH[a.category_id][1]] = a.amount;
         });
-        var hd2 = ['DATE'].concat(Object.entries(Object.entries(dataexcate)[0][1]).map(a => a[0])[0]);
+        var hd2 = ['DATE'].concat(Object.entries(Object.entries(dataexcate)[0][1]).map(a => a[0]));
         var reex = Object.entries(dataexcate).map(a => {
             return [a[0]].concat(Object.entries(a[1]).map(b => b[1]));
         });
         reex = hd2.concat(reex);
         return [rein, reex];
     }
-    
+
     SIPUCOMMON.drawGraph = function (node, chartKind, data) {
         var graphdata = data;
         var Paramdata = google.visualization.arrayToDataTable(graphdata);
