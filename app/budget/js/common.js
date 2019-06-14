@@ -581,22 +581,22 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         return re;
     }
 
-    function makeSumtable (data) {
+    function makeSumtable(data) {
         var re = data.slice(0);
-        re.push([
-            'TOTAL',
-            data.reduce((s,a)=>s+a.income,0) / data.length,
-            data.reduce((s,a)=>s+a.expense,0) / data.length,
-            data.reduce((s,a)=>s+a.differ,0) / data.length,
-        ]);
-        re.push([
-            'AVG',
-            data.reduce((s,a)=>s+a.income,0),
-            data.reduce((s,a)=>s+a.expense,0),
-            data.reduce((s,a)=>s+a.differ,0),
-        ]);
+        re.push({
+            date:'TOTAL',
+            income:data.reduce((s, a) => s + a.income, 0),
+            expense:data.reduce((s, a) => s + a.expense, 0),
+            differ:data.reduce((s, a) => s + a.differ, 0)
+        });
+        re.push({
+            date:'AVG',
+            income:data.reduce((s, a) => s + a.income, 0) / data.length,
+            expense:data.reduce((s, a) => s + a.expense, 0) / data.length,
+            differ:data.reduce((s, a) => s + a.differ, 0) / data.length
+        });
         return re;
-    }    
+    }
     
     function makeCateData(data) {
         var dataincate = {};
