@@ -235,7 +235,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         },
         CATEGORYGET: {
             //BASE_URL: "/data/app.json",
-            ADD_URL: "/budget/data/category",
+            ADD_URL: "/diet/data/category",
             rqMethod: "GET",
             //rqData :function () {},
             rsFunc: function (data) {
@@ -248,14 +248,14 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                     return item;
                 });
                 UI_WK.setNodeValue(obj, format, data1, true);
-                var obj2 = DATANODES.CATEGORY.select_expense;
-                var obj3 = DATANODES.CATEGORY.select_income;
-                var format2 = DATANODES.CATEGORY.templatenew;
-                var data2 = data.filter(a => a.ttype === false).map(a => {
+                var obj2 = DATANODES.DATANEW.category_food;
+                var obj3 = DATANODES.DATANEW.category_gym;
+                var format2 = DATANODES.DATANEW.template_category;
+                var data2 = data.filter(a => a.ttype === true).map(a => {
                     a.select = "";
                     return a;
                 });
-                var data3 = data.filter(a => a.ttype === true).map(a => {
+                var data3 = data.filter(a => a.ttype === false).map(a => {
                     a.select = "";
                     return a;
                 });
@@ -267,7 +267,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 UI_WK.setNodeValue(obj3, format2, data3, true);
                 RS_DATA.CATEGORYHASH = {};
                 data.map(a => {
-                    RS_DATA.CATEGORYHASH[a.id] = [a.ttype, a.name, a.show];
+                    RS_DATA.CATEGORYHASH[a.id] = [a.ttype, a.name, a.calorie];
                 });
             },
             doOnload: false,
@@ -277,15 +277,14 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         },
         DATANEW: {
             //BASE_URL: "/data/app.json",
-            ADD_URL: "/budget/data/insert",
+            ADD_URL: "/diet/data/insert",
             rqMethod: "POST",
             rqData: function () {
                 var a = {};
                 a.seq = 0;
                 a.date = UI_WK.getNodeValue(DATANODES.DATANEW.date);
                 a.ttype = UI_WK.getNodeValue(DATANODES.DATANEW.ttype) === "false" ? false : true;
-                a.category_id = a.ttype ? UI_WK.getNodeValue(DATANODES.CATEGORY.select_income) : UI_WK.getNodeValue(DATANODES.CATEGORY.select_expense);
-                a.account_id = UI_WK.getNodeValue(DATANODES.ACCOUNT.selectnew);
+                a.category_id = a.ttype ? UI_WK.getNodeValue(DATANODES.DATANEW.category_food) : UI_WK.getNodeValue(DATANODES.DATANEW.category_gym);
                 a.amount = +UI_WK.getNodeValue(DATANODES.DATANEW.amount);
                 return a;
             },
@@ -300,55 +299,28 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 });
             }
         },
-        TRANSFROM: {
+        WEIGHTNEW: {
             //BASE_URL: "/data/app.json",
-            ADD_URL: "/budget/data/insert",
+            ADD_URL: "/diet/data/insert/weight",
             rqMethod: "POST",
             rqData: function () {
                 var a = {};
-                a.seq = 0;
-                a.date = UI_WK.getNodeValue(DATANODES.TRANS.date);
-                a.ttype = false;
-                a.category_id = "0000";
-                a.account_id = UI_WK.getNodeValue(DATANODES.TRANS.account_from);
-                a.amount = +(UI_WK.getNodeValue(DATANODES.TRANS.amount));
+                a.date = UI_WK.getNodeValue(DATANODES.WEIGHT.date);
+                a.amount = +(UI_WK.getNodeValue(DATANODES.WEIGHT.amount));
                 return a;
             },
             rsFunc: function (data) {
-                RQ_WK(JOB_WK.TRANSTO);
+                RQ_WK(JOB_WK.WEIGHTGET);
             },
             doOnload: false,
             init: () => {
                 UI_WK.setEvent(DATANODES.TRANS.submit, () => {
-                    RQ_WK(JOB_WK.TRANSFROM);
-                });
-            }
-        },
-        TRANSTO: {
-            //BASE_URL: "/data/app.json",
-            ADD_URL: "/budget/data/insert",
-            rqMethod: "POST",
-            rqData: function () {
-                var a = {};
-                a.seq = 0;
-                a.date = UI_WK.getNodeValue(DATANODES.TRANS.date);
-                a.ttype = true;
-                a.category_id = "5000";
-                a.account_id = UI_WK.getNodeValue(DATANODES.TRANS.account_to);
-                a.amount = +(UI_WK.getNodeValue(DATANODES.TRANS.amount));
-                return a;
-            },
-            //rsFunc : function (data) {},
-            doOnload: false,
-            init: () => {
-                UI_WK.setEvent(DATANODES.TRANS.submit, () => {
-                    JOB_WK.DATAGET.ADD_URL = UI_WK.getNodeValue(DATANODES.DATATRANS.date).slice(0, 7);
-                    RQ_WK(JOB_WK.DATAGET);
+                    RQ_WK(JOB_WK.WEIGHTGET);
                 });
             }
         },
         DATAGET: {
-            BASE_URL: "https://sipu.iptime.org/budget/data/",
+            BASE_URL: "https://sipu.iptime.org/diet/data/",
             ADD_URL: "",
             rqMethod: "GET",
             //rqData :function () {},
@@ -357,17 +329,15 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             //rsData : "",
             rsFunc: function (data) {
                 RS_DATA.DATA = JSON.parse(JSON.stringify(data));
-                var obj1 = DATANODES.DATAGET.tbody_ex;
-                var obj2 = DATANODES.DATAGET.tbody_in;
-                var format = DATANODES.DATAGET.template;
+                var obj1 = DATANODES.DATAGET.tbody_food;
+                var obj2 = DATANODES.DATAGET.tbody_gym;
+                var format = DATANODES.DATAGET.template_foodgym;
                 data = data.sort((a, b) => a.date < b.date);
-                var data1 = data.filter(a => a.ttype === false).map(a => {
-                    a.account_id = RS_DATA.ACCOUNTHASH[a.account_id];
+                var data1 = data.filter(a => a.ttype === true).map(a => {
                     a.category_id = RS_DATA.CATEGORYHASH[a.category_id][1];
                     return a;
                 });
-                var data2 = data.filter(a => a.ttype === true).map(a => {
-                    a.account_id = RS_DATA.ACCOUNTHASH[a.account_id];
+                var data2 = data.filter(a => a.ttype === false).map(a => {
                     a.category_id = RS_DATA.CATEGORYHASH[a.category_id][1];
                     return a;
                 });
@@ -379,59 +349,46 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 UI_WK.setEvent(DATANODES.DATAGET.submit, () => {
                     JOB_WK.DATAGET.ADD_URL = UI_WK.getNodeValue(DATANODES.DATAGET.date).slice(0, 7);
                     RQ_WK(JOB_WK.DATAGET);
+                    RQ_WK(JOB_WK.WEIGHTGET);
                 });
             }
         },
-        STATGET: {
-            //BASE_URL: "/data/app.json",
-            ADD_URL: "/budget/stat/account/0000",
+        WEIGHTGET: {
+            BASE_URL: "https://sipu.iptime.org/diet/data/",
+            ADD_URL: "",
             rqMethod: "GET",
             //rqData :function () {},
+            //setHTML: ``,
+            setPushType: "SET",
+            //rsData : "",
             rsFunc: function (data) {
-                var obj = DATANODES.STATGET.tbody;
-                var format = DATANODES.STATGET.template;
-                data = data.map(a => {
-                    a.account_id = RS_DATA.ACCOUNTHASH[a.account_id];
-                    return a;
-                });
+                RS_DATA.DATA = JSON.parse(JSON.stringify(data));
+                var obj = DATANODES.DATAGET.tbody_weight;
+                var format = DATANODES.DATAGET.template_weight;
+                data = data.sort((a, b) => a.date < b.date);
                 UI_WK.setNodeValue(obj, format, data, true);
             },
             doOnload: false,
             init: () => {
-                UI_WK.setEvent(DATANODES.STATGET.submit, () => {
-                    RQ_WK(JOB_WK.STATGET);
-                });
             }
         },
         CHARTGET: {
             //BASE_URL: "/data/app.json",
-            ADD_URL: "/budget/stat/category/",
+            ADD_URL: "/diet/stat/category/",
             rqMethod: "GET",
             //rqData :function () {},
             rsFunc: function (data) {
                 //drawsumchart
-                var d = makeSumData(data);
-                var objsum = DATANODES.CHART.tbodysum;
-                var formatsum = DATANODES.CHART.templatesum;
-                var chartdatatable = makeSumtable(d);
-                UI_WK.setNodeValue(objsum, formatsum, makeSumtable(d), true);
-                var chartdata = [
-                    ["date", "income", "expense", "total"]
-                ].concat(d.map(a => [a.date, a.income, a.expense, a.differ]));
-                SIPUCOMMON.drawGraph(DATANODES.CHART.sumchart, "BarChart", chartdata);
-                //drawcatechart
-                var dc = makeCateData(data);
-                SIPUCOMMON.drawGraph(DATANODES.CHART.cateinchart, "BarChartStacked", dc[0]);
-                SIPUCOMMON.drawGraph(DATANODES.CHART.cateexchart, "BarChartStacked", dc[1]);
+                console.log(data);
             },
             doOnload: false,
             init: () => {
                 UI_WK.setEvent(DATANODES.CHARTGET.submit_month, () => {
-                    JOB_WK.CHARTGET.ADD_URL = "/budget/stat/category/" + UI_WK.getNodeValue(DATANODES.CHARTGET.date).slice(0, 7);
+                    JOB_WK.CHARTGET.ADD_URL = "/diet/stat/category/" + UI_WK.getNodeValue(DATANODES.CHARTGET.date).slice(0, 7);
                     RQ_WK(JOB_WK.CHARTGET);
                 });
                 UI_WK.setEvent(DATANODES.CHARTGET.submit_year, () => {
-                    JOB_WK.CHARTGET.ADD_URL = "/budget/stat/category/" + UI_WK.getNodeValue(DATANODES.CHARTGET.date).slice(0, 4);
+                    JOB_WK.CHARTGET.ADD_URL = "/diet/stat/category/" + UI_WK.getNodeValue(DATANODES.CHARTGET.date).slice(0, 4);
                     RQ_WK(JOB_WK.CHARTGET);
                 });
             }
@@ -441,27 +398,12 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             init: () => {
                 $(DATANODES.DATANEW.ttype).change(function () {
                     if (UI_WK.getNodeValue(DATANODES.DATANEW.ttype) === "false") {
-                        $(DATANODES.CATEGORY.select_expense).show();
-                        $(DATANODES.CATEGORY.select_income).hide();
+                        $(DATANODES.CATEGORY.category_gym).show();
+                        $(DATANODES.CATEGORY.category_food).hide();
                     } else {
-                        $(DATANODES.CATEGORY.select_expense).hide();
-                        $(DATANODES.CATEGORY.select_income).show();
+                        $(DATANODES.CATEGORY.category_gym).hide();
+                        $(DATANODES.CATEGORY.category_food).show();
                     }
-                });
-            }
-        },
-        SETPAGE: {
-            doOnload: false,
-            init: () => {
-                var acct = DATANODES.SET.account_button;
-                var cate = DATANODES.SET.category_button;
-                UI_WK.setEvent(acct, function () {
-                    $('TABLE[data-node="account-table"]').show();
-                    $('TABLE[data-node="category-table"]').hide();
-                });
-                UI_WK.setEvent(cate, function () {
-                    $('TABLE[data-node="account-table"]').hide();
-                    $('TABLE[data-node="category-table"]').show();
                 });
             }
         }
@@ -475,90 +417,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             }
             a[1].init();
         });
-    }
-
-    function makeSumData(data) {
-        var datasum = {};
-        data.map(a => {
-            if (!datasum[a.date]) {
-                datasum[a.date] = {};
-                datasum[a.date].income = 0;
-                datasum[a.date].tranincome = 0;
-                datasum[a.date].expense = 0;
-                datasum[a.date].tranexpense = 0;
-                datasum[a.date].differ = 0;
-            }
-            if (!RS_DATA.CATEGORYHASH[a.category_id][2] && a.ttype) {
-                datasum[a.date].tranincome += a.amount;
-            } else if (!RS_DATA.CATEGORYHASH[a.category_id][2] && !a.ttype) {
-                datasum[a.date].tranexpense += a.amount;
-            } else if (a.ttype) {
-                datasum[a.date].income += a.amount;
-            } else if (!a.ttype) {
-                datasum[a.date].expense += a.amount;
-            }
-        });
-        Object.entries(datasum).map(a => {
-            datasum[a[0]].differ = a[1].income - a[1].expense;
-        });
-        var re = Object.entries(datasum).map(a => {
-            a[1].date = a[0];
-            return a[1];
-        });
-        return re;
-    }
-
-    function makeSumtable(data) {
-        var re = data.slice(0);
-        re.push({
-            date: 'TOTAL',
-            income: data.reduce((s, a) => s + a.income, 0),
-            expense: data.reduce((s, a) => s + a.expense, 0),
-            differ: data.reduce((s, a) => s + a.differ, 0)
-        });
-        re.push({
-            date: 'AVG',
-            income: data.reduce((s, a) => s + a.income, 0) / data.length,
-            expense: data.reduce((s, a) => s + a.expense, 0) / data.length,
-            differ: data.reduce((s, a) => s + a.differ, 0) / data.length
-        });
-        return re;
-    }
-
-    function makeCateData(data) {
-        var dataincate = {};
-        data.map(a => {
-            if (!dataincate[a.date]) {
-                dataincate[a.date] = {};
-            }
-            if (!a.ttype) {
-                return;
-            }
-            dataincate[a.date][RS_DATA.CATEGORYHASH[a.category_id][1]] = a.amount;
-        });
-        //category in
-        var hd = ['DATE'].concat(Object.entries(Object.entries(dataincate)[0][1]).map(a => a[0]));
-        var rein = Object.entries(dataincate).map(a => {
-            return [a[0]].concat(Object.entries(a[1]).map(b => b[1]));
-        });
-        rein = [hd].concat(rein);
-        //category ex
-        var dataexcate = {};
-        data.map(a => {
-            if (!dataexcate[a.date]) {
-                dataexcate[a.date] = {};
-            }
-            if (a.ttype) {
-                return;
-            }
-            dataexcate[a.date][RS_DATA.CATEGORYHASH[a.category_id][1]] = a.amount;
-        });
-        var hd2 = ['DATE'].concat(Object.entries(Object.entries(dataexcate)[0][1]).map(a => a[0]));
-        var reex = Object.entries(dataexcate).map(a => {
-            return [a[0]].concat(Object.entries(a[1]).map(b => b[1]));
-        });
-        reex = [hd2].concat(reex);
-        return [rein, reex];
     }
 
     SIPUCOMMON.drawGraph = function (node, chartKind, data) {
@@ -617,7 +475,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         dataPage: function (node) {
             var delobj = {
                 //BASE_URL: "/data/app.json",
-                ADD_URL: "/budget/data/delete",
+                ADD_URL: "/diet/data/delete",
                 rqMethod: "POST",
                 rqData: function () {
                     return RS_DATA.DATA.filter(a => a.seq == $(node).val())[0];
