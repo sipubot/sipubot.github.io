@@ -307,6 +307,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 var a = {};
                 a.date = UI_WK.getNodeValue(DATANODES.WEIGHT.date);
                 a.weight = +(UI_WK.getNodeValue(DATANODES.WEIGHT.amount));
+                a.base_cal = 0;
+                a.gain_cal = 0;
+                a.loss_cal = 0;
                 return a;
             },
             rsFunc: function (data) {
