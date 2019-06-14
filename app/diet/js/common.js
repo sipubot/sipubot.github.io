@@ -448,6 +448,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             ];
             return t;
         });
+        console.log([hd].concat(d));
         return [hd].concat(d);
     }
 
@@ -461,6 +462,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             ];
             return t;
         });
+        console.log([hd].concat(d));
         return [hd].concat(d);
     }
 
