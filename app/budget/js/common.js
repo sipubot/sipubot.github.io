@@ -604,7 +604,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             if (!dataincate[a.date]) {
                 dataincate[a.date] = {};
             }
-            if (!a.ttype) {
+            if (!a.ttype || !RS_DATA.CATEGORYHASH[a.category_id][2]) {
                 return;
             }
             dataincate[a.date][RS_DATA.CATEGORYHASH[a.category_id][1]] = a.amount;
@@ -621,7 +621,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             if (!dataexcate[a.date]) {
                 dataexcate[a.date] = {};
             }
-            if (a.ttype) {
+            if (a.ttype || !RS_DATA.CATEGORYHASH[a.category_id][2]) {
                 return;
             }
             dataexcate[a.date][RS_DATA.CATEGORYHASH[a.category_id][1]] = a.amount;
