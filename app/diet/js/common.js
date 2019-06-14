@@ -478,7 +478,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         dataPage: function (node) {
             var delobj = {
                 //BASE_URL: "/data/app.json",
-                ADD_URL: "/diet/data/delete",
+                ADD_URL: "/diet/foodgym/delete",
                 rqMethod: "POST",
                 rqData: function () {
                     return RS_DATA.DATA.filter(a => a.seq == $(node).val())[0];
