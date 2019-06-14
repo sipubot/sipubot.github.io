@@ -621,9 +621,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         data.map(a => {
             if (!dataexcate[a.date]) {
                 dataexcate[a.date] = {};
-                Object.entries(RS_DATA.CATEGORYHASH).map(a => {
-                    if (a[1][0]) {
-                        dataexcate[a.date][a[1][1]] = a.amount;
+                Object.entries(RS_DATA.CATEGORYHASH).map(b => {
+                    if (b[1][0]) {
+                        dataexcate[a.date][b[1][1]] = a.amount;
                     }
                 });
             }
