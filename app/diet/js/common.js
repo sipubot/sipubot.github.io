@@ -235,7 +235,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         },
         CATEGORYGET: {
             //BASE_URL: "/data/app.json",
-            ADD_URL: "/diet/data/category",
+            ADD_URL: "/diet/category",
             rqMethod: "GET",
             //rqData :function () {},
             rsFunc: function (data) {
