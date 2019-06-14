@@ -338,6 +338,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 var obj2 = DATANODES.DATAGET.tbody_gym;
                 var format = DATANODES.DATAGET.template_foodgym;
                 data = data.sort((a, b) => a.date < b.date);
+                console.log(data, RS_DATA.CATEGORYHASH);
                 var data1 = data.filter(a => RS_DATA.CATEGORYHASH[a.category_id][0] === true).map(a => {
                     a.category_id = RS_DATA.CATEGORYHASH[a.category_id][1];
                     return a;
