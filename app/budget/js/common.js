@@ -486,7 +486,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 var d = makeSumData(data);
                 var objsum = DATANODES.CHART.tbodysum;
                 var formatsum = DATANODES.CHART.templatesum;
-                UI_WK.setNodeValue(objsum, formatsum, d, true);
+                UI_WK.setNodeValue(objsum, formatsum, makeSumtable(d), true);
                 var chartdata = [
                     ["date", "income", "expense", "total"]
                 ].concat(d.map(a => [a.date, a.income, a.expense, a.differ]));
@@ -577,6 +577,22 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         return re;
     }
 
+    function makeSumtable (data) {
+        var re = data.slice(0);
+        re.push([
+            'TOTAL',
+            data.reduce((s,a)=>s+a.income,0) / data.length,
+            data.reduce((s,a)=>s+a.expense,0) / data.length,
+            data.reduce((s,a)=>s+a.differ,0) / data.length,
+        ]);
+        re.push([
+            'AVG',
+            data.reduce((s,a)=>s+a.income,0),
+            data.reduce((s,a)=>s+a.expense,0),
+            data.reduce((s,a)=>s+a.differ,0),
+        ]);
+        return re;
+    }    
     SIPUCOMMON.drawGraph = function (node, chartKind, data) {
         var graphdata = data;
         var Paramdata = google.visualization.arrayToDataTable(graphdata);
