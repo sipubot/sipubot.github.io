@@ -225,12 +225,13 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 });
                 return data;
             },
-            //rsFunc : function (data) {},
+            rsFunc : function (data) {
+                RQ_WK(JOB_WK.CATEGORYGET);
+            },
             doOnload: false,
             init: () => {
                 UI_WK.setEvent(DATANODES.CATEGORY.submit, () => {
                     RQ_WK(JOB_WK.CATEGORYSET);
-                    RQ_WK(JOB_WK.CATEGORYGET);
                 });
             }
         },
