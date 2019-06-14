@@ -181,7 +181,7 @@
                 </header>
                 <div class="section clearfix">
                     <div data-node="category-table">
-                        <table class="table">
+                        <table class="table table-striped table-dark">
                             <thead>
                                 <tr>
                                     <th scope="col" class="col-2">Type</th>
@@ -203,8 +203,8 @@
                                             placeholder="Name" value="{name}"></td>
                                     <td><input data-node="CATEGORY-cal" type="text" class="form-control"
                                             placeholder="Name" value="{calorie}"></td>
-                                    <td><button type="button" class="btn btn-secondary"
-                                            onclick="javascript:SIPUCOMMON.delRow.setPage(this);">삭제</button></td>
+                                    <th scope="row"><button type="button" class="btn btn-secondary"
+                                            onclick="javascript:SIPUCOMMON.delRow.setPage(this);">삭제</button></th>
                                 </tr>
                             </template>
                             <tbody data-node="CATEGORY-settbody">

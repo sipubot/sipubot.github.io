@@ -202,7 +202,8 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 UI_WK.setEvent(evobj, () => {
                     var dummy = [{
                         id: "",
-                        name: ""
+                        name: "",
+                        calorie:0
                     }];
                     UI_WK.setNodeValue(obj, format, dummy, false);
                 });
