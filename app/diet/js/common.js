@@ -352,6 +352,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 UI_WK.setEvent(DATANODES.DATAGET.submit, () => {
                     JOB_WK.DATAGET.ADD_URL = UI_WK.getNodeValue(DATANODES.DATAGET.date).slice(0, 7);
                     RQ_WK(JOB_WK.DATAGET);
+                    JOB_WK.WEIGHTGET.ADD_URL = "day";
                     RQ_WK(JOB_WK.WEIGHTGET);
                 });
             }
