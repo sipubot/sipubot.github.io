@@ -277,7 +277,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         },
         DATANEW: {
             //BASE_URL: "/data/app.json",
-            ADD_URL: "/diet/data/insert",
+            ADD_URL: "/diet/foodgym/insert",
             rqMethod: "POST",
             rqData: function () {
                 var a = {};
@@ -301,7 +301,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         },
         WEIGHTNEW: {
             //BASE_URL: "/data/app.json",
-            ADD_URL: "/diet/data/insert/weight",
+            ADD_URL: "/diet/weight/insert",
             rqMethod: "POST",
             rqData: function () {
                 var a = {};
@@ -320,7 +320,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             }
         },
         DATAGET: {
-            BASE_URL: "https://sipu.iptime.org/diet/data/",
+            BASE_URL: "https://sipu.iptime.org/diet/foodgym/",
             ADD_URL: "",
             rqMethod: "GET",
             //rqData :function () {},
@@ -354,7 +354,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             }
         },
         WEIGHTGET: {
-            BASE_URL: "https://sipu.iptime.org/diet/data/",
+            BASE_URL: "https://sipu.iptime.org/diet/weight/",
             ADD_URL: "",
             rqMethod: "GET",
             //rqData :function () {},
@@ -372,27 +372,27 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             init: () => {
             }
         },
-        CHARTGET: {
-            //BASE_URL: "/data/app.json",
-            ADD_URL: "/diet/stat/category/",
-            rqMethod: "GET",
-            //rqData :function () {},
-            rsFunc: function (data) {
-                //drawsumchart
-                console.log(data);
-            },
-            doOnload: false,
-            init: () => {
-                UI_WK.setEvent(DATANODES.CHARTGET.submit_month, () => {
-                    JOB_WK.CHARTGET.ADD_URL = "/diet/stat/category/" + UI_WK.getNodeValue(DATANODES.CHARTGET.date).slice(0, 7);
-                    RQ_WK(JOB_WK.CHARTGET);
-                });
-                UI_WK.setEvent(DATANODES.CHARTGET.submit_year, () => {
-                    JOB_WK.CHARTGET.ADD_URL = "/diet/stat/category/" + UI_WK.getNodeValue(DATANODES.CHARTGET.date).slice(0, 4);
-                    RQ_WK(JOB_WK.CHARTGET);
-                });
-            }
-        },
+        //CHARTGET: {
+        //    //BASE_URL: "/data/app.json",
+        //    ADD_URL: "/diet/stat/category/",
+        //    rqMethod: "GET",
+        //    //rqData :function () {},
+        //    rsFunc: function (data) {
+        //        //drawsumchart
+        //        console.log(data);
+        //    },
+        //    doOnload: false,
+        //    init: () => {
+        //        UI_WK.setEvent(DATANODES.CHARTGET.submit_month, () => {
+        //            JOB_WK.CHARTGET.ADD_URL = "/diet/stat/category/" + UI_WK.getNodeValue(DATANODES.CHARTGET.date).slice(0, 7);
+        //            RQ_WK(JOB_WK.CHARTGET);
+        //        });
+        //        UI_WK.setEvent(DATANODES.CHARTGET.submit_year, () => {
+        //            JOB_WK.CHARTGET.ADD_URL = "/diet/stat/category/" + UI_WK.getNodeValue(DATANODES.CHARTGET.date).slice(0, 4);
+        //            RQ_WK(JOB_WK.CHARTGET);
+        //        });
+        //    }
+        //},
         MODALNEW: {
             doOnload: false,
             init: () => {
