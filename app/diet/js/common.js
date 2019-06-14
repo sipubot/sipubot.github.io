@@ -396,7 +396,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             },
             doOnload: false,
             init: () => {
-                UI_WK.setEvent(DATANODES.CHARTGET.submit_month, () => {
+                UI_WK.setEvent(DATANODES.CHARTGET.submit_day, () => {
                     JOB_WK.CHARTGET.ADD_URL = "day";
                     RQ_WK(JOB_WK.CHARTGET);
                 });
