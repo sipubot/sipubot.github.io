@@ -612,7 +612,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         //category in
         var hd = ['DATE'].concat(Object.entries(Object.entries(dataincate)[0]).map(a => a[0])[0]);
         var rein = Object.entries(dataincate).map(a => {
-            return [a[0].date].concat(Object.entries(a[1]).map(b => b[1]));
+            return [a[0]].concat(Object.entries(a[1]).map(b => b[1]));
         });
         rein = hd.concat(rein);
         //category ex
@@ -628,7 +628,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         });
         var hd2 = ['DATE'].concat(Object.entries(Object.entries(dataexcate)[0]).map(a => a[0])[0]);
         var reex = Object.entries(dataexcate).map(a => {
-            return [a[0].date].concat(Object.entries(a[1]).map(b => b[1]));
+            return [a[0]].concat(Object.entries(a[1]).map(b => b[1]));
         });
         reex = hd2.concat(reex);
         return [rein, reex];
