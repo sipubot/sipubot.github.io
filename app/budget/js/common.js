@@ -492,6 +492,10 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 ].concat(d.map(a => [a.date, a.income, a.expense, a.differ]));
                 console.log(chartdata);
                 SIPUCOMMON.drawGraph(DATANODES.CHART.sumchart, "BarChart", chartdata);
+                //drawcatechart
+                var dc = makeCateData(data);
+                SIPUCOMMON.drawGraph(DATANODES.CHART.cateinchart, "BarChartStacked", dc[0]);
+                SIPUCOMMON.drawGraph(DATANODES.CHART.cateexchart, "BarChartStacked", dc[1]);
             },
             doOnload: false,
             init: () => {
@@ -593,6 +597,45 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         ]);
         return re;
     }    
+    
+    function makeCateData(data) {
+        var dataincate = {};
+        data.map(a => {
+            if (!dataincate[a.date]) {
+                dataincate[a.date] = {};
+                Object.entries(RS_DATA.CATEGORYHASH).map(a => {
+                    if (a[1][0]) {
+                        dataincate[a.date][a[1][1]] = a.amount;
+                    }
+                });
+            }
+        });
+        //category in
+        var hd = ['DATE'].concat(Object.entries(Object.entries(dataincate)[0]).map(a=>a[0])[0]);
+        var rein = Object.entries(dataincate).map(a => {
+            return [a[1].date].concat(Object.entries(a[1]).map(b=>b[1]));
+        });
+        rein = hd.concat(rein);
+        //category ex
+        var dataexcate = {};
+        data.map(a => {
+            if (!dataexcate[a.date]) {
+                dataexcate[a.date] = {};
+                Object.entries(RS_DATA.CATEGORYHASH).map(a => {
+                    if (a[1][0]) {
+                        dataexcate[a.date][a[1][1]] = a.amount;
+                    }
+                });
+            }
+        });
+        var hd2 = ['DATE'].concat(Object.entries(Object.entries(dataexcate)[0]).map(a=>a[0])[0]);
+        var reex = Object.entries(dataexcate).map(a => {
+            return [a[1].date].concat(Object.entries(a[1]).map(b=>b[1]));
+        });
+        reex = hd2.concat(reex);
+        return [rein,reex];
+    }
+
     SIPUCOMMON.drawGraph = function (node, chartKind, data) {
         var graphdata = data;
         var Paramdata = google.visualization.arrayToDataTable(graphdata);
