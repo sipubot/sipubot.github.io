@@ -219,7 +219,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                     a.ttype = $(tr).find("SELECT[data-node='CATEGORY-ttype'] option:selected").val() === "false" ? false : true;
                     a.id = $(tr).find("INPUT[data-node='CATEGORY-id']").val();
                     a.name = $(tr).find("INPUT[data-node='CATEGORY-name']").val();
-                    a.calorie = $(tr).find("INPUT[data-node='CATEGORY-cal']").val();
+                    a.calorie = +$(tr).find("INPUT[data-node='CATEGORY-cal']").val();
                     data.push(a);
                 });
                 return data;
