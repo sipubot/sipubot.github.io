@@ -414,11 +414,11 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             init: () => {
                 $(DATANODES.DATANEW.ttype).change(function () {
                     if (UI_WK.getNodeValue(DATANODES.DATANEW.ttype) === "false") {
-                        $(DATANODES.CATEGORY.category_gym).show();
-                        $(DATANODES.CATEGORY.category_food).hide();
+                        $(DATANODES.DATANEW.category_gym).show();
+                        $(DATANODES.DATANEW.category_food).hide();
                     } else {
-                        $(DATANODES.CATEGORY.category_gym).hide();
-                        $(DATANODES.CATEGORY.category_food).show();
+                        $(DATANODES.DATANEW.category_gym).hide();
+                        $(DATANODES.DATANEW.category_food).show();
                     }
                 });
             }
