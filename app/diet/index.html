@@ -47,10 +47,11 @@
                                 <option value="true" selected>FOOD</option>
                                 <option value="false">GYM</option>
                             </select>
-                            <template data-node="DATANEW-templatenew">
+                            <template data-node="DATANEW-template_category">
                                 <option value="{id}" {select}>{name}</option>
                             </template>
-                            <select data-node="DATANEW-selectnew" class="custom-select"></select>
+                            <select data-node="DATANEW-category_food" class="custom-select"></select>
+                            <select data-node="DATANEW-category_gym" class="custom-select"></select>
                             <input data-node="DATANEW-amount" type="number" class="form-control" placeholder="Amount">
                         </div>
                         <div class="modal-footer border-0">
@@ -111,7 +112,9 @@
                                         onclick="javascript:SIPUCOMMON.delRow.dataPage(this);">-</button></th>
                             </TR>
                         </template>
-                        <tbody data-node="DATAGET-tbody_foodgym">
+                        <tbody data-node="DATAGET-tbody_food">
+                        </tbody>
+                        <tbody data-node="DATAGET-tbody_gym">
                         </tbody>
                     </table>
                     <h4>Weight</h4>
