@@ -680,7 +680,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 var select = chart.getSelection()[0];
                 if (select) {
                     var items = [];
-                    data[0].map((a,i)=> items.push([a[0],data[select.row][i]]));
+                    data[0].map((a,i)=> items.push([a,data[select.row][i]]));
                     SIPUCOMMON.drawGraph(DATANODES.CHART.pie, "PieChart", items);
                 }
             });
