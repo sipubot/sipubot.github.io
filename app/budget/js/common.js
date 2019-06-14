@@ -679,8 +679,8 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             google.visualization.events.addListener(chart, 'select', function (a) {
                 var select = chart.getSelection()[0];
                 if (select) {
-                    var items = Paramdata.rows[select.row];
-                    console.log(items);
+                    var items = [data[0],data[select.row + 1]];
+                    SIPUCOMMON.drawGraph(DATANODES.CHART.pie, "PieChart", items);
                 }
             });
         }
