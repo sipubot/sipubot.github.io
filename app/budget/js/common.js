@@ -222,12 +222,13 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 });
                 return data;
             },
-            //rsFunc : function (data) {},
+            rsFunc : function (data) {
+                RQ_WK(JOB_WK.ACCOUNTGET);
+            },
             doOnload: false,
             init: () => {
                 UI_WK.setEvent(DATANODES.ACCOUNT.summit, () => {
                     RQ_WK(JOB_WK.ACCOUNTSET);
-                    RQ_WK(JOB_WK.ACCOUNTGET);
                 });
             }
         },
@@ -297,12 +298,13 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 });
                 return data;
             },
-            //rsFunc : function (data) {},
+            rsFunc : function (data) {
+                RQ_WK(JOB_WK.CATEGORYGET);
+            },
             doOnload: false,
             init: () => {
                 UI_WK.setEvent(DATANODES.CATEGORY.submit, () => {
                     RQ_WK(JOB_WK.CATEGORYSET);
-                    RQ_WK(JOB_WK.CATEGORYGET);
                 });
             }
         },
