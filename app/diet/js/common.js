@@ -336,11 +336,11 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 var obj2 = DATANODES.DATAGET.tbody_gym;
                 var format = DATANODES.DATAGET.template_foodgym;
                 data = data.sort((a, b) => a.date < b.date);
-                var data1 = data.filter(a => a.ttype === true).map(a => {
+                var data1 = data.filter(a => RS_DATA.CATEGORYHASH[a.category_id][0] === true).map(a => {
                     a.category_id = RS_DATA.CATEGORYHASH[a.category_id][1];
                     return a;
                 });
-                var data2 = data.filter(a => a.ttype === false).map(a => {
+                var data2 = data.filter(a => RS_DATA.CATEGORYHASH[a.category_id][0] === false).map(a => {
                     a.category_id = RS_DATA.CATEGORYHASH[a.category_id][1];
                     return a;
                 });
@@ -373,8 +373,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 UI_WK.setNodeValue(obj, format, data, true);
             },
             doOnload: false,
-            init: () => {
-            }
+            init: () => {}
         },
         //CHARTGET: {
         //    //BASE_URL: "/data/app.json",
