@@ -675,6 +675,12 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         if (options === undefined) return;
         var chart = new google.visualization[chartKind](node);
         chart.draw(Paramdata, options);
+        if (chartKind === "BarChartStacked") {
+            google.visualization.events.addListener(chart, 'select', function(a) {
+                console.log(a);
+                console.log(this);
+            });
+        }
     }
 
 
