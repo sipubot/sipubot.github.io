@@ -340,11 +340,11 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 data = data.sort((a, b) => a.date < b.date);
                 console.log(data, RS_DATA.CATEGORYHASH);
                 var data1 = data.filter(a => RS_DATA.CATEGORYHASH[a.category_id][0] === true).map(a => {
-                    a.category_id = RS_DATA.CATEGORYHASH[a.category_id][1];
+                    a.category_name = RS_DATA.CATEGORYHASH[a.category_id][1];
                     return a;
                 });
                 var data2 = data.filter(a => RS_DATA.CATEGORYHASH[a.category_id][0] === false).map(a => {
-                    a.category_id = RS_DATA.CATEGORYHASH[a.category_id][1];
+                    a.category_name = RS_DATA.CATEGORYHASH[a.category_id][1];
                     return a;
                 });
                 UI_WK.setNodeValue(obj1, format, data1, true);
