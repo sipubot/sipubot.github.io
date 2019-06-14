@@ -591,9 +591,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         });
         re.push({
             date:'AVG',
-            income:data.reduce((s, a) => s + a.income, 0) / data.length,
-            expense:data.reduce((s, a) => s + a.expense, 0) / data.length,
-            differ:data.reduce((s, a) => s + a.differ, 0) / data.length
+            income:Math.round(data.reduce((s, a) => s + a.income, 0) / data.length),
+            expense:Math.round(data.reduce((s, a) => s + a.expense, 0) / data.length),
+            differ:Math.round(data.reduce((s, a) => s + a.differ, 0) / data.length)
         });
         return re;
     }
