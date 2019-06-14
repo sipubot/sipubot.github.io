@@ -603,17 +603,16 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         data.map(a => {
             if (!dataincate[a.date]) {
                 dataincate[a.date] = {};
-                Object.entries(RS_DATA.CATEGORYHASH).map(b => {
-                    if (b[1][0]) {
-                        dataincate[a.date][b[1][1]] = a.amount;
-                    }
-                });
             }
+            if (!a.ttype) {
+                return;
+            }
+            dataincate[a.date][RS_DATA.CATEGORYHASH[a.category_id][1]] = a.amount;
         });
         //category in
-        var hd = ['DATE'].concat(Object.entries(Object.entries(dataincate)[0]).map(a=>a[0])[0]);
+        var hd = ['DATE'].concat(Object.entries(Object.entries(dataincate)[0]).map(a => a[0])[0]);
         var rein = Object.entries(dataincate).map(a => {
-            return [a[1].date].concat(Object.entries(a[1]).map(b=>b[1]));
+            return [a[1].date].concat(Object.entries(a[1]).map(b => b[1]));
         });
         rein = hd.concat(rein);
         //category ex
@@ -621,21 +620,20 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         data.map(a => {
             if (!dataexcate[a.date]) {
                 dataexcate[a.date] = {};
-                Object.entries(RS_DATA.CATEGORYHASH).map(b => {
-                    if (b[1][0]) {
-                        dataexcate[a.date][b[1][1]] = a.amount;
-                    }
-                });
             }
+            if (a.ttype) {
+                return;
+            }
+            dataexcate[a.date][RS_DATA.CATEGORYHASH[a.category_id][1]] = a.amount;
         });
-        var hd2 = ['DATE'].concat(Object.entries(Object.entries(dataexcate)[0]).map(a=>a[0])[0]);
+        var hd2 = ['DATE'].concat(Object.entries(Object.entries(dataexcate)[0]).map(a => a[0])[0]);
         var reex = Object.entries(dataexcate).map(a => {
-            return [a[1].date].concat(Object.entries(a[1]).map(b=>b[1]));
+            return [a[1].date].concat(Object.entries(a[1]).map(b => b[1]));
         });
         reex = hd2.concat(reex);
-        return [rein,reex];
+        return [rein, reex];
     }
-
+    
     SIPUCOMMON.drawGraph = function (node, chartKind, data) {
         var graphdata = data;
         var Paramdata = google.visualization.arrayToDataTable(graphdata);
