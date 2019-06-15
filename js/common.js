@@ -305,23 +305,18 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             }
         },
         STAT: {
-            //BASE_URL: "/data/app.json",
-            ADD_URL: "/stat",
+            BASE_URL: "/data/stat.json",
+            //ADD_URL: "/stat",
             rqMethod: "GET",
             //rqData :function (data) {}
             rsFunc: function (data) {
-                //var statDATA = {
-                //    MASTER_URL: "https://sipu.iptime.org/",
-                //    IMOJI_LIST: ["status-sad.png", "status-nom.png", "status-hap.png"],
-                //    IMOJI_BACK: ["#ef6f45", "#c0c0c0", "#94de59"]
-                //};
-                //var obj = DATANODES.STAT.setul
-                //var format = `<a href="{href}" target="_blank"><li class="Icon" style="background-image : url({imageurl})"><p>{picon}</p></li></a>`;
-                //UI_WK.setNodeValue(obj, format, data, true);
-            },
+                var obj = DATANODES.STAT.ul;
+                var format = DATANODES.STAT.template;
+                UI_WK.setNodeValue(obj, format, data, true);
+            }, 
             doOnload: false,
             init: () => {
-                //RQ_WK(JOB_WK.STAT);
+                RQ_WK(JOB_WK.STAT);
             }
         }
     }
@@ -418,7 +413,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     }
 
     function SetStat() {
-        $.getJSON(DATA.MASTER_URL + "json/dataperson.json", Rfunc);
 
         function Rfunc(v) {
             var passpoint = 10;

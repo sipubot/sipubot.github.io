@@ -142,16 +142,12 @@
             </section>
             <section id="stat">
                 <div class="section clearfix">
-                    <ul class="now Stat clearfix">
-                        <li>
-                            <p>🎭</p>
+                    <template data-node="STAT-template">
+                        <li style="background-image : url({imageurl}); background-color: {color}">
+                            <p>{imoji}</p>
                         </li>
-                        <li>
-                            <p>🏃</p>
-                        </li>
-                        <li>
-                            <p>💻</p>
-                        </li>
+                   </template>
+                    <ul class="now Stat clearfix" data-node="STAT-ul">
                     </ul>
                 </div>
             </section>
