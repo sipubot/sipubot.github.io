@@ -427,7 +427,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         }).reduce((s,a)=>s+a,0);
         var prop_w = {
             image : IMG_[Math.round(b_w / 53)],
-            imoji : "🎭",
+            imoji : "💻",
             color : COLOR_[Math.round(b_w / 53)]
         }
         var prop_p = {
@@ -436,9 +436,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             color : COLOR_[Math.round(+data[data.length-1].pa_point / 53)]
         }
         var prop_g = {
-            image : IMG_[Math.round(+data[data.length-1].pa_point / 53)],
-            imoji : "🎭",
-            color : COLOR_[Math.round(+data[data.length-1].pa_point / 53)]
+            image : IMG_[1],
+            imoji : "🏃",
+            color : COLOR_[1]
         }
         return [prop_w,prop_p,prop_g];
     }
