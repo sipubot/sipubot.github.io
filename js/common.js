@@ -305,14 +305,15 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             }
         },
         STAT: {
-            BASE_URL: "/data/stat.json",
+            BASE_URL: "/data/persondata.json",
             //ADD_URL: "/stat",
             rqMethod: "GET",
             //rqData :function (data) {}
             rsFunc: function (data) {
+                var pdata = statdata(data);
                 var obj = DATANODES.STAT.ul;
                 var format = DATANODES.STAT.template;
-                UI_WK.setNodeValue(obj, format, data, true);
+                UI_WK.setNodeValue(obj, format, pdata, true);
             }, 
             doOnload: false,
             init: () => {
@@ -412,26 +413,33 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         setInterval(func, 1000);
     }
 
-    function SetStat() {
-
-        function Rfunc(v) {
-            var passpoint = 10;
-            var wa = v.map(function (a) {
-                return +a["WAdata"];
-            }).slice(0, 7);
-            var point = [50, 20, 10, 5, 3, 2];
-            var rp = Array.apply(null, Array(6)).map(function (a, i) {
-                return wa[i] - wa[i + 1] >= passpoint ? point[i] : 0;
-            }).reduce(function (s, a) {
-                return s + a;
-            }, 0);
-            var picidx = [Math.round((+v[0]["PAdata"]) / 53), Math.round((+v[0]["GAdata"]) / 53), Math.round(rp / 53)];
-            var node = $(".Status > li");
-            $.each(node, function (i, n) {
-                $(n).css("background-image", "url(/icon/" + DATA.IMOJI_LIST[picidx[i]] + ")");
-                $(n).css("background-color", DATA.IMOJI_BACK[picidx[i]]);
-            });
+    function statdata(data) {
+        var IMG_ = ["icon/sipu_sad.png","icon/sipu_nom.png","icon/sipu_hap.png"];
+        var COLOR_ = ["red","grey","green"];
+        var point_w = [50, 30, 20];
+        var b_w = point_w.map((a,i)=>{
+            if (data[data.length - i - 1].wa_point - data[data.length - i - 2].wa_point > 30) {
+                return a;
+            } else {
+                return 0;
+            }
+        }).reduce((s,a)=>s+a,0);
+        var prop_w = {
+            image : IMG_[Math.round(b_w / 53)],
+            imoji : "🎭",
+            color : COLOR_[Math.round(b_w / 53)]
         }
+        var prop_p = {
+            image : IMG_[Math.round(+data[data.length-1].pa_point / 53)],
+            imoji : "🎭",
+            color : COLOR_[Math.round(+data[data.length-1].pa_point / 53)]
+        }
+        var prop_g = {
+            image : IMG_[Math.round(+data[data.length-1].pa_point / 53)],
+            imoji : "🎭",
+            color : COLOR_[Math.round(+data[data.length-1].pa_point / 53)]
+        }
+        return [prop_w,prop_p,prop_g];
     }
 
     SIPUCOMMON.run = function () {
