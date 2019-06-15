@@ -492,7 +492,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 var chartdata = [
                     ["date", "income", "expense", "total"]
                 ].concat(d.map(a => [a.date, a.income, a.expense, a.differ]));
-                console.log(chartdata);
                 SIPUCOMMON.drawGraph(DATANODES.CHART.sumchart, "BarChart", chartdata);
                 //drawcatechart
                 var dc = makeCateData(data);
@@ -705,7 +704,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 doOnload: false,
                 init: () => {}
             }
-            console.log(RS_DATA);
             RQ_WK(delobj);
             $(node).parent().parent().remove();
         }

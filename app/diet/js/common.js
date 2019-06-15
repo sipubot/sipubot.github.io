@@ -339,7 +339,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 var obj2 = DATANODES.DATAGET.tbody_gym;
                 var format = DATANODES.DATAGET.template_foodgym;
                 data = data.sort((a, b) => a.date < b.date);
-                console.log(data, RS_DATA.CATEGORYHASH);
                 var data1 = data.filter(a => RS_DATA.CATEGORYHASH[a.category_id][0] === true).map(a => {
                     a.category_name = RS_DATA.CATEGORYHASH[a.category_id][1];
                     return a;
@@ -439,7 +438,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
 
     function dataDayChart (data) {
         var hd = ["DATE","GAIN","LOSS","SUM"];
-        data = data.sort((a,b)=> a.date < b.date);
+        data.sort((a,b)=> a.date < b.date);
         var d = data.map(a=>{
             var t = [
                 a.date,
@@ -510,8 +509,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         chart.draw(Paramdata, options);
         if (chartKind === "BarChartStacked") {
             google.visualization.events.addListener(chart, 'select', function (a) {
-                console.log(a);
-                console.log(this);
             });
         }
     }
@@ -532,7 +529,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 doOnload: false,
                 init: () => {}
             }
-            console.log(RS_DATA);
             RQ_WK(delobj);
             $(node).parent().parent().remove();
         }
