@@ -387,12 +387,12 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 //drawsumchart
                 var obj = DATANODES.CHART.weight;
                 var obj2 = DATANODES.CHART.calorie;
-                data = dataChart(JSON.parse(JSON.stringify(data)));
+                var chartdata = dataChart(JSON.parse(JSON.stringify(data)));
                 if (JOB_WK.CHARTGET.ADD_URL === "day") {
                     var data2 = dataDayChart(data);
                     SIPUCOMMON.drawGraph(obj2, "BarChart", data2);
                 } 
-                SIPUCOMMON.drawGraph(obj, "BarChart", data);
+                SIPUCOMMON.drawGraph(obj, "BarChart", chartdata);
             },
             doOnload: false,
             init: () => {
