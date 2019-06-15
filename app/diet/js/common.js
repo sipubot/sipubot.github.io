@@ -303,7 +303,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         },
         WEIGHTNEW: {
             //BASE_URL: "/data/app.json",
-            ADD_URL: "/diet/weight/",
+            ADD_URL: "/diet/weight/ins",
             rqMethod: "POST",
             rqData: function () {
                 var a = {};
