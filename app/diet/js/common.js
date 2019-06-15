@@ -387,9 +387,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 //drawsumchart
                 var obj = DATANODES.CHART.weight;
                 var obj2 = DATANODES.CHART.calorie;
-                data = dataChart(data);
+                data = dataChart(JSON.parse(JSON.stringify(data)));
                 if (JOB_WK.CHARTGET.ADD_URL === "day") {
-                    var data2 = dataDayChart(JSON.parse(JSON.stringify(data)));
+                    var data2 = dataDayChart(data);
                     SIPUCOMMON.drawGraph(obj2, "BarChart", data2);
                 } 
                 SIPUCOMMON.drawGraph(obj, "BarChart", data);
