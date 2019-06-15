@@ -62,7 +62,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     };
     //노드맵은 초기 생성필요
     DATANODES.init();
-    DATANODES.log();
+    //DATANODES.log();
 
     var RS_DATA = {};
 
