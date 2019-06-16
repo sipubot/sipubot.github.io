@@ -446,6 +446,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     SIPUCOMMON.run = function () {
         initWK();
         life();
+        Snail.start();
     };
     return SIPUCOMMON;
 })(window.SIPUCOMMON || {}, jQuery);
