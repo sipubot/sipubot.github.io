@@ -147,7 +147,7 @@ canvas {
   background-size: cover;
   background-color: #dddddd;
   float: left;
-  box-shadow: 2px 2px 4px #444;
+  box-shadow: 2px 2px 4px #111;
 }
 
 .Stat li p {
