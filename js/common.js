@@ -217,6 +217,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             init: () => {
                 UI_WK.setEvent(DATANODES.LOGIN.summit, () => {
                     RQ_WK(JOB_WK.LOGIN);
+                    UI_WK.preventDoubleClick(DATANODES.LOGIN.summit);
                 });
             }
         },
