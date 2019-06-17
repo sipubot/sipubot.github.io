@@ -163,7 +163,7 @@
                         <table class="table table-striped table-dark">
                             <thead>
                                 <tr>
-                                    <th scope="col" class="col-2">Type</th>
+                                    <th scope="col">Type</th>
                                     <th scope="col">Code</th>
                                     <th scope="col">Name</th>
                                     <th scope="col">Calorie</th>
@@ -172,12 +172,12 @@
                             </thead>
                             <template data-node="CATEGORY-template">
                                 <tr>
-                                    <td><select data-node="CATEGORY-ttype" class="col-2 custom-select">
+                                    <td><select data-node="CATEGORY-ttype" class="custom-select">
                                             <option value="false" {ttypefalse}>운동</option>
                                             <option value="true" {ttypetrue}>음식</option>
                                         </select></td>
                                     <td><input data-node="CATEGORY-id" type="text" class="form-control"
-                                            placeholder="code" value="{id}"></td>
+                                            placeholder="Name" value="{id}"></td>
                                     <td><input data-node="CATEGORY-name" type="text" class="form-control"
                                             placeholder="Name" value="{name}"></td>
                                     <td><input data-node="CATEGORY-cal" type="text" class="form-control"
