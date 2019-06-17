@@ -237,6 +237,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             init: () => {
                 UI_WK.setEvent(DATANODES.ACCOUNT.summit, () => {
                     RQ_WK(JOB_WK.ACCOUNTSET);
+                    UI_WK.preventDoubleClick(DATANODES.ACCOUNT.summit);
                 });
             }
         },
@@ -313,6 +314,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             init: () => {
                 UI_WK.setEvent(DATANODES.CATEGORY.submit, () => {
                     RQ_WK(JOB_WK.CATEGORYSET);
+                    UI_WK.preventDoubleClick(DATANODES.CATEGORY.submit);
                 });
             }
         },
@@ -380,6 +382,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             init: () => {
                 UI_WK.setEvent(DATANODES.DATANEW.submit, () => {
                     RQ_WK(JOB_WK.DATANEW);
+                    UI_WK.preventDoubleClick(DATANODES.DATANEW.submit);
                 });
             }
         },
@@ -404,6 +407,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             init: () => {
                 UI_WK.setEvent(DATANODES.TRANS.submit, () => {
                     RQ_WK(JOB_WK.TRANSFROM);
+                    UI_WK.preventDoubleClick(DATANODES.TRANS.submit);
                 });
             }
         },
