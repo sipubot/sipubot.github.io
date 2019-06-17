@@ -306,6 +306,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             init: () => {
                 UI_WK.setEvent(DATANODES.DATANEW.submit, () => {
                     RQ_WK(JOB_WK.DATANEW);
+                    UI_WK.preventDoubleClick(DATANODES.DATANEW.submit);
                 });
             }
         },
@@ -330,6 +331,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             init: () => {
                 UI_WK.setEvent(DATANODES.WEIGHT.submit, () => {
                     RQ_WK(JOB_WK.WEIGHTNEW);
+                    UI_WK.preventDoubleClick(DATANODES.WEIGHT.submit);
                 });
             }
         },
