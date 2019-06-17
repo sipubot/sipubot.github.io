@@ -344,6 +344,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             setPushType: "SET",
             //rsData : "",
             rsFunc: function (data) {
+                data = data.reverse();
                 RS_DATA.DATA = JSON.parse(JSON.stringify(data));
                 var obj1 = DATANODES.DATAGET.tbody_food;
                 var obj2 = DATANODES.DATAGET.tbody_gym;
@@ -379,6 +380,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             setPushType: "SET",
             //rsData : "",
             rsFunc: function (data) {
+                data = data.reverse();
                 RS_DATA.DATA = JSON.parse(JSON.stringify(data));
                 var obj = DATANODES.DATAGET.tbody_weight;
                 var format = DATANODES.DATAGET.template_weight;
