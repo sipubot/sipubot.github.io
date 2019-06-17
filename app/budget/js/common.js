@@ -190,6 +190,14 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             if (!UI_WK.isHTML(obj) || typeof (func) !== "function") return;
             obj.addEventListener("click", func, false);
             obj.addEventListener("touchstart", func, false);
+        },
+        preventDoubleClick : function (obj) {
+            if (!UI_WK.isHTML(obj)) return;
+            obj.createAttribute("disable");
+            var set = window.setTimeout(() => {
+                obj.removeAttribute("disable");
+                window.clearTimeout(set);
+            }, 2000);
         }
     }
     var JOB_WK = {
