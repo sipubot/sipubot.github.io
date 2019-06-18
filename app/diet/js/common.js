@@ -453,7 +453,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
 
     function dataDayChart (data) {
         var hd = ["DATE","GAIN","LOSS","SUM"];
-        data.sort((a,b)=> a.date < b.date);
+        data = data.sort((a,b)=> a.date > b.date);
         var d = data.map(a=>{
             var t = [
                 a.date,
@@ -468,7 +468,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
 
     function dataChart (data) {
         var hd = ["DATE", "WEIGHT"];
-        data = data.sort((a,b)=> a.date < b.date);
+        data = data.sort((a,b)=> a.date > b.date);
         var d = data.map(a=>{
             var t = [
                 a.date,
