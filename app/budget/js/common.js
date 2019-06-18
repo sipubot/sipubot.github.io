@@ -1,7 +1,7 @@
 var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     "use strict";
     google.charts.load("current", {
-        packages: ["corechart","bar"]
+        packages: ["corechart", "bar"]
     });
     google.charts.setOnLoadCallback(SIPUCOMMON.drawGraph);
     //util here
@@ -188,13 +188,13 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         },
         setEvent: function (obj, func) {
             if (!UI_WK.isHTML(obj) || typeof (func) !== "function") return;
-            if(typeof window.ontouchstart === 'undefined'){
+            if (typeof window.ontouchstart === 'undefined') {
                 obj.addEventListener("click", func, false);
-            } else{
+            } else {
                 obj.addEventListener("touchstart", func, false);
-            }            
+            }
         },
-        preventDoubleClick : function (obj) {
+        preventDoubleClick: function (obj) {
             if (!UI_WK.isHTML(obj)) return;
             obj.createAttribute("disable");
             var set = window.setTimeout(() => {
@@ -233,7 +233,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 });
                 return data;
             },
-            rsFunc : function (data) {
+            rsFunc: function (data) {
                 RQ_WK(JOB_WK.ACCOUNTGET);
             },
             doOnload: false,
@@ -310,7 +310,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 });
                 return data;
             },
-            rsFunc : function (data) {
+            rsFunc: function (data) {
                 RQ_WK(JOB_WK.CATEGORYGET);
             },
             doOnload: false,
@@ -484,6 +484,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                     a.account_id = RS_DATA.ACCOUNTHASH[a.account_id];
                     return a;
                 });
+                data.push({
+                    "총계": data.reduce((s, a) => s + a.amount, 0)
+                });
                 UI_WK.setNodeValue(obj, format, data, true);
             },
             doOnload: false,
@@ -600,20 +603,20 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     function makeSumtable(data) {
         var re = data.slice(0);
         re.push({
-            date:'TOTAL',
-            income:data.reduce((s, a) => s + a.income, 0),
-            expense:data.reduce((s, a) => s + a.expense, 0),
-            differ:data.reduce((s, a) => s + a.differ, 0)
+            date: 'TOTAL',
+            income: data.reduce((s, a) => s + a.income, 0),
+            expense: data.reduce((s, a) => s + a.expense, 0),
+            differ: data.reduce((s, a) => s + a.differ, 0)
         });
         re.push({
-            date:'AVG',
-            income:Math.round(data.reduce((s, a) => s + a.income, 0) / data.length),
-            expense:Math.round(data.reduce((s, a) => s + a.expense, 0) / data.length),
-            differ:Math.round(data.reduce((s, a) => s + a.differ, 0) / data.length)
+            date: 'AVG',
+            income: Math.round(data.reduce((s, a) => s + a.income, 0) / data.length),
+            expense: Math.round(data.reduce((s, a) => s + a.expense, 0) / data.length),
+            differ: Math.round(data.reduce((s, a) => s + a.differ, 0) / data.length)
         });
         return re;
     }
-    
+
     function makeCateData(data) {
         var dataincate = {};
         data.map(a => {
@@ -696,7 +699,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 var select = chart.getSelection()[0];
                 if (select) {
                     var items = [];
-                    data[0].map((a,i)=> items.push([a,data[select.row+1][i]]));
+                    data[0].map((a, i) => items.push([a, data[select.row + 1][i]]));
                     SIPUCOMMON.drawGraph(DATANODES.CHART.pie, "PieChart", items);
                 }
             });
