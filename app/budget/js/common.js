@@ -443,7 +443,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             setPushType: "SET",
             //rsData : "",
             rsFunc: function (data) {
-                RS_DATA.DATA = JSON.parse(JSON.stringify(data));
+                RS_DATA.DATA = JSON.parse(JSON.stringify(data.reverse()));
                 var obj1 = DATANODES.DATAGET.tbody_ex;
                 var obj2 = DATANODES.DATAGET.tbody_in;
                 var format = DATANODES.DATAGET.template;
