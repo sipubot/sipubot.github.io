@@ -182,8 +182,11 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         },
         setEvent: function (obj, func) {
             if (!UI_WK.isHTML(obj) || typeof (func) !== "function") return;
-            obj.addEventListener("click", func, false);
-            obj.addEventListener("touchstart", func, false);
+            if(typeof window.ontouchstart === 'undefined'){
+                obj.addEventListener("click", func, false);
+            } else{
+                obj.addEventListener("touchstart", func, false);
+            }            
         },
         preventDoubleClick : function (obj) {
             if (!UI_WK.isHTML(obj)) return;
