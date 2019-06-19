@@ -72,7 +72,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         var rqMethod = obj.rqMethod || "POST";
         var rqContentType = obj.rqContentType || "application/json";
         var rsContentType = obj.rsContentType || "json";
-        var rqData = typeof (obj.rqData) === "function" ? obj.rqData() : obj.rqData;
+        var rqData = obj.rqData === undefined ? "" : typeof (obj.rqData) === "function" ? obj.rqData() : obj.rqData;
         var rsData = "";
         var rsFunc = obj.rsFunc || function (re) {
             console.log(re);
@@ -228,7 +228,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             //BASE_URL = "https://sipu.iptime.org",
             ADD_URL: "/logout",
             rqMethod: "GET",
-            rqData : ()=> "",
+            rqData : "",
             rsFunc: () => {
                 //log_out effect
             },
@@ -429,7 +429,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         var IMG_ = ["icon/sipu_sad.png","icon/sipu_nom.png","icon/sipu_hap.png"];
         var COLOR_ = ["red","grey","green"];
         var point_w = [50, 30, 20];
-        console.log(data);
         var b_w = point_w.map((a,i)=>{
             if (data[data.length - i - 1].wa_point - data[data.length - i - 2].wa_point > 30) {
                 return a;
