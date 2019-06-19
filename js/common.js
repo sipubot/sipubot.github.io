@@ -228,7 +228,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             //BASE_URL = "https://sipu.iptime.org",
             ADD_URL: "/logout",
             rqMethod: "GET",
-            //rqData : function () {}
+            rqData : ()=> "",
             rsFunc: () => {
                 //log_out effect
             },
