@@ -353,25 +353,23 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
 
     function life() {
         var sheep = 0;
-        var sp = $('P[data-custom="LiveTime"]');
-        var sp2 = $('SPAN[data-custom="LiveOn"]');
-        $('IMG[data-custom="LiveOn"]').src = getPic(new Date().getUTCHours());
+        var timenode = $('P[data-custom="LiveTime"]');
+        var posinode = $('SPAN[data-custom="LiveOn"]');
+        var posipic = $('IMG[data-custom="LiveOn"]');
         var startval = 1089658152;
         var func = function () {
-            var addval = new Date() - new Date("2015-01-01");
-            var nowHour = new Date().getUTCHours();
-            if (nowHour > -1 && nowHour < 14) {
-                nowHour = nowHour + 9;
-            } else {
-                nowHour = nowHour - 15;
-            }
-            sp.html(startval + Math.floor(addval / 1000));
-            sp2.html(getPlace(nowHour));
+            var now = new Date();
+            var addval = now - new Date("2015-01-01");
+            var nowHour = (now.getUTCHours() + 9) % 24;
+            var nowWeek = now.getDay();
+            timenode.innerHTML = startval + Math.floor(addval / 1000);
+            posinode.innerHTML = getPlace(nowHour, nowWeek);
+            posipic.src = getPic(nowHour, nowWeek);
         };
+        setInterval(func, 1000);
 
-        function getPlace(h) {
-            var weekNumber = (new Date()).getDay();
-            if (0 < weekNumber && 5 >= weekNumber) {
+        function getPlace(h, w) {
+            if (0 < w && 5 >= w) {
                 switch (true) {
                     case (7 > h):
                         sheep++;
@@ -398,9 +396,8 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             }
         }
 
-        function getPic(h) {
-            var weekNumber = (new Date()).getDay();
-            if (0 < weekNumber && 5 >= weekNumber) {
+        function getPic(h, w) {
+            if (0 < w && 5 >= w) {
                 switch (true) {
                     case (7 > h):
                         return "https://66.media.tumblr.com/b7aafe176884b49659af62347d1e4571/tumblr_pskw2aOJMP1s8funmo1_250.jpg";
@@ -422,7 +419,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 }
             }
         }
-        setInterval(func, 1000);
     }
 
     function statdata(data) {
