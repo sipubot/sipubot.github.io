@@ -427,7 +427,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
 
     function statdata(data) {
         var IMG_ = ["icon/sipu_sad.png","icon/sipu_nom.png","icon/sipu_hap.png"];
-        var COLOR_ = ["red","grey","green"];
+        var COLOR_ = ["orange","grey","yellowgreen"];
         var point_w = [50, 30, 20];
         var b_w = point_w.map((a,i)=>{
             if (data[data.length - i - 1].wa_point - data[data.length - i - 2].wa_point > 30) {
