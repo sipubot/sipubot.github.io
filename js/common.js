@@ -353,9 +353,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
 
     function life() {
         var sheep = 0;
-        var timenode = $('P[data-custom="LiveTime"]');
-        var posinode = $('SPAN[data-custom="LiveOn"]');
-        var posipic = $('IMG[data-custom="LiveOn"]');
+        var timenode = $('P[data-custom="LiveTime"]')[0];
+        var posinode = $('SPAN[data-custom="LiveOn"]')[0];
+        var posipic = $('IMG[data-custom="LiveOn"]')[0];
         var startval = 1089658152;
         var func = function () {
             var now = new Date();
