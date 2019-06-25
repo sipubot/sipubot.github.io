@@ -426,7 +426,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         var COLOR_ = ["orange","grey","yellowgreen"];
         var point_w = [50, 30, 20];
         var b_w = point_w.map((a,i)=>{
-            if (data[data.length - i - 1].wa_point - data[data.length - i - 2].wa_point > 30) {
+            if (data[data.length - i - 1].wa_point - data[data.length - i - 2].wa_point > 20) {
                 return a;
             } else {
                 return 0;
