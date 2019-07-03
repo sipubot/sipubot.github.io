@@ -342,9 +342,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             }
             a[1].init();
         });
-        $('a').on("click",function(){
-              $(window).scrollTop(0);
-        });
     }
 
     function chunkString(str, length) {
