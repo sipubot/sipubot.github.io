@@ -110,7 +110,7 @@ nav ul li {
   font: bold 12px Dotum;
   width: 24%;
   margin: 0 auto;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 }
 
 nav ul li a {
@@ -124,7 +124,7 @@ nav ul li:first-child {
 
 .main-container, .header-container {
   margin: 0 auto;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
   max-width: 800px;
 }
 
