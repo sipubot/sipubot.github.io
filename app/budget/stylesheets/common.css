@@ -5,6 +5,7 @@ body {
   padding: 0;
   /* make it look decent enough */
   font-family: 'Noto Sans KR', sans-serif;
+  font-size : 0.8rem;
   background: #333;
   color: #bbb;
   /* needed because hiding the menu on the right side is not perfect,  */
