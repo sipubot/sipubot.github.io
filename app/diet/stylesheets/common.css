@@ -123,6 +123,7 @@ nav ul li:first-child {
 .main-container, .header-container {
   margin: 0 auto;
   max-width: 800px;
+  margin-top : 0.5rem;
 }
 
 .chart {
