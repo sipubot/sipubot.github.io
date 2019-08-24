@@ -1,9 +1,5 @@
 ﻿[
     {
-        "wa_point":  25960,
-        "pa_point":  19
-    },
-    {
         "wa_point":  25991,
         "pa_point":  16.5
     },
@@ -21,6 +17,10 @@
     },
     {
         "wa_point":  26227,
+        "pa_point":  11.5
+    },
+    {
+        "wa_point":  26238,
         "pa_point":  11.5
     }
 ]
