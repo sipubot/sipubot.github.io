@@ -549,12 +549,12 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 var acct = DATANODES.SET.account_button;
                 var cate = DATANODES.SET.category_button;
                 UI_WK.setEvent(acct, function () {
-                    $('TABLE[data-node="account-table"]').show();
-                    $('TABLE[data-node="category-table"]').hide();
+                    $('DIV[data-node="account-table"]').show();
+                    $('DIV[data-node="category-table"]').hide();
                 });
                 UI_WK.setEvent(cate, function () {
-                    $('TABLE[data-node="account-table"]').hide();
-                    $('TABLE[data-node="category-table"]').show();
+                    $('DIV[data-node="account-table"]').hide();
+                    $('DIV[data-node="category-table"]').show();
                 });
             }
         }
@@ -611,9 +611,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         });
         re.push({
             date: 'AVG',
-            income: Math.round(data.reduce((s, a) => s + a.income, 0) / data.length),
-            expense: Math.round(data.reduce((s, a) => s + a.expense, 0) / data.length),
-            differ: Math.round(data.reduce((s, a) => s + a.differ, 0) / data.length)
+            income: Math.round(data.slice(0,data.length-1).reduce((s, a) => s + a.income, 0) / (data.length-1)),
+            expense: Math.round(data.slice(0,data.length-1).reduce((s, a) => s + a.expense, 0) / (data.length-1)),
+            differ: Math.round(data.slice(0,data.length-1).reduce((s, a) => s + a.differ, 0) / (data.length-1))
         });
         return re;
     }
