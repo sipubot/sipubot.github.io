@@ -549,12 +549,12 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 var acct = DATANODES.SET.account_button;
                 var cate = DATANODES.SET.category_button;
                 UI_WK.setEvent(acct, function () {
-                    $('TABLE[data-node="account-table"]').show();
-                    $('TABLE[data-node="category-table"]').hide();
+                    $('DIV[data-node="account-table"]').show();
+                    $('DIV[data-node="category-table"]').hide();
                 });
                 UI_WK.setEvent(cate, function () {
-                    $('TABLE[data-node="account-table"]').hide();
-                    $('TABLE[data-node="category-table"]').show();
+                    $('DIV[data-node="account-table"]').hide();
+                    $('DIV[data-node="category-table"]').show();
                 });
             }
         }
