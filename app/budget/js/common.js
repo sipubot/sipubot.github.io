@@ -507,8 +507,8 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             rsFunc: function (data) {
                 var obj = DATANODES.TAXGET.tbody;
                 var format = DATANODES.TAXGET.template;
-                data = data.map(a => {
-                    a.category_id = RS_DATA.CATEGORYHASH[a.category_id];
+                data = data.filter(a=>a.category_id!=='0000').map(a => {
+                    a.category_id = RS_DATA.CATEGORYHASH[a.category_id][1];
                     return a;
                 });
                 UI_WK.setNodeValue(obj, format, data, true);
