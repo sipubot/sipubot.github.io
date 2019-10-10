@@ -268,6 +268,8 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 UI_WK.setNodeValue(obj3, format2, data2, true);
                 var obj4 = DATANODES.TRANS.account_to;
                 UI_WK.setNodeValue(obj4, format2, data2, true);
+                var obj5 = DATANODES.ACCOUNT.selecttax;
+                UI_WK.setNodeValue(obj5, format2, data2, true);
                 RS_DATA.ACCOUNTHASH = {}
                 data.map(a => {
                     RS_DATA.ACCOUNTHASH[a.id] = a.name;
@@ -493,6 +495,28 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             doOnload: false,
             init: () => {
                 UI_WK.setEvent(DATANODES.STATGET.submit, () => {
+                    RQ_WK(JOB_WK.STATGET);
+                });
+            }
+        },
+        TAXGET: {
+            //BASE_URL: "/data/app.json",
+            ADD_URL: "/budget/tax/",
+            rqMethod: "GET",
+            //rqData :function () {},
+            rsFunc: function (data) {
+                var obj = DATANODES.TAXGET.tbody;
+                var format = DATANODES.TAXGET.template;
+                data = data.map(a => {
+                    a.category_id = RS_DATA.CATEGORYHASH[a.category_id];
+                    return a;
+                });
+                UI_WK.setNodeValue(obj, format, data, true);
+            },
+            doOnload: false,
+            init: () => {
+                UI_WK.setEvent(DATANODES.TAXGET.tr, () => {
+                    JOB_WK.TAXGET.ADD_URL = `/budget/tax/${UI_WK.getNodeValue(DATANODES.ACCOUNT.templatetax).slice(0, 4)}/${UI_WK.getNodeValue(DATANODES.TAXGET.date).slice(0, 4)}`;
                     RQ_WK(JOB_WK.STATGET);
                 });
             }

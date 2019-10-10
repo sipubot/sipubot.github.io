@@ -158,12 +158,35 @@
                             </tr>
                         </thead>
                         <template data-node="STATGET-template">
-                            <TR>
+                            <TR data-node="TAXGET-tr">
                                 <td>{account_id}</td>
                                 <td>{amount}</td>
                             </TR>
                         </template>
                         <tbody data-node="STATGET-tbody">
+                        </tbody>
+                    </table>
+                    <input class="date-picker col-4" data-node="TAXGET-date" type="date" placeholder="Select Date..">
+                    <template data-node="ACCOUNT-templatetax">
+                        <option value="{id}" {select}>{name}</option>
+                    </template>
+                    <select data-node="ACCOUNT-selecttax" class="custom-select"></select>
+                    <template data-node="TAXGET-template">
+                        <TR>
+                            <td>{date}</td>
+                            <td>{category_id}</td>
+                            <td>{amount}</td>
+                        </TR>
+                    </template>
+                    <table class="table table-striped table-dark">
+                        <thead>
+                            <tr>
+                                <th scope="col">DATE</th>
+                                <th scope="col">CATEGORY</th>
+                                <th scope="col">AMOUNT</th>
+                            </tr>
+                        </thead>
+                        <tbody data-node="TAXGET-tbody">
                         </tbody>
                     </table>
                 </div>
