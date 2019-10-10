@@ -517,7 +517,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             init: () => {
                 UI_WK.setEvent(DATANODES.TAXGET.submit, () => {
                     JOB_WK.TAXGET.ADD_URL = `/budget/tax/${UI_WK.getNodeValue(DATANODES.ACCOUNT.templatetax)}/${UI_WK.getNodeValue(DATANODES.TAXGET.date).slice(0, 4)}`;
-                    RQ_WK(JOB_WK.STATGET);
+                    RQ_WK(JOB_WK.TAXGET);
                 });
             }
         },
