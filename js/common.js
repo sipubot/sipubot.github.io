@@ -190,7 +190,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         },
         preventDoubleClick : function (obj) {
             if (!UI_WK.isHTML(obj)) return;
-            obj.createAttribute("disable");
+            obj.setAttribute("disabled", "true");
             var set = window.setTimeout(() => {
                 obj.removeAttribute("disable");
                 window.clearTimeout(set);
