@@ -190,7 +190,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         },
         preventDoubleClick : function (obj) {
             if (!UI_WK.isHTML(obj)) return;
-            obj.createAttribute("disable");
+            obj.setAttribute("disabled", "true");
             var set = window.setTimeout(() => {
                 obj.removeAttribute("disable");
                 window.clearTimeout(set);
@@ -364,7 +364,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             var nowWeek = now.getDay();
             timenode.innerHTML = startval + Math.floor(addval / 1000);
             posinode.innerHTML = getPlace(nowHour, nowWeek);
-            posipic.src = getPic(nowHour, nowWeek);
+            getPic(nowHour, nowWeek);
         };
         setInterval(func, 1000);
 
@@ -396,25 +396,39 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             }
         }
 
+        var switchpic = "";
+        function setPic(url) {
+           if (switchpic !== url) {
+               switchpic = url;
+               posipic.src = switchpic;
+           }
+        }
+        
         function getPic(h, w) {
             if (0 < w && 5 >= w) {
                 switch (true) {
                     case (7 > h):
-                        return "https://66.media.tumblr.com/ee854a927539883c110a228f0fc96052/tumblr_pq26l3Z8aP1s8funmo1_250.jpg";
+                        setPic("https://66.media.tumblr.com/ee854a927539883c110a228f0fc96052/tumblr_pq26l3Z8aP1s8funmo1_250.jpg");
+                        break;
                     case (18 > h && 7 <= h):
-                        return "https://66.media.tumblr.com/1a877c0362c3101deb313f932bc204f5/tumblr_o5vx68YC6F1s8funmo1_250.jpg";
+                        setPic("https://66.media.tumblr.com/1a877c0362c3101deb313f932bc204f5/tumblr_o5vx68YC6F1s8funmo1_250.jpg");
+                        break;
                     case (18 <= h && 21 > h):
-                        return "https://66.media.tumblr.com/d9c2052ac2d584f3224f28ba059ef9fa/tumblr_moqr0uiQmy1s8funmo1_250.jpg";
+                        setPic("https://66.media.tumblr.com/d9c2052ac2d584f3224f28ba059ef9fa/tumblr_moqr0uiQmy1s8funmo1_250.jpg");
+                        break;
                     case (21 <= h):
-                        return "https://66.media.tumblr.com/b7aafe176884b49659af62347d1e4571/tumblr_pskw2aOJMP1s8funmo1_250.jpg";
+                        setPic("https://66.media.tumblr.com/b7aafe176884b49659af62347d1e4571/tumblr_pskw2aOJMP1s8funmo1_250.jpg");
+                        break;
                     default:
                 }
             } else {
                 switch (true) {
                     case (7 > h):
-                        return "https://66.media.tumblr.com/93cc981d20d0f95ab0587f339f7156e4/tumblr_pqgwxrwscL1s8funmo1_250.jpg";
+                        setPic("https://66.media.tumblr.com/93cc981d20d0f95ab0587f339f7156e4/tumblr_pqgwxrwscL1s8funmo1_250.jpg");
+                        break;
                     case (7 <= h):
-                        return "https://66.media.tumblr.com/ee854a927539883c110a228f0fc96052/tumblr_pq26l3Z8aP1s8funmo1_250.jpg";
+                        setPic("https://66.media.tumblr.com/ee854a927539883c110a228f0fc96052/tumblr_pq26l3Z8aP1s8funmo1_250.jpg");
+                        break;
                     default:
                 }
             }
