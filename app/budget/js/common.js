@@ -430,7 +430,10 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 a.amount = +(UI_WK.getNodeValue(DATANODES.TRANS.amount));
                 return a;
             },
-            //rsFunc : function (data) {},
+            rsFunc : function (data) {
+                DATANODES.DATAGET.date.value = UI_WK.getNodeValue(DATANODES.TRANS.date);
+                RQ_WK(JOB_WK.DATAGET);
+            },
             doOnload: false,
             init: () => {
                 UI_WK.setEvent(DATANODES.TRANS.submit, () => {
