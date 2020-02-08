@@ -524,6 +524,21 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 });
             }
         },
+        ORGACCOUNT: {
+            //BASE_URL: "/data/app.json",
+            ADD_URL: "/budget/orgaccount",
+            rqMethod: "POST",
+            //rqData :function () {},
+            rsFunc: function (data) {
+                alret("Re organized Account");
+            },
+            doOnload: false,
+            init: () => {
+                UI_WK.setEvent(DATANODES.ORGACCOUNT.submit, () => {
+                    RQ_WK(JOB_WK.ORGACCOUNT);
+                });
+            }
+        },
         CHARTGET: {
             //BASE_URL: "/data/app.json",
             ADD_URL: "/budget/stat/category/",
