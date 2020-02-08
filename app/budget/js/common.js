@@ -530,7 +530,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             rqMethod: "POST",
             //rqData :function () {},
             rsFunc: function (data) {
-                alret("Re organized Account");
+                alert("Re organized Account");
             },
             doOnload: false,
             init: () => {
