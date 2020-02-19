@@ -661,6 +661,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     }
 
     function makeCateData(data) {
+        //category in
         var dataincate = {};
         data.map(a => {
             if (!dataincate[a.date]) {
@@ -671,7 +672,12 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             }
             dataincate[a.date][RS_DATA.CATEGORYHASH[a.category_id][1]] = a.amount;
         });
-        //category in
+        //빈 카테고리 데이터 채우기
+        Object.entries(dataincate).map(a=>{
+            Object.entries(RS_DATA.CATEGORYHASH).map(hs=>{
+                if (hs[1][0] && a[1][hs[1][1]] === undefined) { dataincate[a[0]][hs[1][1]] = 0; }
+            })
+        });
         var hd = ['DATE'].concat(Object.entries(Object.entries(dataincate)[0][1]).map(a => a[0]));
         var rein = Object.entries(dataincate).map(a => {
             return [a[0]].concat(Object.entries(a[1]).map(b => b[1]));
@@ -687,6 +693,12 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 return;
             }
             dataexcate[a.date][RS_DATA.CATEGORYHASH[a.category_id][1]] = a.amount;
+        });
+        //빈 카테고리 데이터 채우기
+        Object.entries(dataincate).map(a=>{
+            Object.entries(RS_DATA.CATEGORYHASH).map(hs=>{
+                if (!hs[1][0] && a[1][hs[1][1]] === undefined) { dataincate[a[0]][hs[1][1]] = 0; }
+            })
         });
         var hd2 = ['DATE'].concat(Object.entries(Object.entries(dataexcate)[0][1]).map(a => a[0]));
         var reex = Object.entries(dataexcate).map(a => {
