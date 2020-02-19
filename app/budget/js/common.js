@@ -675,7 +675,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         //빈 카테고리 데이터 채우기
         Object.entries(dataincate).map(a=>{
             Object.entries(RS_DATA.CATEGORYHASH).map(hs=>{
-                if (hs[1][0] && hs[1][2] !== "" && a[1][hs[1][1]] === undefined) {
+                if (hs[1][0] && a[1][hs[1][1]] === undefined) {
                     dataincate[a[0]][hs[1][1]] = 0; 
                 }
             })
@@ -699,7 +699,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         //빈 카테고리 데이터 채우기
         Object.entries(dataexcate).map(a=>{
             Object.entries(RS_DATA.CATEGORYHASH).map(hs=>{
-                if (!hs[1][0] && hs[1][2] !== "" && a[1][hs[1][1]] === undefined) {
+                if (!hs[1][0] && a[1][hs[1][1]] === undefined) {
                     dataexcate[a[0]][hs[1][1]] = 0; 
                 }
             })
