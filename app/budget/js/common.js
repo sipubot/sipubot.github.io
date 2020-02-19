@@ -695,9 +695,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             dataexcate[a.date][RS_DATA.CATEGORYHASH[a.category_id][1]] = a.amount;
         });
         //빈 카테고리 데이터 채우기
-        Object.entries(dataincate).map(a=>{
+        Object.entries(dataexcate).map(a=>{
             Object.entries(RS_DATA.CATEGORYHASH).map(hs=>{
-                if (!hs[1][0] && a[1][hs[1][1]] === undefined) { dataincate[a[0]][hs[1][1]] = 0; }
+                if (!hs[1][0] && a[1][hs[1][1]] === undefined) { dataexcate[a[0]][hs[1][1]] = 0; }
             })
         });
         var hd2 = ['DATE'].concat(Object.entries(Object.entries(dataexcate)[0][1]).map(a => a[0]));
