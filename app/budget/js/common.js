@@ -675,14 +675,14 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         //빈 카테고리 데이터 채우기
         Object.entries(dataincate).map(a=>{
             Object.entries(RS_DATA.CATEGORYHASH).map(hs=>{
-                if (hs[1][0] && a[1][hs[1][1]] === undefined) {
+                if (hs[1][0] && hs[1][2] !== "" && a[1][hs[1][1]] === undefined) {
                     dataincate[a[0]][hs[1][1]] = 0; 
                 }
             })
         });
-        var hd = ['DATE'].concat(Object.entries(Object.entries(dataincate)[0][1]).map(a => a[0]));
+        var hd = ['DATE'].concat(Object.entries(Object.entries(dataincate)[0][1]).map(a => a[0]).sort());
         var rein = Object.entries(dataincate).map(a => {
-            return [a[0]].concat(Object.entries(a[1]).map(b => b[1]));
+            return [a[0]].concat(Object.entries(a[1]).sort((a,b)=>a[0]>b[0]).map(b => b[1]));
         });
         rein = [hd].concat(rein);
         //category ex
@@ -699,14 +699,14 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         //빈 카테고리 데이터 채우기
         Object.entries(dataexcate).map(a=>{
             Object.entries(RS_DATA.CATEGORYHASH).map(hs=>{
-                if (!hs[1][0] && a[1][hs[1][1]] === undefined) {
+                if (!hs[1][0] && hs[1][2] !== "" && a[1][hs[1][1]] === undefined) {
                     dataexcate[a[0]][hs[1][1]] = 0; 
                 }
             })
         });
-        var hd2 = ['DATE'].concat(Object.entries(Object.entries(dataexcate)[0][1]).map(a => a[0]));
+        var hd2 = ['DATE'].concat(Object.entries(Object.entries(dataexcate)[0][1]).map(a => a[0]).sort());
         var reex = Object.entries(dataexcate).map(a => {
-            return [a[0]].concat(Object.entries(a[1]).map(b => b[1]));
+            return [a[0]].concat(Object.entries(a[1]).sort((a,b)=>a[0]>b[0]).map(b => b[1]));
         });
         reex = [hd2].concat(reex);
         return [rein, reex];
