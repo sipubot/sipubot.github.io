@@ -547,8 +547,8 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             //rqData :function () {},
             rsFunc: function (data) {
                 //drawchart
-                data = data.map(a=>{ a.amount = toFixedMoney(a.amount); return a;});
-                var d = makeSumData(data);
+                var fixdata = data.map(a=>{ a.amount = toFixedMoney(a.amount); return a;});
+                var d = makeSumData(fixdata);
                 var objsum = DATANODES.CHART.tbodysum;
                 var formatsum = DATANODES.CHART.templatesum;
                 UI_WK.setNodeValue(objsum, formatsum, makeSumtable(d), true);
@@ -557,7 +557,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 ].concat(d.map(a => [a.date, a.income, a.expense, a.differ]));
                 //SIPUCOMMON.drawGraph(DATANODES.CHART.sumchart, "BarChart", chartdata);
                 //drawcatechart
-                var dc = makeCateData(data);
+                var dc = makeCateData(fixdata);
                 SIPUCOMMON.drawGraph(DATANODES.CHART.cateinchart, "BarChartStacked", dc[0]);
                 SIPUCOMMON.drawGraph(DATANODES.CHART.cateexchart, "BarChartStacked", dc[1]);
             },
