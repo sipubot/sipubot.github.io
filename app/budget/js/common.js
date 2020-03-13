@@ -616,7 +616,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     
     function toFixedMoney(mo) {
         if(mo % 1 !== 0) {
-            return Math.round(mo/100)*100;
+            return Math.round(mo*100)/100;
         } else {
             return mo;
         }
