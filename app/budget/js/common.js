@@ -547,8 +547,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             //rqData :function () {},
             rsFunc: function (data) {
                 //drawchart
-                var fixdata = data.map(a=>{ a.amount = toFixedMoney(a.amount); return a;});
-                var d = makeSumData(fixdata);
+                var d = makeSumData(data);
                 var objsum = DATANODES.CHART.tbodysum;
                 var formatsum = DATANODES.CHART.templatesum;
                 UI_WK.setNodeValue(objsum, formatsum, makeSumtable(d), true);
@@ -557,7 +556,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 ].concat(d.map(a => [a.date, a.income, a.expense, a.differ]));
                 //SIPUCOMMON.drawGraph(DATANODES.CHART.sumchart, "BarChart", chartdata);
                 //drawcatechart
-                var dc = makeCateData(fixdata);
+                var dc = makeCateData(data);
                 SIPUCOMMON.drawGraph(DATANODES.CHART.cateinchart, "BarChartStacked", dc[0]);
                 SIPUCOMMON.drawGraph(DATANODES.CHART.cateexchart, "BarChartStacked", dc[1]);
             },
@@ -668,9 +667,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             differ: data.slice(0,data.length-1).reduce((s, a) => s + a.differ, 0) / (data.length-1)
         });
         re = re.map(a=>{ 
-            a.income = toFixedMoney(a,income);
-            a.expense = toFixedMoney(a,expense);
-            a.differ = toFixedMoney(a,differ);
+            a.income = toFixedMoney(a.income);
+            a.expense = toFixedMoney(a.expense);
+            a.differ = toFixedMoney(a.differ);
             return a;
         })
         return re;
