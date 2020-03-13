@@ -671,6 +671,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             a.income = toFixedMoney(a,income);
             a.expense = toFixedMoney(a,expense);
             a.differ = toFixedMoney(a,differ);
+            return a;
         })
         return re;
     }
