@@ -487,6 +487,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 var format = DATANODES.STATGET.template;
                 data = data.map(a => {
                     a.account_id = RS_DATA.ACCOUNTHASH[a.account_id];
+                    a.amount = toFixedMoney(a.amount);
                     return a;
                 });
                 data.push({
@@ -546,6 +547,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             //rqData :function () {},
             rsFunc: function (data) {
                 //drawchart
+                data = data.map(a=>{ a.amount = toFixedMoney(a.amount); return a;});
                 var d = makeSumData(data);
                 var objsum = DATANODES.CHART.tbodysum;
                 var formatsum = DATANODES.CHART.templatesum;
@@ -610,6 +612,14 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             }
             a[1].init();
         });
+    }
+    
+    function toFixedMoney(mo) {
+        if(mo % 1 !== 0) {
+            return Math.round(mo/100)*100;
+        } else {
+            return mo;
+        }
     }
 
     function makeSumData(data) {
