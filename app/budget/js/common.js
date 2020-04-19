@@ -492,7 +492,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 });
                 data.push({
                     account_id: "총계",
-                    amount: toFixedMoney(data.reduce((s, a) => s + a.amount, 0));
+                    amount: toFixedMoney(data.reduce((s, a) => s + a.amount, 0))
                 });
                 UI_WK.setNodeValue(obj, format, data, true);
             },
