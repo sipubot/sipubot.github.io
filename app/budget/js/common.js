@@ -437,7 +437,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             doOnload: false,
             init: () => {
                 UI_WK.setEvent(DATANODES.TRANS.submit, () => {
-                    JOB_WK.DATAGET.ADD_URL = UI_WK.getNodeValue(DATANODES.DATATRANS.date).slice(0, 7);
+                    JOB_WK.DATAGET.ADD_URL = UI_WK.getNodeValue(DATANODES.TRANS.date).slice(0, 7);
                     RQ_WK(JOB_WK.DATAGET);
                 });
             }
