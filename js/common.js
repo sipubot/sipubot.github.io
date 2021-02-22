@@ -122,7 +122,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             .catch(function (error) {
                 console.log(rqData);
                 console.log(obj);
-                alret.log('There has been a problem with your fetch operation: ' + error.message);
+                alert('There has been a problem with your fetch operation: ' + error.message);
             });
     }
 
