@@ -203,6 +203,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             ADD_URL: "/login",
             //rqMethod : "POST",
             rqData: function () {
+                UI_WK.preventDoubleClick(DATANODES.LOGIN.summit);
                 return {
                     "email": DATANODES.LOGIN.getemail.value,
                     "password": CryptoJS.SHA3(DATANODES.LOGIN.getpassword.value, {
@@ -220,7 +221,6 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             init: () => {
                 UI_WK.setEvent(DATANODES.LOGIN.summit, () => {
                     RQ_WK(JOB_WK.LOGIN);
-                    UI_WK.preventDoubleClick(DATANODES.LOGIN.summit);
                 });
             }
         },
