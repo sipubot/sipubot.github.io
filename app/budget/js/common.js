@@ -444,7 +444,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
         },
         DATAGET: {
             //BASE_URL: "",
-            ADD_URL: "/budget/data/",
+            ADD_URL: "/budget/data",
             rqMethod: "GET",
             //rqData :function () {},
             //setHTML: ``,
