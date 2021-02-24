@@ -69,9 +69,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
     //DATANODES.log();
 
     var RS_DATA = {};
-
+    var PREPIX_URL = "https://sipu.iptime.org";
     function RQ_WK(obj) {
-        var BASE_URL = obj.BASE_URL || "https://sipu.iptime.org";
+        var BASE_URL = obj.BASE_URL || PREPIX_URL;
         var ADD_URL = obj.ADD_URL || "";
         var rqMethod = obj.rqMethod || "POST";
         var rqContentType = obj.rqContentType || "application/json";
@@ -443,8 +443,8 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
             }
         },
         DATAGET: {
-            //BASE_URL: "",
-            ADD_URL: "/budget/data",
+            BASE_URL: PREPIX_URL + "/budget/data",
+            ADD_URL: "",
             rqMethod: "GET",
             //rqData :function () {},
             //setHTML: ``,
