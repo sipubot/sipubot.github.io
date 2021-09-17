@@ -461,11 +461,13 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                     a.category_id = RS_DATA.CATEGORYHASH[a.category_id][1];
                     return a;
                 });
+                data1 = data1.sort((a,b)=>new Date(b.date) - new Date(a.date));
                 var data2 = data.filter(a => a.ttype === true).map(a => {
                     a.account_id = RS_DATA.ACCOUNTHASH[a.account_id];
                     a.category_id = RS_DATA.CATEGORYHASH[a.category_id][1];
                     return a;
                 });
+                data2 = data2.sort((a,b)=>new Date(b.date) - new Date(a.date));
                 UI_WK.setNodeValue(obj1, format, data1, true);
                 UI_WK.setNodeValue(obj2, format, data2, true);
             },
