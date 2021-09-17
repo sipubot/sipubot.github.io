@@ -695,9 +695,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 }
             })
         });
-        var hd = ['DATE'].concat(Object.entries(Object.entries(dataincate)[0][1]).map(a => a[0]).sort());
+        var hd = ['DATE'].concat(Object.entries(Object.entries(dataincate)[0][1]).map(a => a[0]));
         var rein = Object.entries(dataincate).map(a => {
-            return [a[0]].concat(Object.entries(a[1]).sort((a,b)=>a[0]>b[0]).map(b => b[1]));
+            return [a[0]].concat(Object.entries(a[1]).map(b => b[1]));
         });
         rein = [hd].concat(rein);
         //category ex
@@ -719,9 +719,9 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                 }
             })
         });
-        var hd2 = ['DATE'].concat(Object.entries(Object.entries(dataexcate)[0][1]).map(a => a[0]).sort());
+        var hd2 = ['DATE'].concat(Object.entries(Object.entries(dataexcate)[0][1]).map(a => a[0]));
         var reex = Object.entries(dataexcate).map(a => {
-            return [a[0]].concat(Object.entries(a[1]).sort((a,b)=>a[0]>b[0]).map(b => b[1]));
+            return [a[0]].concat(Object.entries(a[1]).map(b => b[1]));
         });
         reex = [hd2].concat(reex);
         return [rein, reex];
