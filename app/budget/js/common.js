@@ -517,6 +517,7 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                     a.category_id = RS_DATA.CATEGORYHASH[a.category_id][1];
                     return a;
                 });
+                data = data.sort((a,b)=>new Date(a.date) - new Date(b.date));
                 UI_WK.setNodeValue(obj, format, data, true);
             },
             doOnload: false,
