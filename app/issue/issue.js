@@ -33,7 +33,7 @@ var SIPUISSUE = (function (SIPUISSUE, $, undefined) {
         }
     };
     function init() {
-        fetch("./app/issue/list.json")
+        fetch("./list.json")
         .then(re=>re.json())
         .then(data=>{
             console.log(data)
