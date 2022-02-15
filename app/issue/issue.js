@@ -33,14 +33,41 @@ var SIPUISSUE = (function (SIPUISSUE, $, undefined) {
         }
     };
     function init() {
-        fetch("./list.json")
+        var new_mo = "<span>&#128064;</span>";
+        fetch("./list_dc.json")
         .then(re=>re.json())
         .then(data=>{
             console.log(data)
-           var ul = document.getElementById("list");
+           var ul = document.getElementById("list_dc");
            var text = "";
            data.map(a=>{
-                text += `<li><a href="${(a.more =="디시") ? "https://gall.dcinside.com"+a.link : a.link}" target="_blank" >${a.title}</a></li>`;
+                text += `<li>${a.new ? new_mo:""}<a href="${"https://gall.dcinside.com"+a.link}" target="_blank" >실베::${a.title}</a></li>`;
+            });
+            ul.innerHTML = text;
+        });
+        fetch("./list_fm.json")
+        .then(re=>re.json())
+        .then(data=>{
+            console.log(data)
+           var ul = document.getElementById("list_fm");
+           var text = "";
+           data.map(a=>{
+                if (a.link.indexOf("index.php") < 0) {
+                    text += `<li>${a.new ? new_mo:""}<a href="${"https://www.fmkorea.com"+a.link}" target="_blank" >FM::${a.title}</a></li>`;
+                }
+            });
+            ul.innerHTML = text;
+        });
+        fetch("./list_mp.json")
+        .then(re=>re.json())
+        .then(data=>{
+            console.log(data)
+           var ul = document.getElementById("list_mp");
+           var text = "";
+           data.map(a=>{
+                if (a.link.indexOf("index.php") < 0) {
+                    text += `<li>${a.new ? new_mo:""}<a href="${"https://www.fmkorea.com"+a.link}" target="_blank" >엠::${a.title} </a></li>`;
+                }
             });
             ul.innerHTML = text;
         });
