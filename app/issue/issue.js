@@ -66,7 +66,7 @@ var SIPUISSUE = (function (SIPUISSUE, $, undefined) {
            var text = "";
            data.map(a=>{
                 if (a.link.indexOf("index.php") < 0) {
-                    text += `<li>${a.new ? new_mo:""}<a href="${"https://www.fmkorea.com"+a.link}" target="_blank" >엠::${a.title} </a></li>`;
+                    text += `<li>${a.new ? new_mo:""}<a href="${a.link}" target="_blank" >엠::${a.title} </a></li>`;
                 }
             });
             ul.innerHTML = text;
