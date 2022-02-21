@@ -128,7 +128,6 @@ nav ul li:first-child {
   margin: 0 auto;
   max-width: 800px;
   margin-top : 0.5rem;
-  position: fixed;
 }
 
 .chart {
