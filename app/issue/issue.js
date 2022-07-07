@@ -37,7 +37,7 @@ var SIPUISSUE = (function (SIPUISSUE, $, undefined) {
         fetch("./list_dc.json")
         .then(re=>re.json())
         .then(data=>{
-            console.log(data)
+           //console.log(data)
            var ul = document.getElementById("list_dc");
            var text = "";
            data.map(a=>{
@@ -48,7 +48,7 @@ var SIPUISSUE = (function (SIPUISSUE, $, undefined) {
         fetch("./list_fm.json")
         .then(re=>re.json())
         .then(data=>{
-            console.log(data)
+           //console.log(data)
            var ul = document.getElementById("list_fm");
            var text = "";
            data.map(a=>{
@@ -61,7 +61,7 @@ var SIPUISSUE = (function (SIPUISSUE, $, undefined) {
         fetch("./list_mp.json")
         .then(re=>re.json())
         .then(data=>{
-            console.log(data)
+           //console.log(data)
            var ul = document.getElementById("list_mp");
            var text = "";
            data.map(a=>{
