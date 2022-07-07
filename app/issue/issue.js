@@ -32,6 +32,13 @@ var SIPUISSUE = (function (SIPUISSUE, $, undefined) {
             return typeof (obj) === "string" && obj.length > 3;
         }
     };
+    var dc_head = {
+        "lovecome" : "[럽코]",
+        "comic_new" : "[만갤]",
+        "neostock" : "[주식]",
+        "baseball_new11" : "[야갤]",
+        "dcbest" : "",        
+    }
     function init() {
         var new_mo = "<span>&#128064;</span>";
         fetch("./list_dc.json")
@@ -41,7 +48,11 @@ var SIPUISSUE = (function (SIPUISSUE, $, undefined) {
            var ul = document.getElementById("list_dc");
            var text = "";
            data.map(a=>{
-                text += `<li>${a.new ? new_mo:""}<a href="${"https://gall.dcinside.com"+a.link}" target="_blank" >실베::${a.title}</a></li>`;
+                var head = "";
+                Object.entries(dc_head).map(_=>{
+                    dc_head = a.link.indexOf(_[0]) > 0 ? _[1] : head;
+                });
+                text += `<li>${a.new ? new_mo:""}<a href="${"https://gall.dcinside.com"+a.link}" target="_blank" >${head}::${a.title}</a></li>`;
             });
             ul.innerHTML = text;
         });
