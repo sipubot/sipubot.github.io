@@ -82,14 +82,7 @@ var SIPUISSUE = (function (SIPUISSUE, $, undefined) {
             });
             ul.innerHTML = text;
         });
-        
-        const requestURL = 'http://sipubot.iptime.org:2790/data/list_dc.json';
-        const request = new Request(requestURL);
-
-        const response = await fetch(request);
-        const superHeroes = await response.json();
-
-        console.log(superHeroes);
+      
     }
 
     SIPUISSUE.run = function () {
