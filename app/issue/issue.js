@@ -42,10 +42,10 @@ var SIPUISSUE = (function (SIPUISSUE, $, undefined) {
     function init() {
         var new_mo = "<span>&#128064;</span>";
         fetch("./list_dc.json")
-        .then(re=>re.json())
+        .then(re=>re.json())     
         .then(data=>{
            //console.log(data)
-           var ul = document.getElementById("list_dc");
+           var ul = document.getElementById("list_d c");
            var text = "";
            data.map(a=>{
                 var head = "";
@@ -82,6 +82,14 @@ var SIPUISSUE = (function (SIPUISSUE, $, undefined) {
             });
             ul.innerHTML = text;
         });
+        
+        const requestURL = 'http://sipubot.iptime.org:2790/data/list_dc.json';
+        const request = new Request(requestURL);
+
+        const response = await fetch(request);
+        const superHeroes = await response.json();
+
+        console.log(superHeroes);
     }
 
     SIPUISSUE.run = function () {
