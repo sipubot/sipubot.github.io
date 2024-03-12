@@ -41,23 +41,22 @@ var SIPUISSUE = (function (SIPUISSUE, $, undefined) {
     }
     function init() {
         var new_mo = "<span>&#128064;</span>";
-        fetch("./list_dc.json")
+        fetch("./issue/list_dc.json")
         .then(re=>re.json())     
         .then(data=>{
            //console.log(data)
-           var ul = document.getElementById("list_d c");
+           var ul = document.getElementById("list_dc");
            var text = "";
            data.map(a=>{
                 var head = "";
                 Object.entries(dc_head).map(_=>{
                     dc_head = a.link.indexOf(_[0]) > 0 ? _[1] : head;
                 });
-                a.title = (a.title.indexOf("<strong>") > 0 ? a.title.split("<strong>")[1] : a.title)
-                text += `<li>${a.new ? new_mo:""}<a href="${"https://gall.dcinside.com"+a.link}" target="_blank" >${head}::${a.title}</a></li>`;
+                text += `<li>${a.new ? new_mo:""}<a href="${a.link}" target="_blank" >${head}::${a.title}</a></li>`;
             });
             ul.innerHTML = text;
         });
-        fetch("./list_fm.json")
+        fetch("./issue/list_fm.json")
         .then(re=>re.json())
         .then(data=>{
            //console.log(data)
@@ -70,7 +69,7 @@ var SIPUISSUE = (function (SIPUISSUE, $, undefined) {
             });
             ul.innerHTML = text;
         });
-        fetch("./list_mp.json")
+        fetch("./issue/list_mp.json")
         .then(re=>re.json())
         .then(data=>{
            //console.log(data)
@@ -83,11 +82,12 @@ var SIPUISSUE = (function (SIPUISSUE, $, undefined) {
             });
             ul.innerHTML = text;
         });
-      
+        
     }
 
     SIPUISSUE.run = function () {
         init();
+		
         //life();
         //Snail.start();
     };
