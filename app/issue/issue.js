@@ -52,6 +52,7 @@ var SIPUISSUE = (function (SIPUISSUE, $, undefined) {
                 Object.entries(dc_head).map(_=>{
                     dc_head = a.link.indexOf(_[0]) > 0 ? _[1] : head;
                 });
+                a.title = (a.title.indexOf("<strong>") > 0 ? a.title.split("<strong>")[1] : a.title)
                 text += `<li>${a.new ? new_mo:""}<a href="${"https://gall.dcinside.com"+a.link}" target="_blank" >${head}::${a.title}</a></li>`;
             });
             ul.innerHTML = text;
