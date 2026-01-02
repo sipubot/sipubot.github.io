@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html
+  class="js flexbox canvas canvastext webgl touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths"
+  lang="ko"
+>
+  <!--<![endif]-->
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>시퍼렁어</title>
+    <meta name="viewport" content="width=device-width" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://sipubot.github.io/icon/favicon.ico"
+    />
+    <link
+      rel="shortcut icon"
+      href="https://sipubot.github.io/icon/bookmark.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="https://sipubot.github.io/icon/bookmark.png"
+    />
+    <link
+      href="https://ajax.aspnetcdn.com/ajax/bootstrap/4.2.1/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/app/issue/stylesheets/common.min.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  </head>
+
+  <body>
+    <!--[if lt IE 8]>
+      <p class="browserupgrade">
+        You are using an <strong>outdated</strong> browser. Please
+        <a href="http://browsehappy.com/">upgrade your browser</a> to improve
+        your experience.
+      </p>
+    <![endif]-->
+    <div class="header-container">
+      <header class="wrapper clearfix">
+        <nav>
+          <ul>
+            <li>
+              <button onclick="SIPUSTOCK.DRAWTYPE('ALL')" class="filter-btn sharp-btn px-4 py-2 text-[10px] bg-gray-600 text-gray-100 uppercase">ALL</button>
+            </li>
+            <li>
+              <a href="#list_in">NORMAL</a>
+            </li>
+            <li>
+              <a href="#list_out">COLD</a>
+            </li>
+          </ul>
+        </nav>
+      </header>
+    </div>
+    <template data-node="DATAGET-template">
+      <tr>
+          <td>{ticker}</td>
+          <td>{price}</td>
+          <td>{sc}</td>
+          <td>{ns}</td>
+          <td>{detail}</td>
+          <th scope="row"><button value="{seq}" type="button" class="btn btn-secondary" onclick="javascript:SIPUCOMMON.delRow.dataPage(this);">VIEW</button></th>
+      </tr>
+    </template>
+    <table class="table table-striped table-dark">
+        <thead>
+            <tr>
+                <th scope="col">TICKER</th>
+                <th scope="col">PRICE</th>
+                <th scope="col">SOCIAL POINT</th>
+                <th scope="col">NEWS POINT</th>
+                <th scope="col">STATUS</th>
+                <th scope="col">VIEW</th>
+            </tr>
+        </thead>
+        <tbody id ="list_stock">
+        </tbody>
+    </table>
+
+    <ul id="list_in"></ul>
+    <ul id="list_out"></ul>
+
+    <div id="detail-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4">
+        <div class="sharp-card w-full max-w-xl border-slate-700 overflow-hidden flex flex-col max-h-[95vh] shadow-2xl">
+            
+            <div class="p-6 border-b border-slate-800 flex justify-between items-center bg-slate-900/80">
+                <div>
+                    <h2 id="modal-ticker" class="text-4xl font-black italic tracking-tighter text-white uppercase leading-none">---</h2>
+                    <p id="modal-update" class="text-[9px] text-slate-500 font-mono mt-1 font-bold tracking-widest uppercase italic">---</p>
+                </div>
+                <button onclick="SIPUSTOCK.closeModal()" class="w-10 h-10 sharp-btn bg-slate-800 flex items-center justify-center border border-slate-700 hover:bg-slate-700 text-white">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto no-scrollbar p-6 space-y-6">
+                <div class="grid grid-cols-2 gap-px bg-slate-800 border border-slate-800">
+                    <div class="bg-slate-900 p-5">
+                        <div class="text-[9px] text-slate-500 uppercase font-black mb-1">Current Price</div>
+                        <div id="modal-price" class="text-2xl font-bold text-emerald-400 font-mono tracking-tighter">$0.00</div>
+                    </div>
+                    <div class="bg-slate-900 p-5 text-right">
+                        <div class="text-[9px] text-slate-500 uppercase font-black mb-1 italic text-blue-400">Market Insight</div>
+                        <div id="modal-score" class="text-2xl font-bold text-white font-mono tracking-tighter">0.0</div>
+                    </div>
+                </div>
+
+                <div class="sharp-card p-4 border-slate-800 bg-slate-900/40">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Insight History</h3>
+                        <div class="flex border border-slate-800 bg-black/40" id="period-tabs">
+                            <button onclick="changePeriod('hour', this)" class="btn-period sharp-btn active px-3 py-1.5 text-[9px] font-bold uppercase transition-all">1H</button>
+                            <button onclick="changePeriod('day', this)" class="btn-period sharp-btn px-3 py-1.5 text-[9px] font-bold text-slate-500 uppercase">1D</button>
+                            <button onclick="changePeriod('month', this)" class="btn-period sharp-btn px-3 py-1.5 text-[9px] font-bold text-slate-500 uppercase">1M</button>
+                            <button onclick="changePeriod('year', this)" class="btn-period sharp-btn px-3 py-1.5 text-[9px] font-bold text-slate-500 uppercase">1Y</button>
+                        </div>
+                    </div>
+                    <div class="relative w-full h-[240px]">
+                        <canvas id="historyChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="border-l-2 border-blue-500 bg-blue-500/5 p-4 hidden">
+                        <h4 class="text-[10px] font-black text-blue-400 uppercase mb-1">Data Interpretation</h4>
+                        <p class="text-[11px] text-slate-400 leading-relaxed">
+                            <b>Market Insight</b>: 실시간 가격 변동과 소셜 감성의 정규화 점수. <b>Social Buzz</b>: 하단 막대 그래프로 시장 참여도를 의미.
+                        </p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <a id="link-yahoo" target="_blank" class="bg-[#7e1fff] py-4 sharp-btn text-center text-white font-black text-[10px] tracking-widest uppercase hover:brightness-110">YAHOO FINANCE</a>
+                        <a id="link-trading" target="_blank" class="bg-[#2962ff] py-4 sharp-btn text-center text-white font-black text-[10px] tracking-widest uppercase hover:brightness-110">TRADINGVIEW</a>
+                    </div>
+                </div>
+
+                <div class="space-y-3 pb-6">
+                    <h4 class="text-[10px] font-black text-slate-500 uppercase tracking-widest border-l-2 border-slate-700 pl-2">Recent Intelligence</h4>
+                    <div id="social-feed" class="space-y-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.slim.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/bootstrap/4.2.1/bootstrap.min.js"></script>
+    <script src="./stock/stock.js"></script>
+
+  </body>
+</html>
