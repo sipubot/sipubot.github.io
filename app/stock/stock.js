@@ -1,203 +1,176 @@
 var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
     "use strict";
-    //util here
-    var VERIFY = {
-        OnlyChar: function (obj) {
-            obj = obj.replace(/[^(가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9)]/gi, "");
-            return obj;
-        },
-        OutSpecial: function (obj) {
-            obj = obj.replace(/[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi, ""); // 특수문자 제거    
-            return obj;
-        },
-        OnlyNumber: function (obj) {
-            obj = obj.replace(/[^\d\.]/g, "");
-            return obj;
-        },
-        RemoveQuot: function (obj) {
-            obj = obj.replace(/'/g, "&apos;").replace(/"/g, "&quot;");
-            return obj;
-        },
-        RemoveJQ: function (obj) {
-            obj = obj.replace(".", "").replace("#", "");
-            return obj;
-        },
-        UrlLinker: function (obj) {
-            var urlRegex = /(https?:\/\/[^\s]+)/g;
-            return obj.replace(urlRegex, function (url) {
-                return '<a href="' + url + '" target="_blank">&#128279</a>';
-            });
-        },
-        Length: function (obj) {
-            return typeof (obj) === "string" && obj.length > 3;
-        }
-    };
 
+    SIPUSTOCK.DATA = {}; 
     SIPUSTOCK.DETAIL_DATA = null;
-    SIPUSTOCK.OPEN_MODAL = (symbol) => {
-        fetch(`./stock/data/${symbol}.json`)
-        .then(re=>re.json())     
-        .then(data=>{
-            //console.log(data)
-            SIPUSTOCK.DETAIL_DATA = data;
-            const s = SIPUSTOCK.DATA.signals.find(s => s.t === symbol);
-            document.getElementById('modal-ticker').innerText = s.t;
-            document.getElementById('modal-update').innerText = `LAST SYNC: ${new Date().toLocaleTimeString()}`;
-            document.getElementById('modal-price').innerText = `$${s.p.toLocaleString()}`;
-            document.getElementById('modal-score').innerText = s.sc;
-            document.getElementById('link-yahoo').href = `https://finance.yahoo.com/quote/${s.t}`;
-            document.getElementById('link-trading').href = `https://www.tradingview.com/symbols/${s.t}`;
-            document.getElementById('detail-modal').classList.remove('hidden');
-
-            const feed = document.getElementById('social-feed');
-            SIPUSTOCK.DETAIL_DATA.links.news.forEach(link => {
-                const div = `
-                    <div class="bg-slate-900/60 p-4 border border-slate-800 sharp-card">
-                        <span class="text-[9px] font-black text-blue-400 uppercase">${link.platform}</span>
-                        <a href="${link.link}" target="_blank"><p class="text-xs font-semibold mt-1 text-slate-300">${link.title}</p></a>
-                    </div>
-                `;
-                feed.insertAdjacentHTML("beforeend", div);
-            });
-
-            SIPUSTOCK.changePeriod('hour', document.querySelector('#period-tabs button'));
-        });
-    }
-
-    SIPUSTOCK.closeModal = function() { document.getElementById('detail-modal').classList.add('hidden'); }
     SIPUSTOCK.CHART_OBJ = null;
 
-    SIPUSTOCK.changePeriod = (period, btn) => {
-        document.querySelectorAll('.btn-period').forEach(b => {
-            b.classList.remove('active', 'bg-blue-600');
-            b.classList.add('text-slate-500');
+    // 1. 데이터 로드
+    SIPUSTOCK.LOADDATA = function () {
+        fetch("./stock/data/_overview.json")
+            .then(re => re.json())
+            .then(data => {
+                SIPUSTOCK.DATA = data.signals || data;
+                // 초기 실행 시 ALL 버튼 활성화
+                const allBtn = document.querySelector('.filter-btn');
+                SIPUSTOCK.FILTER("ALL", allBtn);
+            })
+            .catch(err => console.error("Data Load Error:", err));
+    };
+
+    // 2. 필터 제어 (클래스 선택자 점(.) 수정 완료)
+    SIPUSTOCK.FILTER = function (type, element) {
+        document.querySelectorAll('.filter-btn').forEach(el => {
+            el.classList.remove('active');
         });
-        btn.classList.add('active', 'bg-blue-600');
-        btn.classList.remove('text-slate-500');
+        if (element) element.classList.add('active');
+        SIPUSTOCK.DRAWTYPE(type);
+    };
 
-        let history = [];
-        if (period === 'hour') {
-            history = SIPUSTOCK.DETAIL_DATA.history.recent;
-        } else if (period === 'day') {
-            history = SIPUSTOCK.DETAIL_DATA.history.summary;
-        } else if (period === 'month') {
-            history = SIPUSTOCK.DETAIL_DATA.history.month_summary;
-        }   else if (period === 'year') {
-            history = SIPUSTOCK.DETAIL_DATA.history.year_summary;
-        }
-        // 더미 데이터 생성 (이중 축 테스트용)
-        //const history = Array.from({length: 12}, (_, i) => ({
-        //    t: (i+9) + ":00",
-        //    p: 440 + Math.random()*30,
-        //    sc: 40 + Math.random()*50,
-        //    b: 10 + Math.random()*70
-        //}));
-        SIPUSTOCK.renderChart(history);
-    }
+    // 3. 리스트 렌더링 (Status 글자 기준 보정)
+    SIPUSTOCK.DRAWTYPE = function (type) {
+        const _node = document.getElementById('list_stock');
+        if (!_node) return;
+        _node.innerHTML = '';
 
-    //이거 히스토리쪽은 대대적인 수정 필요해
+        const signals = Array.isArray(SIPUSTOCK.DATA) ? SIPUSTOCK.DATA : Object.values(SIPUSTOCK.DATA);
+
+        signals.forEach(s => {
+            const statusText = (s.status || "").toUpperCase(); 
+
+            if (type !== "ALL") {
+                if (type === "HOT" && statusText !== "HOT") return;
+                if (type === "NORMAL" && statusText !== "NORMAL") return;
+                if (type === "COLD" && statusText !== "COLD") return;
+            }
+
+            const score = parseFloat(s.score) || 0;
+            const price = parseFloat(s.p) || 0;
+            const priceColor = s.pc === "green" ? "#28a745" : s.pc === "red" ? "#dc3545" : "#ccc";
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td style="font-weight:bold; color:#fff;">${s.t}</td>
+                <td style="color:${priceColor}; font-family:monospace;">$${price.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+                <td class="text-center">${s.status || '---'}</td>
+                <td class="text-center">${s.sb === true ? "📡" : ""}</td>
+                <td style="font-family:monospace;">${score.toFixed(1)}</td>
+                <th scope="row">
+                    <button type="button" class="btn btn-secondary sharp-btn" 
+                            onclick="SIPUSTOCK.OPEN_MODAL('${s.t}')">
+						<i class="fa-solid fa-arrow-up-right-from-square"></i>
+					</button>
+                </th>
+            `;
+            _node.appendChild(tr);
+        });
+    };
+
+// 4. 모달 상세 보기 보정
+    SIPUSTOCK.OPEN_MODAL = (symbol) => {
+        fetch(`./stock/data/${symbol}.json`)
+            .then(re => re.json())
+            .then(data => {
+                SIPUSTOCK.DETAIL_DATA = data; // 전역에 상세 데이터 저장
+                const signals = Array.isArray(SIPUSTOCK.DATA) ? SIPUSTOCK.DATA : Object.values(SIPUSTOCK.DATA);
+                const s = signals.find(item => item.t === symbol);
+                if (!s) return;
+				
+				// 1. 헤더 정보 및 야후 링크 설정
+                document.getElementById('modal-ticker').innerText = s.t;
+				const yahooBtn = document.getElementById('yahoo-link');
+				if (yahooBtn) {
+					yahooBtn.href = `https://finance.yahoo.com/quote/${s.t}`;
+					yahooBtn.title = `${s.t} Yahoo Finance 바로가기`;
+				}
+                document.getElementById('modal-price').innerText = `$${parseFloat(s.p).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+                document.getElementById('modal-score').innerText = parseFloat(s.score).toFixed(1);
+                
+                document.getElementById('detail-modal').classList.remove('hidden');
+
+                // 2. 순수 소셜/뉴스 피드만 렌더링
+				const feed = document.getElementById('social-feed');
+				if (feed) {
+					feed.innerHTML = '';
+					const allLinks = [...(data.links.news || []), ...(data.links.social || [])];
+					allLinks.forEach(link => {
+						feed.insertAdjacentHTML("beforeend", `
+							<div style="border:1px solid #333; padding:10px; margin-bottom:5px; background:#1a1a1a;">
+								<small style="color:#666; text-transform:uppercase;">${link.platform || 'INFO'}</small>
+								<a href="${link.link || link.url}" target="_blank" style="color:#ccc; display:block; text-decoration:none;">
+									<strong>${link.title}</strong>
+								</a>
+							</div>`);
+					});
+				}
+				
+                // 초기 차트는 recent 데이터로 표시
+                if (data.history && data.history.recent) {
+                    SIPUSTOCK.renderChart(data.history.recent);
+                    // 탭 초기화
+                    document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active', 'bg-[#444]'));
+                    document.querySelector('.period-btn').classList.add('active', 'bg-[#444]');
+                }
+            });
+    };
+
+    // [추가] 기간 변경 함수
+    SIPUSTOCK.CHANGE_PERIOD = function(period) {
+        if (!SIPUSTOCK.DETAIL_DATA || !SIPUSTOCK.DETAIL_DATA.history[period]) return;
+        
+        // 버튼 스타일 변경
+        const btns = document.querySelectorAll('.period-btn');
+        btns.forEach(btn => {
+            btn.classList.remove('active', 'bg-[#444]');
+            if(btn.innerText.toLowerCase() === period) btn.classList.add('active', 'bg-[#444]');
+        });
+
+        SIPUSTOCK.renderChart(SIPUSTOCK.DETAIL_DATA.history[period]);
+    };
+	
+	
+    SIPUSTOCK.closeModal = function() { document.getElementById('detail-modal').classList.add('hidden'); };
+
+    // 5. Chart.js (sc 필드 사용)
     SIPUSTOCK.renderChart = (history) => {
-        const ctx = document.getElementById('historyChart').getContext('2d');
+        const chartEl = document.getElementById('historyChart');
+        if (!chartEl) return;
+        const ctx = chartEl.getContext('2d');
         if (SIPUSTOCK.CHART_OBJ) SIPUSTOCK.CHART_OBJ.destroy();
+		// [보정] 가격(p)과 스코어(sc)가 모두 0보다 큰 유효한 데이터만 추출
+		const validData = history.filter(h => parseFloat(h.p) > 0 && parseFloat(h.sc) > 0);
 
+		if (validData.length === 0) {
+			console.warn("표시할 유효한 데이터가 없습니다.");
+			return;
+		}
+		
         SIPUSTOCK.CHART_OBJ = new Chart(ctx, {
             data: {
-                labels: history.map(h => h.t),
+                labels: validData.map(h => {
+                    const d = new Date(h.t * 1000);
+                    return `${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`;
+                }),
                 datasets: [
-                    { type: 'line', label: 'Market Insight', data: history.map(h => h.sc), borderColor: '#3b82f6', borderWidth: 2, tension: 0.1, yAxisID: 'y', pointRadius: 0 },
-                    { type: 'line', label: 'Price ($)', data: history.map(h => h.p), borderColor: '#10b981', borderWidth: 1, borderDash: [4, 4], yAxisID: 'y1', pointRadius: 0 },
-                    { type: 'bar', label: 'Social Buzz', data: history.map(h => h.b), backgroundColor: 'rgba(255, 255, 255, 0.04)', yAxisID: 'y' }
+                    { type: 'line', data: validData.map(h => parseFloat(h.sc) || 0), borderColor: '#888', borderWidth: 2, pointRadius: 0, tension: 0.2, yAxisID: 'y' },
+                    { type: 'line', data: validData.map(h => parseFloat(h.p) || 0), borderColor: '#444', borderWidth: 1, borderDash: [5, 5], pointRadius: 0, yAxisID: 'y1' }
                 ]
             },
             options: {
-                responsive: true, maintainAspectRatio: false,
-                plugins: { 
-                    legend: { display: true, position: 'bottom', labels: { color: '#64748b', font: { size: 9 }, boxWidth: 8 } } 
-                },
-                scales: { 
-                    x: { grid: { display: false }, ticks: { color: '#475569', font: { size: 8 } } },
-                    y: { position: 'left', min: 0, max: 100, ticks: { color: '#3b82f6', font: { size: 8 } }, grid: { color: 'rgba(255,255,255,0.02)' } },
-                    y1: { position: 'right', ticks: { color: '#10b981', font: { size: 8 }, callback: v => '$' + v.toFixed(0) }, grid: { display: false } }
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { ticks: { color: '#555', font: { size: 10 } }, grid: { display: false } },
+                    y: { position: 'left', ticks: { color: '#777' }, grid: { color: '#222' } },
+                    y1: { position: 'right', grid: { display: false }, ticks: { color: '#444' } }
                 }
             }
         });
-    }
-
-    
-    SIPUSTOCK.GREENSIGN = "🟢";
-    SIPUSTOCK.REDSIGN = "🔴";
-    SIPUSTOCK.NEUTRALSIGN = "⚪";
-    SIPUSTOCK.DRAWTYPE = function (type) {
-        if (!type) {
-            type = "ALL";
-        } 
-        const _node = document.getElementById('list_stock');
-        _node.innerHTML = '';
-
-        let filteredData = SIPUSTOCK.DATA.signals;
-        if (type !== "ALL") {
-            // Implement filtering logic based on type if needed
-            filteredData = SIPUSTOCK.DATA.signals.filter(item => item.type === type);
-        }
-        filteredData.forEach(s => {
-            let news_sign = SIPUSTOCK.NEUTRALSIGN;
-            if (s.nc == "green") {
-                news_sign = SIPUSTOCK.GREENSIGN;
-            } else if (s.nc == "red") {
-                news_sign = SIPUSTOCK.REDSIGN;
-            }
-            let social_sign = SIPUSTOCK.NEUTRALSIGN;
-            if (s.sc == "green") {
-                social_sign = SIPUSTOCK.GREENSIGN;
-            } else if (s.sc == "red") {
-                social_sign = SIPUSTOCK.REDSIGN;
-            }
-            const card = document.createElement('tr');
-            card.innerHTML = `
-                <td>${s.t}</td>
-                <td><span style="color: ${s.nc == "green" ? "green" : s.nc == "red" ? "red" : "gray"};">$${s.p}</span></td>
-                <td>${news_sign + s.sb ? "📡":""}</td>
-                <td>${social_sign + s.ns ? "📰":""}</td>
-                <td>${s.score}</td>
-                <th scope="row"><button value="${s.seq}" type="button" class="btn btn-secondary" onclick="javascript:SIPUSTOCK.OPEN_MODAL('${s.t}');">${s.status}</button></th>
-            `;
-            _node.appendChild(card);
-        });
-        
-                
-        if (type === "ALL") {
-
-            console.log(SIPUSTOCK.DATA);
-        }
-
     };
 
-    SIPUSTOCK.DATA = {};
-    SIPUSTOCK.DATA_LASTUPDATE = 0;
-    SIPUSTOCK.HIGH_POINT = 60;
-    SIPUSTOCK.LOW_POINT = 30;
-
-    SIPUSTOCK.GETNOW = function () {
-        const unixMillis = date.getTime(); // 밀리초 
-        return unixSeconds = Math.floor(unixMillis / 1000); // 초
-    };
-    SIPUSTOCK.LOADDATA = function () {
-        fetch("./stock/data/_overview.json")
-        .then(re=>re.json())     
-        .then(data=>{
-            //console.log(data)
-            SIPUSTOCK.DATA = data;
-            //SIPUSTOCK.DRAWTYPE();
-        });
-    };
-
-    SIPUSTOCK.run = function () {
-        //init();
-        SIPUSTOCK.LOADDATA();
-		
-        //life();
-        //Snail.start();
-    };
+    SIPUSTOCK.run = function () { SIPUSTOCK.LOADDATA(); };
     return SIPUSTOCK;
 })(window.SIPUSTOCK || {}, jQuery);
+
 SIPUSTOCK.run();
