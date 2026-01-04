@@ -9,10 +9,9 @@
     <link rel="icon" type="image/x-icon" href="https://sipubot.github.io/icon/favicon.ico">
     <link rel="shortcut icon" type="image/x-icon" href="https://sipubot.github.io/icon/favicon.ico">    <link href="https://ajax.aspnetcdn.com/ajax/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/app/issue/stylesheets/common.min.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
     /* 버튼 그룹 스타일링 */
@@ -64,18 +63,28 @@
 				</button>
 			</li>
 			<li>
+				<button onclick="SIPUSTOCK.FILTER('DIVERGENCE', this)" class="filter-btn" title="DIVERGENCE">
+					<i class="fa-solid fa-explosion fa-2x"></i>
+				</button>
+			</li>
+			<li>
 				<button onclick="SIPUSTOCK.FILTER('HOT', this)" class="filter-btn" title="HOT">
 					<i class="fa fa-fire fa-2x"></i>
 				</button>
 			</li>
 			<li>
-				<button onclick="SIPUSTOCK.FILTER('NORMAL', this)" class="filter-btn" title="NORMAL">
-					<i class="fa fa-wave-square fa-2x"></i>
+				<button onclick="SIPUSTOCK.FILTER('STABLE', this)" class="filter-btn" title="NORMAL">
+					<i class="fa fa-heart-pulse fa-2x"></i>
 				</button>
 			</li>
 			<li>
 				<button onclick="SIPUSTOCK.FILTER('COLD', this)" class="filter-btn" title="COLD">
-					<i class="fa fa-snowflake fa-2x"></i>
+					<i class="fa fa-cloud-rain fa-2x"></i>
+				</button>
+			</li>
+			<li>
+				<button onclick="SIPUSTOCK.FILTER('FREEZE', this)" class="filter-btn" title="FREEZE">
+					<i class="fa fa-snowman fa-2x"></i>
 				</button>
 			</li>
 		</ul>

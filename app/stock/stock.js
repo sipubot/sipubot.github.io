@@ -39,9 +39,11 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
             const statusText = (s.status || "").toUpperCase(); 
 
             if (type !== "ALL") {
+                if (type === "DIVERGENCE" && statusText !== "DIVERGENCE") return;
                 if (type === "HOT" && statusText !== "HOT") return;
-                if (type === "NORMAL" && statusText !== "NORMAL") return;
+                if (type === "STABLE" && statusText !== "STABLE") return;
                 if (type === "COLD" && statusText !== "COLD") return;
+                if (type === "FREEZE" && statusText !== "FREEZE") return;
             }
 
             const score = parseFloat(s.score) || 0;
