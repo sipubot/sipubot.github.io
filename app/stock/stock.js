@@ -38,14 +38,18 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
         signals.forEach(s => {
             const statusText = (s.status || "").toUpperCase(); 
 
-            if (type !== "ALL") {
-                if (type === "DIVERGENCE" && statusText !== "DIVERGENCE") return;
-                if (type === "HOT" && statusText !== "HOT") return;
-                if (type === "STABLE" && statusText !== "STABLE") return;
-                if (type === "COLD" && statusText !== "COLD") return;
-                if (type === "FREEZE" && statusText !== "FREEZE") return;
-            }
-
+			if (type !== "ALL") {
+				// STABLE 필터를 선택했을 때 NEUTRAL도 함께 보여줌
+				if (type === "STABLE") {
+					if (statusText !== "STABLE" && statusText !== "NEUTRAL") return;
+				} 
+				// 그 외 필터는 정확히 일치할 때만 노출
+				else if (type === "DIVERGENCE" && statusText !== "DIVERGENCE") return;
+				else if (type === "HOT" && statusText !== "HOT") return;
+				else if (type === "COLD" && statusText !== "COLD") return;
+				else if (type === "FREEZE" && statusText !== "FREEZE") return;
+			}
+			
             const score = parseFloat(s.score) || 0;
             const price = parseFloat(s.p) || 0;
             const priceColor = s.pc === "green" ? "#28a745" : s.pc === "red" ? "#dc3545" : "#ccc";
