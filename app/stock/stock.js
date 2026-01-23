@@ -13,7 +13,7 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
                 SIPUSTOCK.DATA = data.signals || data;
                 // 초기 실행 시 ALL 버튼 활성화
                 const allBtn = document.querySelector('.filter-btn');
-                SIPUSTOCK.FILTER("ALL", allBtn);
+                SIPUSTOCK.FILTER("ALL", allBtn); 
             })
             .catch(err => console.error("Data Load Error:", err));
     };
