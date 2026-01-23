@@ -48,17 +48,17 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
 				else if (type === "HOT" && statusText !== "HOT") return;
 				else if (type === "COLD" && statusText !== "COLD") return;
 				else if (type === "FREEZE" && statusText !== "FREEZE") return;
-				else if (type === "HIGH_MOMENTUM" && (parseFloat(s.momentum_score) || 0) < 75) return;
+				else if (type === "HIGH_MOMENTUM" && (parseFloat(s.ms) || 0) < 75) return;
 			}
 
             const score = parseFloat(s.score) || 0;
             const price = parseFloat(s.p) || 0;
             const priceColor = s.pc === "green" ? "#28a745" : s.pc === "red" ? "#dc3545" : "#ccc";
 
-            // ⭐ 스마트 메트릭 활용 (추가된 필드들)
-            const newsTrend = parseFloat(s.news_trend) || 0;
-            const momentumScore = parseFloat(s.momentum_score) || 50;
-            const eventCount = parseInt(s.event_count) || 0;
+            // ⭐ 스마트 메트릭 활용 (압축된 필드명 사용)
+            const newsTrend = parseFloat(s.nt) || 0;
+            const momentumScore = parseFloat(s.ms) || 50;
+            const eventCount = parseInt(s.ec) || 0;
 
             // 📊 STATUS를 의미 있는 아이콘 + 색상으로 변환
             let statusDisplay = '⚪';
@@ -177,12 +177,12 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
                 document.getElementById('modal-price').innerText = `$${parseFloat(s.p).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
                 document.getElementById('modal-score').innerText = parseFloat(s.score).toFixed(1);
 
-                // ⭐ 스마트 메트릭 표시 추가
-                const newsTrend = parseFloat(s.news_trend) || 0;
-                const socialTrend = parseFloat(s.social_trend) || 0;
-                const momentumScore = parseFloat(s.momentum_score) || 50;
-                const eventCount = parseInt(s.event_count) || 0;
-                const topPlatform = s.top_platform || 'unknown';
+                // ⭐ 스마트 메트릭 표시 추가 (압축된 필드명 사용)
+                const newsTrend = parseFloat(s.nt) || 0;
+                const socialTrend = parseFloat(s.st) || 0;
+                const momentumScore = parseFloat(s.ms) || 50;
+                const eventCount = parseInt(s.ec) || 0;
+                const topPlatform = s.tp || 'unknown';
 
                 // 스마트 메트릭 정보 표시 (더 직관적으로 개선)
                 const getTrendIcon = (trend) => {
