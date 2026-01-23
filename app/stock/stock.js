@@ -48,21 +48,59 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
 				else if (type === "HOT" && statusText !== "HOT") return;
 				else if (type === "COLD" && statusText !== "COLD") return;
 				else if (type === "FREEZE" && statusText !== "FREEZE") return;
+				else if (type === "HIGH_MOMENTUM" && (parseFloat(s.momentum_score) || 0) < 75) return;
 			}
 			
             const score = parseFloat(s.score) || 0;
             const price = parseFloat(s.p) || 0;
             const priceColor = s.pc === "green" ? "#28a745" : s.pc === "red" ? "#dc3545" : "#ccc";
 
+            // ⭐ 스마트 메트릭 활용 (추가된 필드들)
+            const newsTrend = parseFloat(s.news_trend) || 0;
+            const momentumScore = parseFloat(s.momentum_score) || 50;
+            const eventCount = parseInt(s.event_count) || 0;
+
+            // 트렌드 기반 직관적 아이콘 (사람이 직관적으로 이해하기 쉽도록)
+            let trendIcon = '⚪'; // 중립
+            let trendColor = '#777';
+            if (newsTrend > 0.3) {
+                trendIcon = '📈'; // 강한 상승
+                trendColor = '#28a745';
+            } else if (newsTrend > 0.1) {
+                trendIcon = '↗️'; // 상승
+                trendColor = '#20c997';
+            } else if (newsTrend < -0.3) {
+                trendIcon = '📉'; // 강한 하락
+                trendColor = '#dc3545';
+            } else if (newsTrend < -0.1) {
+                trendIcon = '↘️'; // 하락
+                trendColor = '#fd7e14';
+            }
+
+            // 모멘텀 점수를 시각적 게이지로 표현
+            const momentumPercent = Math.min(100, Math.max(0, momentumScore));
+            const momentumBar = `<div style="width:40px; height:4px; background:#333; border-radius:2px; overflow:hidden; display:inline-block; margin-left:2px;">
+                <div style="width:${momentumPercent}%; height:100%; background:linear-gradient(90deg, #dc3545 0%, #ffc107 50%, #28a745 100%); border-radius:2px;"></div>
+            </div>`;
+
+            // 이벤트 표시 개선 (불꽃 아이콘으로 더 눈에 띄게)
+            const eventIndicator = eventCount > 0 ? `<i class="fa-solid fa-fire" style="color:#ffd700; margin-left:2px;" title="${eventCount} events"></i>` : '';
+
+            // 모멘텀 기반 강조 (75점 이상은 금색 테두리)
+            const rowStyle = momentumScore > 75 ? 'border-left: 3px solid #ffd700; background: linear-gradient(90deg, rgba(255,215,0,0.05) 0%, transparent 100%);' : '';
+
             const tr = document.createElement('tr');
+            tr.setAttribute('style', rowStyle);
             tr.innerHTML = `
                 <td style="font-weight:bold; color:#fff;">${s.t}</td>
                 <td style="color:${priceColor}; font-family:monospace;">$${price.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
                 <td class="text-center">${s.status || '---'}</td>
                 <td class="text-center">${s.sb === true ? "📡" : ""}</td>
                 <td style="font-family:monospace;">${score.toFixed(1)}</td>
+                <td style="text-align:center; font-size:14px;" title="News trend: ${newsTrend > 0 ? '+' : ''}${newsTrend.toFixed(1)}">${trendIcon}</td>
+                <td style="font-family:monospace; font-size:11px; text-align:center;">${momentumScore.toFixed(0)}${momentumBar}${eventIndicator}</td>
                 <th scope="row">
-                    <button type="button" class="btn btn-secondary sharp-btn" 
+                    <button type="button" class="btn btn-secondary sharp-btn"
                             onclick="SIPUSTOCK.OPEN_MODAL('${s.t}')">
 						<i class="fa-solid fa-arrow-up-right-from-square"></i>
 					</button>
@@ -82,7 +120,7 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
                 const s = signals.find(item => item.t === symbol);
                 if (!s) return;
 				
-				// 1. 헤더 정보 및 야후 링크 설정
+                // 1. 헤더 정보 및 야후 링크 설정
                 document.getElementById('modal-ticker').innerText = s.t;
 				const yahooBtn = document.getElementById('yahoo-link');
 				if (yahooBtn) {
@@ -91,6 +129,70 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
 				}
                 document.getElementById('modal-price').innerText = `$${parseFloat(s.p).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
                 document.getElementById('modal-score').innerText = parseFloat(s.score).toFixed(1);
+
+                // ⭐ 스마트 메트릭 표시 추가
+                const newsTrend = parseFloat(s.news_trend) || 0;
+                const socialTrend = parseFloat(s.social_trend) || 0;
+                const momentumScore = parseFloat(s.momentum_score) || 50;
+                const eventCount = parseInt(s.event_count) || 0;
+                const topPlatform = s.top_platform || 'unknown';
+
+                // 스마트 메트릭 정보 표시 (더 직관적으로 개선)
+                const getTrendIcon = (trend) => {
+                    if (trend > 0.3) return '🚀'; // 강한 상승
+                    if (trend > 0.1) return '📈'; // 상승
+                    if (trend < -0.3) return '📉'; // 강한 하락
+                    if (trend < -0.1) return '📊'; // 하락
+                    return '➡️'; // 중립
+                };
+
+                const metricsHtml = `
+                    <div style="margin-top: 15px; padding: 15px; background: #1a1a1a; border-radius: 8px; border: 1px solid #333;">
+                        <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; text-align: center;">
+                            <div>
+                                <div style="font-size: 20px; margin-bottom: 5px;">${getTrendIcon(newsTrend)}</div>
+                                <small style="color: #888; display: block;">News</small>
+                                <span style="color: ${newsTrend > 0.1 ? '#28a745' : newsTrend < -0.1 ? '#dc3545' : '#777'}; font-weight: bold; font-size: 12px;">
+                                    ${newsTrend > 0 ? '+' : ''}${newsTrend.toFixed(1)}
+                                </span>
+                            </div>
+                            <div>
+                                <div style="font-size: 20px; margin-bottom: 5px;">${getTrendIcon(socialTrend)}</div>
+                                <small style="color: #888; display: block;">Social</small>
+                                <span style="color: ${socialTrend > 0.1 ? '#28a745' : socialTrend < -0.1 ? '#dc3545' : '#777'}; font-weight: bold; font-size: 12px;">
+                                    ${socialTrend > 0 ? '+' : ''}${socialTrend.toFixed(1)}
+                                </span>
+                            </div>
+                            <div>
+                                <div style="font-size: 20px; margin-bottom: 5px;">⚡</div>
+                                <small style="color: #888; display: block;">Momentum</small>
+                                <span style="color: ${momentumScore > 70 ? '#28a745' : momentumScore < 40 ? '#dc3545' : '#ffd700'}; font-weight: bold; font-size: 12px;">
+                                    ${momentumScore.toFixed(0)}
+                                </span>
+                            </div>
+                            <div>
+                                <div style="font-size: 20px; margin-bottom: 5px;">${eventCount > 0 ? '🔥' : '💤'}</div>
+                                <small style="color: #888; display: block;">Events</small>
+                                <span style="color: ${eventCount > 0 ? '#ffd700' : '#777'}; font-weight: bold; font-size: 12px;">
+                                    ${eventCount}
+                                </span>
+                            </div>
+                            <div>
+                                <div style="font-size: 20px; margin-bottom: 5px;">🌐</div>
+                                <small style="color: #888; display: block;">Platform</small>
+                                <span style="color: #ccc; font-weight: bold; font-size: 10px; text-transform: uppercase;">
+                                    ${topPlatform.substring(0, 6)}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // 기존 price/score 정보 영역에 스마트 메트릭 추가
+                const infoRow = document.querySelector('.row.mb-4');
+                if (infoRow) {
+                    infoRow.insertAdjacentHTML('afterend', metricsHtml);
+                }
                 
                 document.getElementById('detail-modal').classList.remove('hidden');
 
