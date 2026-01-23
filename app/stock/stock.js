@@ -36,13 +36,13 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
         const signals = Array.isArray(SIPUSTOCK.DATA) ? SIPUSTOCK.DATA : Object.values(SIPUSTOCK.DATA);
 
         signals.forEach(s => {
-            const statusText = (s.status || "").toUpperCase(); 
+            const statusText = (s.status || "").toUpperCase();
 
 			if (type !== "ALL") {
 				// STABLE 필터를 선택했을 때 NEUTRAL도 함께 보여줌
 				if (type === "STABLE") {
 					if (statusText !== "STABLE" && statusText !== "NEUTRAL") return;
-				} 
+				}
 				// 그 외 필터는 정확히 일치할 때만 노출
 				else if (type === "DIVERGENCE" && statusText !== "DIVERGENCE") return;
 				else if (type === "HOT" && statusText !== "HOT") return;
@@ -50,7 +50,7 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
 				else if (type === "FREEZE" && statusText !== "FREEZE") return;
 				else if (type === "HIGH_MOMENTUM" && (parseFloat(s.momentum_score) || 0) < 75) return;
 			}
-			
+
             const score = parseFloat(s.score) || 0;
             const price = parseFloat(s.p) || 0;
             const priceColor = s.pc === "green" ? "#28a745" : s.pc === "red" ? "#dc3545" : "#ccc";
@@ -59,6 +59,53 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
             const newsTrend = parseFloat(s.news_trend) || 0;
             const momentumScore = parseFloat(s.momentum_score) || 50;
             const eventCount = parseInt(s.event_count) || 0;
+
+            // 📊 STATUS를 의미 있는 아이콘 + 색상으로 변환
+            let statusDisplay = '⚪';
+            let statusColor = '#777';
+            let statusBg = '';
+            if (statusText === "HOT") {
+                statusDisplay = '🔥';
+                statusColor = '#fff';
+                statusBg = 'background: linear-gradient(45deg, #ff6b35, #ff4757); border-radius: 3px; padding: 2px 4px;';
+            } else if (statusText === "DIVERGENCE") {
+                statusDisplay = '⚠️';
+                statusColor = '#fff';
+                statusBg = 'background: linear-gradient(45deg, #ffa726, #fb8c00); border-radius: 3px; padding: 2px 4px;';
+            } else if (statusText === "STABLE") {
+                statusDisplay = '📈';
+                statusColor = '#28a745';
+            } else if (statusText === "COLD") {
+                statusDisplay = '❄️';
+                statusColor = '#17a2b8';
+            } else if (statusText === "FREEZE") {
+                statusDisplay = '🧊';
+                statusColor = '#6c757d';
+            }
+
+            // 📡 SIGNAL을 더 의미 있게 (소셜 활성도 + 이벤트)
+            let signalDisplay = '';
+            if (s.sb === true) {
+                signalDisplay = '📡';
+                if (eventCount > 0) {
+                    signalDisplay += '<sup style="color:#ffd700; font-size:8px;">' + eventCount + '</sup>';
+                }
+            } else if (eventCount > 0) {
+                signalDisplay = '🔔';
+            }
+
+            // 📊 SCORE를 시각적 등급으로 변환
+            let scoreDisplay = score.toFixed(1);
+            let scoreStyle = 'font-family:monospace;';
+            if (score >= 80) {
+                scoreStyle += 'color:#28a745; font-weight:bold; text-shadow: 0 0 3px #28a74540;';
+            } else if (score >= 60) {
+                scoreStyle += 'color:#ffc107; font-weight:bold;';
+            } else if (score >= 40) {
+                scoreStyle += 'color:#fd7e14;';
+            } else {
+                scoreStyle += 'color:#dc3545;';
+            }
 
             // 트렌드 기반 직관적 아이콘 (사람이 직관적으로 이해하기 쉽도록)
             let trendIcon = '⚪'; // 중립
@@ -94,9 +141,9 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
             tr.innerHTML = `
                 <td style="font-weight:bold; color:#fff;">${s.t}</td>
                 <td style="color:${priceColor}; font-family:monospace;">$${price.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
-                <td class="text-center">${s.status || '---'}</td>
-                <td class="text-center">${s.sb === true ? "📡" : ""}</td>
-                <td style="font-family:monospace;">${score.toFixed(1)}</td>
+                <td class="text-center" style="${statusBg}" title="${statusText}"><span style="color:${statusColor};">${statusDisplay}</span></td>
+                <td class="text-center">${signalDisplay}</td>
+                <td style="${scoreStyle}">${scoreDisplay}</td>
                 <td style="text-align:center; font-size:14px;" title="News trend: ${newsTrend > 0 ? '+' : ''}${newsTrend.toFixed(1)}">${trendIcon}</td>
                 <td style="font-family:monospace; font-size:11px; text-align:center;">${momentumScore.toFixed(0)}${momentumBar}${eventIndicator}</td>
                 <th scope="row">
