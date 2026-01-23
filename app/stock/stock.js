@@ -235,10 +235,19 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
                     </div>
                 `;
 
+                // 기존 스마트 메트릭 요소 제거 (중복 방지)
+                const existingMetrics = document.querySelector('.smart-metrics-container');
+                if (existingMetrics) {
+                    existingMetrics.remove();
+                }
+
                 // 기존 price/score 정보 영역에 스마트 메트릭 추가
                 const infoRow = document.querySelector('.row.mb-4');
                 if (infoRow) {
-                    infoRow.insertAdjacentHTML('afterend', metricsHtml);
+                    const metricsDiv = document.createElement('div');
+                    metricsDiv.className = 'smart-metrics-container';
+                    metricsDiv.innerHTML = metricsHtml;
+                    infoRow.insertAdjacentElement('afterend', metricsDiv);
                 }
                 
                 document.getElementById('detail-modal').classList.remove('hidden');
