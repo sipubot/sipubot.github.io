@@ -1,9 +1,40 @@
 var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
     "use strict";
 
+    /* ==========================================
+       SIPUSTOCK 차트 애플리케이션 메인 모듈
+       ========================================== */
+
+    // 전역 변수 정의
     SIPUSTOCK.DATA = {}; 
     SIPUSTOCK.DETAIL_DATA = null;
-    SIPUSTOCK.CHART_OBJ = null;
+    SIPUSTOCK.MAIN_CHART_OBJ = null;
+    SIPUSTOCK.SOCIAL_CHART_OBJ = null;
+
+    // 차트 설정 상수
+    const CHART_CONFIG = {
+        COLORS: {
+            PRICE: '#444',
+            SCORE: '#888',
+            VOLUME_UP: '#28a745',
+            VOLUME_DOWN: '#dc3545',
+            SOCIAL_POSITIVE: '#28a745',
+            SOCIAL_NEGATIVE: '#dc3545',
+            SENTIMENT: '#888'
+        },
+        SIZES: {
+            MAIN_HEIGHT: 200,
+            SOCIAL_HEIGHT: 150,
+            FONT_SIZE: 10
+        },
+        LABELS: {
+            PRICE: 'Price',
+            SCORE: 'Score',
+            VOLUME: 'Volume (%)',
+            SOCIAL_ACTIVITY: 'Social Activity',
+            SENTIMENT: 'Sentiment'
+        }
+    };
 
     // 1. 데이터 로드
     SIPUSTOCK.LOADDATA = function () {
@@ -295,42 +326,326 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
 	
     SIPUSTOCK.closeModal = function() { document.getElementById('detail-modal').classList.add('hidden'); };
 
-    // 5. Chart.js (sc 필드 사용)
+    /**
+     * 차트 렌더링 메인 함수
+     * @param {Array} history - 히스토리 데이터 배열
+     */
     SIPUSTOCK.renderChart = (history) => {
-        const chartEl = document.getElementById('historyChart');
-        if (!chartEl) return;
-        const ctx = chartEl.getContext('2d');
-        if (SIPUSTOCK.CHART_OBJ) SIPUSTOCK.CHART_OBJ.destroy();
-		// [보정] 가격(p)과 스코어(sc)가 모두 0보다 큰 유효한 데이터만 추출
-		const validData = history.filter(h => parseFloat(h.p) > 0 && parseFloat(h.sc) > 0);
+        // 유효성 검사
+        if (!Array.isArray(history) || history.length === 0) {
+            console.warn("히스토리 데이터가 없습니다.");
+            return;
+        }
 
-		if (validData.length === 0) {
-			console.warn("표시할 유효한 데이터가 없습니다.");
-			return;
-		}
-		
-        SIPUSTOCK.CHART_OBJ = new Chart(ctx, {
+        try {
+            // 메인 차트 렌더링
+            SIPUSTOCK.renderMainChart(history);
+            
+            // 소셜 차트 렌더링
+            SIPUSTOCK.renderSocialChart(history);
+        } catch (error) {
+            console.error("차트 렌더링 중 오류 발생:", error);
+        }
+    };
+
+    /**
+     * 메인 차트 렌더링 (가격/스코어 + 거래량)
+     * @param {Array} history - 히스토리 데이터 배열
+     */
+    SIPUSTOCK.renderMainChart = (history) => {
+        const mainChartEl = document.getElementById('mainChart');
+        if (!mainChartEl) return;
+
+        const mainCtx = mainChartEl.getContext('2d');
+        if (SIPUSTOCK.MAIN_CHART_OBJ) {
+            SIPUSTOCK.MAIN_CHART_OBJ.destroy();
+        }
+
+        // 유효한 데이터 필터링
+        const validData = history.filter(h => 
+            parseFloat(h.p) > 0 && parseFloat(h.sc) > 0
+        );
+
+        if (validData.length === 0) {
+            console.warn("메인 차트에 표시할 유효한 데이터가 없습니다.");
+            return;
+        }
+
+        // 데이터 전처리
+        const labels = SIPUSTOCK.formatTimeLabels(validData);
+        const priceData = validData.map(h => parseFloat(h.p) || 0);
+        const scoreData = validData.map(h => parseFloat(h.sc) || 0);
+        const volumeData = SIPUSTOCK.normalizeVolumeData(validData);
+        const priceColors = SIPUSTOCK.getPriceColors(validData);
+
+        // 차트 옵션 설정
+        const chartOptions = SIPUSTOCK.getMainChartOptions();
+
+        SIPUSTOCK.MAIN_CHART_OBJ = new Chart(mainCtx, {
+            type: 'line',
             data: {
-                labels: validData.map(h => {
-                    const d = new Date(h.t * 1000);
-                    return `${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`;
-                }),
+                labels: labels,
                 datasets: [
-                    { type: 'line', data: validData.map(h => parseFloat(h.sc) || 0), borderColor: '#888', borderWidth: 2, pointRadius: 0, tension: 0.2, yAxisID: 'y' },
-                    { type: 'line', data: validData.map(h => parseFloat(h.p) || 0), borderColor: '#444', borderWidth: 1, borderDash: [5, 5], pointRadius: 0, yAxisID: 'y1' }
+                    // 가격 차트
+                    {
+                        label: CHART_CONFIG.LABELS.PRICE,
+                        data: priceData,
+                        borderColor: CHART_CONFIG.COLORS.PRICE,
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        tension: 0.2,
+                        yAxisID: 'y',
+                        fill: false
+                    },
+                    // 스코어 차트
+                    {
+                        label: CHART_CONFIG.LABELS.SCORE,
+                        data: scoreData,
+                        borderColor: CHART_CONFIG.COLORS.SCORE,
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        tension: 0.2,
+                        yAxisID: 'y',
+                        fill: false
+                    },
+                    // 거래량 막대그래프
+                    {
+                        label: CHART_CONFIG.LABELS.VOLUME,
+                        data: volumeData,
+                        backgroundColor: priceColors,
+                        borderColor: priceColors,
+                        borderWidth: 1,
+                        yAxisID: 'y1',
+                        type: 'bar',
+                        order: 0
+                    }
                 ]
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    x: { ticks: { color: '#555', font: { size: 10 } }, grid: { display: false } },
-                    y: { position: 'left', ticks: { color: '#777' }, grid: { color: '#222' } },
-                    y1: { position: 'right', grid: { display: false }, ticks: { color: '#444' } }
+            options: chartOptions
+        });
+    };
+
+    /**
+     * 소셜 차트 렌더링 (소셜 활동 + 감성 분석)
+     * @param {Array} history - 히스토리 데이터 배열
+     */
+    SIPUSTOCK.renderSocialChart = (history) => {
+        const socialChartEl = document.getElementById('socialChart');
+        if (!socialChartEl) return;
+
+        const socialCtx = socialChartEl.getContext('2d');
+        if (SIPUSTOCK.SOCIAL_CHART_OBJ) {
+            SIPUSTOCK.SOCIAL_CHART_OBJ.destroy();
+        }
+
+        // 유효한 데이터 필터링
+        const validData = history.filter(h => 
+            parseFloat(h.b) > 0 || parseFloat(h.s) > 0
+        );
+
+        if (validData.length === 0) {
+            console.warn("소셜 차트에 표시할 유효한 데이터가 없습니다.");
+            return;
+        }
+
+        // 데이터 전처리
+        const labels = SIPUSTOCK.formatTimeLabels(validData);
+        const socialData = validData.map(h => parseFloat(h.b) || 0);
+        const sentimentData = validData.map(h => parseFloat(h.s) || 0);
+        const socialColors = SIPUSTOCK.getSocialColors(validData);
+
+        // 차트 옵션 설정
+        const chartOptions = SIPUSTOCK.getSocialChartOptions();
+
+        SIPUSTOCK.SOCIAL_CHART_OBJ = new Chart(socialCtx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    // 소셜 활동 바 차트
+                    {
+                        label: CHART_CONFIG.LABELS.SOCIAL_ACTIVITY,
+                        data: socialData,
+                        backgroundColor: socialColors,
+                        borderColor: socialColors,
+                        borderWidth: 1,
+                        yAxisID: 'y'
+                    },
+                    // 감성 점수 라인 차트
+                    {
+                        label: CHART_CONFIG.LABELS.SENTIMENT,
+                        data: sentimentData,
+                        borderColor: CHART_CONFIG.COLORS.SENTIMENT,
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        tension: 0.2,
+                        yAxisID: 'y1',
+                        type: 'line',
+                        fill: false
+                    }
+                ]
+            },
+            options: chartOptions
+        });
+    };
+
+    /**
+     * 시간 라벨 포맷팅
+     * @param {Array} data - 데이터 배열
+     * @returns {Array} 포맷팅된 시간 라벨 배열
+     */
+    SIPUSTOCK.formatTimeLabels = (data) => {
+        return data.map(h => {
+            const d = new Date(h.t * 1000);
+            return `${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`;
+        });
+    };
+
+    /**
+     * 거래량 데이터 정규화
+     * @param {Array} data - 원본 데이터 배열
+     * @returns {Array} 정규화된 거래량 배열
+     */
+    SIPUSTOCK.normalizeVolumeData = (data) => {
+        const maxVolume = Math.max(...data.map(h => parseFloat(h.vol) || 0));
+        return data.map(h => {
+            const vol = parseFloat(h.vol) || 0;
+            return maxVolume > 0 ? (vol / maxVolume) * 100 : 0;
+        });
+    };
+
+    /**
+     * 가격 변동에 따른 색상 결정
+     * @param {Array} data - 원본 데이터 배열
+     * @returns {Array} 색상 배열
+     */
+    SIPUSTOCK.getPriceColors = (data) => {
+        return data.map((h, i) => {
+            if (i === 0) return CHART_CONFIG.COLORS.PRICE; // 첫 번째는 기본 색상
+            const prevPrice = parseFloat(data[i-1].p) || 0;
+            const currPrice = parseFloat(h.p) || 0;
+            return currPrice >= prevPrice ? 
+                CHART_CONFIG.COLORS.VOLUME_UP : 
+                CHART_CONFIG.COLORS.VOLUME_DOWN;
+        });
+    };
+
+    /**
+     * 소셜 활동 색상 결정 (감성에 따라)
+     * @param {Array} data - 원본 데이터 배열
+     * @returns {Array} 색상 배열
+     */
+    SIPUSTOCK.getSocialColors = (data) => {
+        return data.map(h => {
+            const sentiment = parseFloat(h.s) || 0;
+            return sentiment >= 0.5 ? 
+                CHART_CONFIG.COLORS.SOCIAL_POSITIVE : 
+                CHART_CONFIG.COLORS.SOCIAL_NEGATIVE;
+        });
+    };
+
+    /**
+     * 메인 차트 옵션 반환
+     * @returns {Object} 차트 옵션 객체
+     */
+    SIPUSTOCK.getMainChartOptions = () => {
+        return {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        color: '#888',
+                        font: { size: CHART_CONFIG.SIZES.FONT_SIZE }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: { 
+                        color: '#555', 
+                        font: { size: CHART_CONFIG.SIZES.FONT_SIZE } 
+                    },
+                    grid: { display: false }
+                },
+                y: {
+                    position: 'left',
+                    ticks: { color: '#777' },
+                    grid: { color: '#222' },
+                    title: {
+                        display: true,
+                        text: 'Price / Score',
+                        color: '#888',
+                        font: { size: CHART_CONFIG.SIZES.FONT_SIZE }
+                    }
+                },
+                y1: {
+                    position: 'right',
+                    ticks: { color: '#777' },
+                    grid: { display: false },
+                    title: {
+                        display: true,
+                        text: 'Volume (%)',
+                        color: '#888',
+                        font: { size: CHART_CONFIG.SIZES.FONT_SIZE }
+                    }
                 }
             }
-        });
+        };
+    };
+
+    /**
+     * 소셜 차트 옵션 반환
+     * @returns {Object} 차트 옵션 객체
+     */
+    SIPUSTOCK.getSocialChartOptions = () => {
+        return {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        color: '#888',
+                        font: { size: CHART_CONFIG.SIZES.FONT_SIZE }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: { 
+                        color: '#555', 
+                        font: { size: CHART_CONFIG.SIZES.FONT_SIZE } 
+                    },
+                    grid: { display: false }
+                },
+                y: {
+                    position: 'left',
+                    ticks: { color: '#777' },
+                    grid: { color: '#222' },
+                    title: {
+                        display: true,
+                        text: 'Social Activity',
+                        color: '#888',
+                        font: { size: CHART_CONFIG.SIZES.FONT_SIZE }
+                    }
+                },
+                y1: {
+                    position: 'right',
+                    ticks: { color: '#777', min: 0, max: 1 },
+                    grid: { display: false },
+                    title: {
+                        display: true,
+                        text: 'Sentiment (0-1)',
+                        color: '#888',
+                        font: { size: CHART_CONFIG.SIZES.FONT_SIZE }
+                    }
+                }
+            }
+        };
     };
 
     SIPUSTOCK.run = function () { SIPUSTOCK.LOADDATA(); };
