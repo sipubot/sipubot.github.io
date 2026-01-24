@@ -14,13 +14,13 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
     // 차트 설정 상수
     const CHART_CONFIG = {
         COLORS: {
-            PRICE: '#444',
-            SCORE: '#888',
+            PRICE: '#28a745',  // 가격 라인 - 녹색 (시각적으로 더 선명)
+            SCORE: '#007bff',  // 스코어 라인 - 파란색 (시각적으로 더 선명)
             VOLUME_UP: '#28a745',
             VOLUME_DOWN: '#dc3545',
             SOCIAL_POSITIVE: '#28a745',
             SOCIAL_NEGATIVE: '#dc3545',
-            SENTIMENT: '#888'
+            SENTIMENT: '#ffc107'  // 감성 라인 - 노란색 (시각적으로 더 선명)
         },
         SIZES: {
             MAIN_HEIGHT: 200,
@@ -490,14 +490,15 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
     };
 
     /**
-     * 시간 라벨 포맷팅
+     * 시간 라벨 포맷팅 (축에 맞게 조정)
      * @param {Array} data - 데이터 배열
      * @returns {Array} 포맷팅된 시간 라벨 배열
      */
     SIPUSTOCK.formatTimeLabels = (data) => {
         return data.map(h => {
             const d = new Date(h.t * 1000);
-            return `${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`;
+            // 날짜가 짤리지 않도록 충분한 길이 확보
+            return `${d.getMonth() + 1}/${d.getDate()} ${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
         });
     };
 

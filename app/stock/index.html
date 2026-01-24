@@ -15,22 +15,17 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
-    /* ==========================================
-       SIPUSTOCK 애플리케이션 스타일
-       ========================================== */
-
-    /* 네비게이션 스타일 */
+    /* 버튼 그룹 스타일링 */
     nav ul { 
         list-style: none; 
         padding: 10px; 
         margin: 0; 
         display: flex; 
-        gap: 5px; 
+        gap: 5px; /* 버튼 사이 간격 */
         border-bottom: 1px solid #333; 
-        background-color: #222;
     }
 
-    /* 필터 버튼 스타일 */
+    /* 초기 디자인 감성을 살린 각진 버튼 */
     .filter-btn {
         background-color: #222;
         color: #777;
@@ -39,58 +34,33 @@
         cursor: pointer;
         font-weight: bold;
         text-transform: uppercase;
-        transition: all 0.2s ease;
-        border-radius: 0;
-        font-size: 12px;
-        min-width: 40px;
-        text-align: center;
+        transition: all 0.2s;
+        border-radius: 0 !important; /* 무조건 각지게 */
+        font-size: 12px !important;
     }
 
+    /* 마우스 올렸을 때 */
     .filter-btn:hover {
         background-color: #333;
         color: #ccc;
     }
 
+    /* 활성화 되었을 때 (클릭 상태) */
     .filter-btn.active {
-        background-color: #444;
-        color: #fff;
+        background-color: #444 !important; /* 좀 더 밝은 그레이 */
+        color: #fff !important;
         border-color: #888;
         box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
     }
 
-    /* 모달 스타일 */
-    #detail-modal {
-        background: rgba(0, 0, 0, 0.9);
-    }
-
-    .modal-content {
-        background: #111;
-        border: 1px solid #333;
-    }
-
-    .modal-header {
-        border-bottom: 1px solid #333;
-        background: #1a1a1a;
-    }
-
-    /* 차트 컨테이너 스타일 */
-    .chart-container {
-        background: #000;
-        border: 1px solid #333;
-        padding: 10px;
-        border-radius: 4px;
-        margin-bottom: 15px;
-    }
-
+    /* 차트 레이블 스타일 */
     .chart-label {
         font-size: 10px;
         color: #888;
         margin-bottom: 5px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
     }
 
+    /* 범례 스타일 */
     .chart-legend {
         display: flex;
         gap: 15px;
@@ -102,54 +72,13 @@
     .legend-item {
         display: flex;
         align-items: center;
-        gap: 8px;
-        padding: 4px 8px;
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 4px;
+        gap: 5px;
     }
 
     .legend-color {
         width: 10px;
         height: 10px;
         border-radius: 2px;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-    }
-
-    /* 테이블 스타일 */
-    .table {
-        border-collapse: separate;
-        border-spacing: 0;
-    }
-
-    .table th {
-        background-color: #222;
-        border-bottom: 1px solid #333;
-        font-weight: 600;
-        font-size: 12px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-
-    .table td {
-        border-top: 1px solid #333;
-        font-size: 13px;
-        vertical-align: middle;
-    }
-
-    .table-striped tbody tr:nth-of-type(odd) {
-        background-color: rgba(255, 255, 255, 0.02);
-    }
-
-    /* 버튼 스타일 */
-    .btn {
-        border-radius: 0;
-        font-weight: bold;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-
-    .sharp-btn {
-        border-radius: 0 !important;
     }
 </style>
 </head>
@@ -236,9 +165,9 @@
 					<button onclick="SIPUSTOCK.CHANGE_PERIOD('month_summary')" class="period-btn text-xs border border-[#444] px-2 py-1 bg-[#222]">MON</button>
 					<button onclick="SIPUSTOCK.CHANGE_PERIOD('year_summary')" class="period-btn text-xs border border-[#444] px-2 py-1 bg-[#222]">YEAR</button>
 				</div>
-                <div class="grid grid-cols-1 gap-4 mb-4">
+                <div class="grid grid-cols-1 gap-6 mb-4">
                     <!-- 상단 차트: 가격/스코어 + 거래량 -->
-                    <div style="height:200px; background:#000; border:1px solid #333; padding:10px;">
+                    <div style="height:200px; background:#000; border:1px solid #333; padding:15px;">
                         <div class="chart-label">가격/스코어 + 거래량</div>
                         <div class="chart-legend">
                             <div class="legend-item"><div class="legend-color" style="background:#444"></div>가격</div>
@@ -248,7 +177,7 @@
                         <canvas id="mainChart"></canvas>
                     </div>
                     <!-- 하단 차트: 소셜 분석 -->
-                    <div style="height:150px; background:#000; border:1px solid #333; padding:10px;">
+                    <div style="height:150px; background:#000; border:1px solid #333; padding:15px;">
                         <div class="chart-label">소셜 활동 + 감성 분석</div>
                         <div class="chart-legend">
                             <div class="legend-item"><div class="legend-color" style="background:#28a745"></div>긍정</div>
@@ -258,7 +187,7 @@
                         <canvas id="socialChart"></canvas>
                     </div>
                 </div>
-                <div id="social-feed"></div>
+                <div id="social-feed" style="font-size: 12px; margin-top: 15px;"></div>
             </div>
         </div>
     </div>
