@@ -301,7 +301,7 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
 				
                 // 초기 차트는 recent 데이터로 표시
                 if (data.history && data.history.recent) {
-                    SIPUSTOCK.renderChart(data.history.recent);
+                    SIPUSTOCK.renderChart(data.history.recent, 'recent');
                     // 탭 초기화
                     document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active', 'bg-[#444]'));
                     document.querySelector('.period-btn').classList.add('active', 'bg-[#444]');
@@ -320,7 +320,7 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
             if(btn.innerText.toLowerCase() === period) btn.classList.add('active', 'bg-[#444]');
         });
 
-        SIPUSTOCK.renderChart(SIPUSTOCK.DETAIL_DATA.history[period]);
+        SIPUSTOCK.renderChart(SIPUSTOCK.DETAIL_DATA.history[period], period);
     };
 	
 	
@@ -329,8 +329,9 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
     /**
      * 차트 렌더링 메인 함수
      * @param {Array} history - 히스토리 데이터 배열
+     * @param {string} period - 기간 (예: "1d", "1w", "1m")
      */
-    SIPUSTOCK.renderChart = (history) => {
+    SIPUSTOCK.renderChart = (history, period) => {
         // 유효성 검사
         if (!Array.isArray(history) || history.length === 0) {
             console.warn("히스토리 데이터가 없습니다.");
@@ -339,7 +340,7 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
 
         try {
             // 메인 차트 렌더링
-            SIPUSTOCK.renderMainChart(history);
+            SIPUSTOCK.renderMainChart(history, period);
             
             // 소셜 차트 렌더링
             SIPUSTOCK.renderSocialChart(history);
@@ -351,8 +352,9 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
     /**
      * 메인 차트 렌더링 (가격/스코어 + 거래량)
      * @param {Array} history - 히스토리 데이터 배열
+     * @param {string} period - 기간 (예: "1d", "1w", "1m")
      */
-    SIPUSTOCK.renderMainChart = (history) => {
+    SIPUSTOCK.renderMainChart = (history, period) => {
         const mainChartEl = document.getElementById('mainChart');
         if (!mainChartEl) return;
 
@@ -379,47 +381,52 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
         const priceColors = SIPUSTOCK.getPriceColors(validData);
 
         // 차트 옵션 설정
-        const chartOptions = SIPUSTOCK.getMainChartOptions();
+        const chartOptions = SIPUSTOCK.getMainChartOptions(period);
+
+        const datasets = [
+            // 가격 차트 (항상 표시)
+            {
+                label: CHART_CONFIG.LABELS.PRICE,
+                data: priceData,
+                borderColor: CHART_CONFIG.COLORS.PRICE,
+                borderWidth: 2,
+                pointRadius: 0,
+                tension: 0.2,
+                yAxisID: 'y',
+                fill: false
+            },
+            // 스코어 차트 (항상 표시)
+            {
+                label: CHART_CONFIG.LABELS.SCORE,
+                data: scoreData,
+                borderColor: CHART_CONFIG.COLORS.SCORE,
+                borderWidth: 2,
+                pointRadius: 0,
+                tension: 0.2,
+                yAxisID: 'y',
+                fill: false
+            }
+        ];
+
+        // 🎯 period가 "recent"가 아닐 때만 거래량 차트 추가
+        if (period !== 'recent') {
+            datasets.push({
+                label: CHART_CONFIG.LABELS.VOLUME,
+                data: volumeData,
+                backgroundColor: priceColors,
+                borderColor: priceColors,
+                borderWidth: 1,
+                yAxisID: 'y1',
+                type: 'bar',
+                order: 0
+            });
+        }
 
         SIPUSTOCK.MAIN_CHART_OBJ = new Chart(mainCtx, {
             type: 'line',
             data: {
                 labels: labels,
-                datasets: [
-                    // 가격 차트
-                    {
-                        label: CHART_CONFIG.LABELS.PRICE,
-                        data: priceData,
-                        borderColor: CHART_CONFIG.COLORS.PRICE,
-                        borderWidth: 2,
-                        pointRadius: 0,
-                        tension: 0.2,
-                        yAxisID: 'y',
-                        fill: false
-                    },
-                    // 스코어 차트
-                    {
-                        label: CHART_CONFIG.LABELS.SCORE,
-                        data: scoreData,
-                        borderColor: CHART_CONFIG.COLORS.SCORE,
-                        borderWidth: 2,
-                        pointRadius: 0,
-                        tension: 0.2,
-                        yAxisID: 'y',
-                        fill: false
-                    },
-                    // 거래량 막대그래프
-                    {
-                        label: CHART_CONFIG.LABELS.VOLUME,
-                        data: volumeData,
-                        backgroundColor: priceColors,
-                        borderColor: priceColors,
-                        borderWidth: 1,
-                        yAxisID: 'y1',
-                        type: 'bar',
-                        order: 0
-                    }
-                ]
+                datasets: datasets 
             },
             options: chartOptions
         });
@@ -549,7 +556,43 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
      * 메인 차트 옵션 반환
      * @returns {Object} 차트 옵션 객체
      */
-    SIPUSTOCK.getMainChartOptions = () => {
+    SIPUSTOCK.getMainChartOptions = (period) => {
+        const scales = {
+            x: {
+                ticks: { 
+                    color: '#555', 
+                    font: { size: CHART_CONFIG.SIZES.FONT_SIZE } 
+                },
+                grid: { display: false }
+            },
+            y: {
+                position: 'left',
+                ticks: { color: '#777' },
+                grid: { color: '#222' },
+                title: {
+                    display: true,
+                    text: 'Price / Score',
+                    color: '#888',
+                    font: { size: CHART_CONFIG.SIZES.FONT_SIZE }
+                }
+            }
+        };
+
+        // 🎯 period가 "recent"가 아닐 때만 거래량 Y축 추가
+        if (period !== 'recent') {
+            scales.y1 = {
+                position: 'right',
+                ticks: { color: '#777' },
+                grid: { display: false },
+                title: {
+                    display: true,
+                    text: 'Volume (%)',
+                    color: '#888',
+                    font: { size: CHART_CONFIG.SIZES.FONT_SIZE }
+                }
+            };
+        }
+
         return {
             responsive: true,
             maintainAspectRatio: false,
@@ -563,37 +606,7 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
                     }
                 }
             },
-            scales: {
-                x: {
-                    ticks: { 
-                        color: '#555', 
-                        font: { size: CHART_CONFIG.SIZES.FONT_SIZE } 
-                    },
-                    grid: { display: false }
-                },
-                y: {
-                    position: 'left',
-                    ticks: { color: '#777' },
-                    grid: { color: '#222' },
-                    title: {
-                        display: true,
-                        text: 'Price / Score',
-                        color: '#888',
-                        font: { size: CHART_CONFIG.SIZES.FONT_SIZE }
-                    }
-                },
-                y1: {
-                    position: 'right',
-                    ticks: { color: '#777' },
-                    grid: { display: false },
-                    title: {
-                        display: true,
-                        text: 'Volume (%)',
-                        color: '#888',
-                        font: { size: CHART_CONFIG.SIZES.FONT_SIZE }
-                    }
-                }
-            }
+            scales: scales 
         };
     };
 
