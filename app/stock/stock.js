@@ -66,6 +66,12 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
 
         const signals = Array.isArray(SIPUSTOCK.DATA) ? SIPUSTOCK.DATA : Object.values(SIPUSTOCK.DATA);
 
+        // 📊 Min-Max 정규화를 위한 score 범위 계산
+        const scores = signals.map(s => parseFloat(s.score) || 0);
+        const minScore = Math.min(...scores);
+        const maxScore = Math.max(...scores);
+        const scoreRange = maxScore - minScore;
+
         signals.forEach(s => {
             const statusText = (s.status || "").toUpperCase();
 
@@ -125,8 +131,8 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
                 signalDisplay = '🔔';
             }
 
-            // 📊 SCORE를 0-100 범위로 변환 (노말라이징)
-            const normalizedScore = Math.min(100, Math.max(0, score * 100));
+            // 📊 SCORE를 Min-Max 정규화로 0-100 범위로 변환
+            const normalizedScore = scoreRange === 0 ? 0 : ((score - minScore) / scoreRange) * 100;
             let scoreDisplay = normalizedScore.toFixed(1);
             let scoreStyle = 'font-family:monospace;';
             if (normalizedScore >= 80) {
