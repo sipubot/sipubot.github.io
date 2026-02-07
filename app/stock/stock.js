@@ -66,12 +66,6 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
 
         const signals = Array.isArray(SIPUSTOCK.DATA) ? SIPUSTOCK.DATA : Object.values(SIPUSTOCK.DATA);
 
-        // 📊 Min-Max 정규화를 위한 score 범위 계산
-        const scores = signals.map(s => parseFloat(s.score) || 0);
-        const minScore = Math.min(...scores);
-        const maxScore = Math.max(...scores);
-        const scoreRange = maxScore - minScore;
-
         signals.forEach(s => {
             const statusText = (s.status || "").toUpperCase();
 
@@ -131,8 +125,8 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
                 signalDisplay = '🔔';
             }
 
-            // 📊 SCORE를 Min-Max 정규화로 0-100 범위로 변환
-            const normalizedScore = scoreRange === 0 ? 0 : ((score - minScore) / scoreRange) * 100;
+            // 📊 SCORE를 0-100 범위로 변환: (score + 1) / 2 * 100
+            const normalizedScore = ((score + 1) / 2) * 100;
             let scoreDisplay = normalizedScore.toFixed(1);
             let scoreStyle = 'font-family:monospace;';
             if (normalizedScore >= 80) {
@@ -181,7 +175,7 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
                 <td style="color:${priceColor}; font-family:monospace;">$${price.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
                 <td class="text-center" style="${statusBg}" title="${statusText}"><span style="color:${statusColor};">${statusDisplay}</span></td>
                 <td class="text-center">${signalDisplay}</td>
-                <td style="${scoreStyle}">${scoreDisplay}</td>
+                <td style="${scoreStyle}">${normalizedScore}</td>
                 <td style="text-align:center; font-size:14px;" title="News trend: ${newsTrend > 0 ? '+' : ''}${newsTrend.toFixed(1)}">${trendIcon}</td>
                 <td style="font-family:monospace; font-size:11px; text-align:center;">${momentumScore.toFixed(0)}${momentumBar}${eventIndicator}</td>
                 <th scope="row">
@@ -213,7 +207,7 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
 					yahooBtn.title = `${s.t} Yahoo Finance 바로가기`;
 				}
                 document.getElementById('modal-price').innerText = `$${parseFloat(s.p).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-                document.getElementById('modal-score').innerText = (parseFloat(s.score) * 100).toFixed(1);
+                document.getElementById('modal-score').innerText = score;
 
                 // ⭐ 스마트 메트릭 표시 추가 (압축된 필드명 사용)
                 const newsTrend = parseFloat(s.nt) || 0;
