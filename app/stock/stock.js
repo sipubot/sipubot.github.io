@@ -125,14 +125,15 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
                 signalDisplay = '🔔';
             }
 
-            // 📊 SCORE를 시각적 등급으로 변환
-            let scoreDisplay = score.toFixed(1);
+            // 📊 SCORE를 0-100 범위로 변환 (노말라이징)
+            const normalizedScore = Math.min(100, Math.max(0, score * 100));
+            let scoreDisplay = normalizedScore.toFixed(1);
             let scoreStyle = 'font-family:monospace;';
-            if (score >= 80) {
+            if (normalizedScore >= 80) {
                 scoreStyle += 'color:#28a745; font-weight:bold; text-shadow: 0 0 3px #28a74540;';
-            } else if (score >= 60) {
+            } else if (normalizedScore >= 60) {
                 scoreStyle += 'color:#ffc107; font-weight:bold;';
-            } else if (score >= 40) {
+            } else if (normalizedScore >= 40) {
                 scoreStyle += 'color:#fd7e14;';
             } else {
                 scoreStyle += 'color:#dc3545;';
@@ -206,14 +207,14 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
 					yahooBtn.title = `${s.t} Yahoo Finance 바로가기`;
 				}
                 document.getElementById('modal-price').innerText = `$${parseFloat(s.p).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-                document.getElementById('modal-score').innerText = parseFloat(s.score).toFixed(1);
+                document.getElementById('modal-score').innerText = (parseFloat(s.score) * 100).toFixed(1);
 
                 // ⭐ 스마트 메트릭 표시 추가 (압축된 필드명 사용)
                 const newsTrend = parseFloat(s.nt) || 0;
                 const socialTrend = parseFloat(s.st) || 0;
                 const momentumScore = parseFloat(s.ms) || 50;
                 const eventCount = parseInt(s.ec) || 0;
-                const topPlatform = s.tp || 'unknown';
+                const topPlatform = 'N/A';
 
                 // 스마트 메트릭 정보 표시 (더 직관적으로 개선)
                 const getTrendIcon = (trend) => {
@@ -226,7 +227,7 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
 
                 const metricsHtml = `
                     <div style="margin-top: 15px; padding: 15px; background: #1a1a1a; border-radius: 8px; border: 1px solid #333;">
-                        <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; text-align: center;">
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; text-align: center;">
                             <div>
                                 <div style="font-size: 20px; margin-bottom: 5px;">${getTrendIcon(newsTrend)}</div>
                                 <small style="color: #888; display: block;">News</small>
@@ -253,13 +254,6 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
                                 <small style="color: #888; display: block;">Events</small>
                                 <span style="color: ${eventCount > 0 ? '#ffd700' : '#777'}; font-weight: bold; font-size: 12px;">
                                     ${eventCount}
-                                </span>
-                            </div>
-                            <div>
-                                <div style="font-size: 20px; margin-bottom: 5px;">🌐</div>
-                                <small style="color: #888; display: block;">Platform</small>
-                                <span style="color: #ccc; font-weight: bold; font-size: 10px; text-transform: uppercase;">
-                                    ${topPlatform.substring(0, 6)}
                                 </span>
                             </div>
                         </div>
@@ -365,7 +359,7 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
 
         // 유효한 데이터 필터링
         const validData = history.filter(h => 
-            parseFloat(h.p) > 0 && parseFloat(h.sc) > 0
+            parseFloat(h.p) > 0
         );
 
         if (validData.length === 0) {
@@ -373,10 +367,10 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
             return;
         }
 
-        // 데이터 전처리
+        // 데이터 전처리 (sc: -1~1 범위를 0~100으로 노말라이징)
         const labels = SIPUSTOCK.formatTimeLabels(validData);
         const priceData = validData.map(h => parseFloat(h.p) || 0);
-        const scoreData = validData.map(h => parseFloat(h.sc) || 0);
+        const scoreData = validData.map(h => ((parseFloat(h.sc) || 0) + 1) / 2 * 100);
         const volumeData = SIPUSTOCK.normalizeVolumeData(validData);
         const priceColors = SIPUSTOCK.getPriceColors(validData);
 
@@ -445,9 +439,9 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
             SIPUSTOCK.SOCIAL_CHART_OBJ.destroy();
         }
 
-        // 유효한 데이터 필터링
+        // 유효한 데이터 필터링 (bi: Buzz Index, s: Sentiment)
         const validData = history.filter(h => 
-            parseFloat(h.b) > 0 || parseFloat(h.s) > 0
+            parseFloat(h.bi) > 0 || parseFloat(h.s) !== 0
         );
 
         if (validData.length === 0) {
@@ -457,8 +451,8 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
 
         // 데이터 전처리
         const labels = SIPUSTOCK.formatTimeLabels(validData);
-        const socialData = validData.map(h => parseFloat(h.b) || 0);
-        const sentimentData = validData.map(h => parseFloat(h.s) || 0);
+        const socialData = validData.map(h => parseFloat(h.bi) || 0);
+        const sentimentData = validData.map(h => ((parseFloat(h.s) || 0) + 1) / 2);
         const socialColors = SIPUSTOCK.getSocialColors(validData);
 
         // 차트 옵션 설정
