@@ -371,10 +371,13 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
             return;
         }
 
-        // 데이터 전처리 (sc: -1~1 범위를 0~100으로 노말라이징)
+        // 데이터 전처리
         const labels = SIPUSTOCK.formatTimeLabels(validData);
         const priceData = validData.map(h => parseFloat(h.p) || 0);
-        const scoreData = validData.map(h => ((parseFloat(h.sc) || 0) + 1) / 2 * 100);
+        
+        // 스코어를 가격 범위에 맞게 스케일링 (추이 비교를 위해)
+        const scoreData = SIPUSTOCK.scaleScoreToPriceRange(validData);
+        
         const volumeData = SIPUSTOCK.normalizeVolumeData(validData);
         const priceColors = SIPUSTOCK.getPriceColors(validData);
 
@@ -391,7 +394,8 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
                 pointRadius: 0,
                 tension: 0.2,
                 yAxisID: 'y',
-                fill: false
+                fill: false,
+                clip: false
             },
             // 스코어 차트 (항상 표시)
             {
@@ -402,7 +406,8 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
                 pointRadius: 0,
                 tension: 0.2,
                 yAxisID: 'y',
-                fill: false
+                fill: false,
+                clip: false
             }
         ];
 
@@ -477,7 +482,8 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
                         pointRadius: 0,
                         tension: 0.2,
                         yAxisID: 'y',
-                        fill: false
+                        fill: false,
+                        clip: false
                     },
                     // 감성 점수 바 차트
                     {
@@ -487,7 +493,8 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
                         borderColor: socialColors,
                         borderWidth: 1,
                         yAxisID: 'y1',
-                        type: 'bar'
+                        type: 'bar',
+                        clip: false
                     }
                 ]
             },
@@ -558,6 +565,27 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
     };
 
     /**
+     * 스코어를 가격 범위에 맞게 스케일링
+     * @param {Array} data - 원본 데이터 배열
+     * @returns {Array} 스케일링된 스코어 배열
+     */
+    SIPUSTOCK.scaleScoreToPriceRange = (data) => {
+        const prices = data.map(h => parseFloat(h.p) || 0);
+        const minPrice = Math.min(...prices);
+        const maxPrice = Math.max(...prices);
+        const priceRange = maxPrice - minPrice;
+        
+        // 가격 범위가 너무 좁으면 기본 범위 사용
+        const effectiveRange = priceRange < 1 ? 1 : priceRange;
+        
+        return data.map(h => {
+            const score = ((parseFloat(h.sc) || 0) + 1) / 2; // 0~1 범위로 정규화
+            // 스코어를 가격 범위에 매핑 (minPrice ~ maxPrice)
+            return minPrice + (score * effectiveRange);
+        });
+    };
+
+    /**
      * 메인 차트 옵션 반환
      * @returns {Object} 차트 옵션 객체
      */
@@ -566,7 +594,10 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
             x: {
                 ticks: { 
                     color: '#555', 
-                    font: { size: CHART_CONFIG.SIZES.FONT_SIZE } 
+                    font: { size: CHART_CONFIG.SIZES.FONT_SIZE },
+                    maxRotation: 0,
+                    autoSkip: true,
+                    maxTicksLimit: 6
                 },
                 grid: { display: false }
             },
@@ -603,22 +634,15 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
             maintainAspectRatio: false,
             layout: {
                 padding: {
-                    top: 10,
-                    right: 10,
-                    bottom: 5,
+                    top: 15,
+                    right: 15,
+                    bottom: 50,
                     left: 5
                 }
             },
             plugins: {
                 legend: {
-                    display: true,
-                    position: 'top',
-                    labels: {
-                        color: '#888',
-                        font: { size: CHART_CONFIG.SIZES.FONT_SIZE },
-                        boxWidth: 10,
-                        boxHeight: 10
-                    }
+                    display: true
                 }
             },
             scales: scales 
@@ -633,6 +657,14 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
         return {
             responsive: true,
             maintainAspectRatio: false,
+            layout: {
+                padding: {
+                    top: 10,
+                    right: 10,
+                    bottom: 50,
+                    left: 5
+                }
+            },
             plugins: {
                 legend: {
                     display: true,
@@ -647,7 +679,10 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
                 x: {
                     ticks: { 
                         color: '#555', 
-                        font: { size: CHART_CONFIG.SIZES.FONT_SIZE } 
+                        font: { size: CHART_CONFIG.SIZES.FONT_SIZE },
+                        maxRotation: 0,
+                        autoSkip: true,
+                        maxTicksLimit: 6
                     },
                     grid: { display: false }
                 },
