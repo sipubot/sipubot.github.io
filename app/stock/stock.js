@@ -295,12 +295,14 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
 					});
 				}
 				
-                // 초기 차트는 recent 데이터로 표시
+                // 🎯 모달이 표시된 후 차트 렌더링 (setTimeout으로 레이아웃 확정 후 실행)
                 if (data.history && data.history.recent) {
-                    SIPUSTOCK.renderChart(data.history.recent, 'recent');
-                    // 탭 초기화
-                    document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active', 'bg-[#444]'));
-                    document.querySelector('.period-btn').classList.add('active', 'bg-[#444]');
+                    setTimeout(() => {
+                        SIPUSTOCK.renderChart(data.history.recent, 'recent');
+                        // 탭 초기화
+                        document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active', 'bg-[#444]'));
+                        document.querySelector('.period-btn').classList.add('active', 'bg-[#444]');
+                    }, 100);
                 }
             });
     };
@@ -384,7 +386,7 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
             {
                 label: CHART_CONFIG.LABELS.PRICE,
                 data: priceData,
-                borderColor: CHART_CONFIG.COLORS.PRICE,
+                borderColor: '#ffffff',  // 흰색으로 변경
                 borderWidth: 2,
                 pointRadius: 0,
                 tension: 0.2,
@@ -461,30 +463,31 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
         const chartOptions = SIPUSTOCK.getSocialChartOptions();
 
         SIPUSTOCK.SOCIAL_CHART_OBJ = new Chart(socialCtx, {
-            type: 'bar',
+            type: 'line',
             data: {
                 labels: labels,
                 datasets: [
-                    // 소셜 활동 바 차트
+                    // 소셜 활동 라인 차트
                     {
                         label: CHART_CONFIG.LABELS.SOCIAL_ACTIVITY,
                         data: socialData,
-                        backgroundColor: socialColors,
-                        borderColor: socialColors,
-                        borderWidth: 1,
-                        yAxisID: 'y'
-                    },
-                    // 감성 점수 라인 차트
-                    {
-                        label: CHART_CONFIG.LABELS.SENTIMENT,
-                        data: sentimentData,
-                        borderColor: CHART_CONFIG.COLORS.SENTIMENT,
+                        borderColor: '#ffc107',
+                        backgroundColor: '#ffc107',
                         borderWidth: 2,
                         pointRadius: 0,
                         tension: 0.2,
-                        yAxisID: 'y1',
-                        type: 'line',
+                        yAxisID: 'y',
                         fill: false
+                    },
+                    // 감성 점수 바 차트
+                    {
+                        label: CHART_CONFIG.LABELS.SENTIMENT,
+                        data: sentimentData,
+                        backgroundColor: socialColors,
+                        borderColor: socialColors,
+                        borderWidth: 1,
+                        yAxisID: 'y1',
+                        type: 'bar'
                     }
                 ]
             },
@@ -541,10 +544,16 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
      */
     SIPUSTOCK.getSocialColors = (data) => {
         return data.map(h => {
-            const sentiment = parseFloat(h.s) || 0;
-            return sentiment >= 0.5 ? 
-                CHART_CONFIG.COLORS.SOCIAL_POSITIVE : 
-                CHART_CONFIG.COLORS.SOCIAL_NEGATIVE;
+            // s 값은 0~1 범위로 정규화 (-1~1 → 0~1)
+            const sentiment = ((parseFloat(h.s) || 0) + 1) / 2;
+            // 0.5를 기준으로 긍정/부정 구분
+            if (sentiment > 0.5) {
+                return '#28a745'; // 긍정 - 녹색
+            } else if (sentiment < 0.5) {
+                return '#dc3545'; // 부정 - 빨간색
+            } else {
+                return '#6c757d'; // 중립 - 회색
+            }
         });
     };
 
@@ -592,13 +601,23 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
         return {
             responsive: true,
             maintainAspectRatio: false,
+            layout: {
+                padding: {
+                    top: 10,
+                    right: 10,
+                    bottom: 5,
+                    left: 5
+                }
+            },
             plugins: {
                 legend: {
                     display: true,
                     position: 'top',
                     labels: {
                         color: '#888',
-                        font: { size: CHART_CONFIG.SIZES.FONT_SIZE }
+                        font: { size: CHART_CONFIG.SIZES.FONT_SIZE },
+                        boxWidth: 10,
+                        boxHeight: 10
                     }
                 }
             },
@@ -644,8 +663,14 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
                     }
                 },
                 y1: {
+                    type: 'linear',
                     position: 'right',
-                    ticks: { color: '#777', min: 0, max: 1 },
+                    min: 0,
+                    max: 1,
+                    ticks: { 
+                        color: '#777',
+                        stepSize: 0.5
+                    },
                     grid: { display: false },
                     title: {
                         display: true,
