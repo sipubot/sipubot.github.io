@@ -168,25 +168,11 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
             // 모멘텀 기반 강조 (75점 이상은 금색 테두리)
             const rowStyle = momentumScore > 75 ? 'border-left: 3px solid #ffd700; background: linear-gradient(90deg, rgba(255,215,0,0.05) 0%, transparent 100%);' : '';
 
-            // 🔥 ATR 변동성 인디케이터
-            const atrInfo = s.atr_info || {};
-            const volState = atrInfo.volatility_state || 'Normal';
-            let volIcon = '😴'; // Low
-            let volColor = '#28a745';
-            let volTitle = 'Low Volatility';
-            if (volState === 'Normal') {
-                volIcon = '⚠️';
-                volColor = '#ffc107';
-                volTitle = 'Normal Volatility';
-            } else if (volState === 'High') {
-                volIcon = '🔥';
-                volColor = '#fd7e14';
-                volTitle = 'High Volatility';
-            } else if (volState === 'Extreme') {
-                volIcon = '⚡️';
-                volColor = '#dc3545';
-                volTitle = 'Extreme Volatility';
-            }
+            // 🔥 ATR 변동성 인디케이터 (단순화: atr_score 기반으로 판단)
+            // 참고: overview.json에는 atr_info가 없으므로 상세 페이지에서만 표시
+            let volIcon = '⚪';
+            let volColor = '#777';
+            let volTitle = 'ATR Info in Detail';
 
             const tr = document.createElement('tr');
             tr.setAttribute('style', rowStyle);
@@ -198,7 +184,7 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
                 <td style="${scoreStyle}">${scoreDisplay}</td>
                 <td style="text-align:center; font-size:14px;" title="News trend: ${newsTrend > 0 ? '+' : ''}${newsTrend.toFixed(1)}">${trendIcon}</td>
                 <td style="font-family:monospace; font-size:11px; text-align:center;">${momentumScore.toFixed(0)}${momentumBar}${eventIndicator}</td>
-                <td class="text-center" style="cursor:help;" title="${volTitle} - ATR: ${(atrInfo.atr_14d || 0).toFixed(2)}"><span style="font-size:16px; filter: drop-shadow(0 0 2px ${volColor});">${volIcon}</span></td>
+                <td class="text-center" style="cursor:help;" title="${volTitle}"><span style="font-size:16px; filter: drop-shadow(0 0 2px ${volColor});">${volIcon}</span></td>
                 <th scope="row">
                     <button type="button" class="btn btn-secondary sharp-btn"
                             onclick="SIPUSTOCK.OPEN_MODAL('${s.t}')">
@@ -248,26 +234,9 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
                     return '➡️'; // 중립
                 };
 
-                // 🔥 ATR 정보 추출
-                const atrInfo = s.atr_info || {};
-                const atr14d = atrInfo.atr_14d || 0;
-                const volState = atrInfo.volatility_state || 'Normal';
-                const stopLoss = atrInfo.suggested_stop_loss || 0;
-                const target = atrInfo.suggested_target || 0;
-
-                // 변동성 상태에 따른 스타일
-                let volBadgeColor = '#28a745'; // Low
-                let volBadgeBg = 'rgba(40,167,69,0.2)';
-                if (volState === 'Normal') {
-                    volBadgeColor = '#ffc107';
-                    volBadgeBg = 'rgba(255,193,7,0.2)';
-                } else if (volState === 'High') {
-                    volBadgeColor = '#fd7e14';
-                    volBadgeBg = 'rgba(253,126,20,0.2)';
-                } else if (volState === 'Extreme') {
-                    volBadgeColor = '#dc3545';
-                    volBadgeBg = 'rgba(220,53,69,0.2)';
-                }
+                // 🔥 ATR 정보 추출 (단순화: atr_score만 사용)
+                const atrInfo = data.atr_info || {};
+                const atrScore = atrInfo.atr_14d || 0;
 
                 const metricsHtml = `
                     <div style="margin-top: 15px; padding: 15px; background: #1a1a1a; border-radius: 8px; border: 1px solid #333;">
@@ -303,28 +272,12 @@ var SIPUSTOCK = (function (SIPUSTOCK, $, undefined) {
                         </div>
                     </div>
                     
-                    <!-- 🔥 ATR 위젯 -->
-                    ${atr14d > 0 ? `
-                    <div style="margin-top: 10px; padding: 12px; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); border-radius: 8px; border: 1px solid ${volBadgeColor};">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                            <span style="color: #888; font-size: 12px;">📊 Volatility (ATR 14D)</span>
-                            <span style="padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; background: ${volBadgeBg}; color: ${volBadgeColor}; border: 1px solid ${volBadgeColor};">
-                                ${volState.toUpperCase()}
-                            </span>
-                        </div>
-                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; text-align: center;">
-                            <div>
-                                <small style="color: #666; display: block; font-size: 10px;">ATR Value</small>
-                                <span style="color: #fff; font-weight: bold; font-size: 14px; font-family: monospace;">$${atr14d.toFixed(2)}</span>
-                            </div>
-                            <div>
-                                <small style="color: #dc3545; display: block; font-size: 10px;">🛑 Stop Loss</small>
-                                <span style="color: #dc3545; font-weight: bold; font-size: 12px; font-family: monospace;">$${stopLoss.toFixed(2)}</span>
-                            </div>
-                            <div>
-                                <small style="color: #28a745; display: block; font-size: 10px;">🎯 Target</small>
-                                <span style="color: #28a745; font-weight: bold; font-size: 12px; font-family: monospace;">$${target.toFixed(2)}</span>
-                            </div>
+                    <!-- 🔥 ATR 위젯 (단순화) -->
+                    ${atrScore > 0 ? `
+                    <div style="margin-top: 10px; padding: 12px; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); border-radius: 8px; border: 1px solid #ffc107;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="color: #888; font-size: 12px;">📊 ATR Score (TradeScore 10%)</span>
+                            <span style="color: #fff; font-weight: bold; font-size: 14px; font-family: monospace;">${atrScore.toFixed(2)}</span>
                         </div>
                     </div>
                     ` : ''}
