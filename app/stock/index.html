@@ -370,6 +370,66 @@
               ></canvas>
             </div>
 
+            <!-- ⭐ v1.6.0: 재무 지표 레이더 차트 -->
+            <div
+              id="financial-metrics-container"
+              style="
+                height: 200px;
+                background: #000;
+                border: 1px solid #333;
+                padding: 10px 10px 5px 10px;
+                position: relative;
+                margin-bottom: 12px;
+                display: none;
+                overflow: hidden;
+              "
+            >
+              <div class="chart-label">재무 건전성 지표 (PER/PBR/PSR/ROE/부채/유동)</div>
+              <div style="position: relative; height: 165px; width: 100%;">
+                <canvas id="financialRadar"></canvas>
+              </div>
+            </div>
+
+            <!-- ⭐ v1.6.0: 기업가치 괴리율 게이지 -->
+            <div
+              id="valuation-container"
+              style="
+                height: 90px;
+                background: #000;
+                border: 1px solid #333;
+                padding: 8px 10px 5px 10px;
+                position: relative;
+                margin-bottom: 12px;
+                display: none;
+                overflow: hidden;
+              "
+            >
+              <div class="chart-label">적정가 대비 괴리율 (DCF 기반)</div>
+              <div style="position: relative; height: 60px; width: 100%;">
+                <canvas id="valuationGauge"></canvas>
+              </div>
+            </div>
+
+            <!-- ⭐ v1.6.0: 스코어 브레이크다운 -->
+            <div
+              id="score-breakdown-container"
+              style="
+                height: 140px;
+                background: #000;
+                border: 1px solid #333;
+                padding: 8px 10px 5px 10px;
+                position: relative;
+                margin-bottom: 12px;
+                display: none;
+                overflow: hidden;
+              "
+            >
+              <div class="chart-label">통합 스코어링 (기술30%/재무20%/뉴스20%/소셜30%)</div>
+              <div style="position: relative; height: 110px; width: 100%;">
+                <canvas id="scoreBreakdown"></canvas>
+              </div>
+            </div>
+
             <div
               id="social-feed"
               style="font-size: 12px; margin-top: 15px"
