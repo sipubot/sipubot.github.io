@@ -31,9 +31,6 @@ const STATE = {
     detailData: null,
     mainChartObj: null,
     socialChartObj: null,
-    // ⭐ v1.6.0: 새로운 차트 객체들
-    financialRadarObj: null,
-    valuationGaugeObj: null,
     scoreBreakdownObj: null
 };
 
@@ -74,151 +71,7 @@ class StockChart {
         this.renderSocialChart(history);
     }
 
-    // ⭐ v1.6.0: 재무 지표 레이더 차트
-    static renderFinancialRadar(financial) {
-        const ctx = document.getElementById('financialRadar')?.getContext('2d');
-        if (!ctx || !financial) return;
-        if (STATE.financialRadarObj) STATE.financialRadarObj.destroy();
-
-        // 재무 지표 정규화 (0-100 스케일)
-        const normalize = (value, good, bad, inverse = false) => {
-            if (!value || value === 0) return 50;
-            let score;
-            if (inverse) {
-                // 낮을수록 좋은 지표 (PER, PBR, 부채비율)
-                score = ((bad - value) / (bad - good)) * 100;
-            } else {
-                // 높을수록 좋은 지표 (ROE, 유동비율)
-                score = ((value - bad) / (good - bad)) * 100;
-            }
-            return Math.max(0, Math.min(100, score));
-        };
-
-        const data = {
-            labels: ['PER', 'PBR', 'PSR', 'ROE', '부채비율', '유동비율'],
-            datasets: [{
-                label: '재무건전성',
-                data: [
-                    normalize(financial.pe_ratio, 15, 30, true),      // PER: 낮을수록 좋음
-                    normalize(financial.pb_ratio, 1.5, 3, true),      // PBR: 낮을수록 좋음
-                    normalize(financial.ps_ratio, 2, 5, true),        // PSR: 낮을수록 좋음
-                    normalize(financial.roe, 5, 20, false),           // ROE: 높을수록 좋음
-                    normalize(financial.debt_ratio, 200, 50, true),   // 부채비율: 낮을수록 좋음
-                    normalize(financial.current_ratio, 100, 200, false) // 유동비율: 높을수록 좋음
-                ],
-                backgroundColor: 'rgba(40, 167, 69, 0.2)',
-                borderColor: '#28a745',
-                borderWidth: 2,
-                pointBackgroundColor: '#28a745',
-                pointBorderColor: '#fff',
-                pointRadius: 4
-            }]
-        };
-
-        STATE.financialRadarObj = new Chart(ctx, {
-            type: 'radar',
-            data: data,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: {
-                            label: (ctx) => {
-                                const labels = ['PER', 'PBR', 'PSR', 'ROE', '부채비율', '유동비율'];
-                                const raw = [financial.pe_ratio, financial.pb_ratio, financial.ps_ratio, financial.roe, financial.debt_ratio, financial.current_ratio];
-                                return `${labels[ctx.dataIndex]}: ${raw[ctx.dataIndex]?.toFixed(2) || 'N/A'}`;
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    r: {
-                        min: 0,
-                        max: 100,
-                        ticks: { display: false },
-                        pointLabels: {
-                            color: '#ccc',
-                            font: { size: 11 }
-                        },
-                        grid: { color: '#333' },
-                        angleLines: { color: '#444' }
-                    }
-                }
-            }
-        });
-    }
-
-    // ⭐ v1.6.0: 기업가치 괴리율 게이지 차트
-    static renderValuationGauge(valuation) {
-        const ctx = document.getElementById('valuationGauge')?.getContext('2d');
-        if (!ctx || !valuation) return;
-        if (STATE.valuationGaugeObj) STATE.valuationGaugeObj.destroy();
-
-        const upside = parseFloat(valuation.upside_potential) || 0;
-        const grade = valuation.grade || 'C';
-        const gradeColors = { 'A': '#28a745', 'B': '#6bcf7f', 'C': '#ffc107', 'D': '#fd7e14', 'F': '#dc3545' };
-        const color = gradeColors[grade] || '#ffc107';
-
-        STATE.valuationGaugeObj = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['적정가 대비 괴리율'],
-                datasets: [{
-                    data: [Math.max(-30, Math.min(50, upside))],
-                    backgroundColor: upside > 0 ? '#28a745' : '#dc3545',
-                    borderWidth: 0,
-                    barThickness: 30
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                indexAxis: 'y',
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: {
-                            label: () => `적정가: $${valuation.fair_value?.toFixed(2) || 'N/A'} / 현재가: $${valuation.current_price?.toFixed(2) || 'N/A'}`
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        min: -30,
-                        max: 50,
-                        ticks: {
-                            color: '#888',
-                            callback: (v) => v + '%'
-                        },
-                        grid: { color: '#333' }
-                    },
-                    y: { display: false }
-                }
-            },
-            plugins: [{
-                id: 'centerLabel',
-                afterDraw: (chart) => {
-                    const { ctx, chartArea } = chart;
-                    const centerX = chartArea.left + (chartArea.right - chartArea.left) / 2;
-                    const centerY = chartArea.top + (chartArea.bottom - chartArea.top) / 2;
-                    ctx.save();
-                    ctx.font = 'bold 14px Arial';
-                    ctx.fillStyle = color;
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.fillText(`${upside > 0 ? '+' : ''}${upside.toFixed(1)}%`, centerX, centerY);
-                    ctx.font = '12px Arial';
-                    ctx.fillStyle = '#888';
-                    ctx.fillText(`등급 ${grade}`, centerX, centerY + 20);
-                    ctx.restore();
-                }
-            }]
-        });
-    }
-
-    // ⭐ v1.6.0: 스코어 브레이크다운 도넛 차트
+    // 스코어 브레이크다운 도넛 차트
     static renderScoreBreakdown(breakdown) {
         const ctx = document.getElementById('scoreBreakdown')?.getContext('2d');
         if (!ctx || !breakdown) return;
@@ -226,17 +79,16 @@ class StockChart {
 
         // 점수가 0보다 큰 데이터만 필터링 (최소값 0.001로 표시)
         const rawData = [
-            { label: '기술', score: breakdown.technical?.score || 0, weight: breakdown.technical?.weight || 0.3 },
-            { label: '재무', score: breakdown.financial?.score || 0, weight: breakdown.financial?.weight || 0.2 },
-            { label: '뉴스', score: breakdown.news?.score || 0, weight: breakdown.news?.weight || 0.2 },
-            { label: '소셜', score: breakdown.social?.score || 0, weight: breakdown.social?.weight || 0.3 }
+            { label: '기술', score: breakdown.technical?.score || 0, weight: breakdown.technical?.weight || 0.35 },
+            { label: '뉴스', score: breakdown.news?.score || 0, weight: breakdown.news?.weight || 0.30 },
+            { label: '소셜', score: breakdown.social?.score || 0, weight: breakdown.social?.weight || 0.35 }
         ];
 
-        // 0~100 스케일로 변환하고 최소값 보장
+        // 스케일 변환: -1~1 → 0~100, 범위를 넓게 확장 (±30% 여유)
         const data = rawData.map(d => ({
             label: d.label,
-            // -1~1 → 0~100 변환, 최소 5%는 표시
-            value: Math.max(5, ((d.score + 1) / 2) * 100),
+            // -1~1 → -30~130 범위로 확장하여 차이를 더 크게 표시
+            value: ((d.score + 1) / 2) * 160 - 30,
             rawScore: d.score,
             weight: d.weight
         }));
@@ -247,7 +99,7 @@ class StockChart {
                 labels: data.map(d => `${d.label} (${(d.weight * 100).toFixed(0)}%)`),
                 datasets: [{
                     data: data.map(d => d.value),
-                    backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545'],
+                    backgroundColor: ['#007bff', '#ffc107', '#dc3545'],
                     borderWidth: 0
                 }]
             },
@@ -468,27 +320,7 @@ class StockUI {
             });
         }
 
-        // ⭐ v1.6.0: 재무/기업가치/스코어 브레이크다운 차트 렌더링
-        const financialContainer = document.getElementById('financial-metrics-container');
-        if (financialContainer) {
-            financialContainer.style.display = data.financial ? 'block' : 'none';
-            if (data.financial) {
-                setTimeout(() => {
-                    StockChart.renderFinancialRadar(data.financial);
-                }, 100);
-            }
-        }
-
-        const valuationContainer = document.getElementById('valuation-container');
-        if (valuationContainer) {
-            valuationContainer.style.display = data.valuation ? 'block' : 'none';
-            if (data.valuation) {
-                setTimeout(() => {
-                    StockChart.renderValuationGauge(data.valuation);
-                }, 150);
-            }
-        }
-
+        // 스코어 브레이크다운 차트 렌더링
         const scoreBreakdownContainer = document.getElementById('score-breakdown-container');
         if (scoreBreakdownContainer) {
             scoreBreakdownContainer.style.display = data.score_breakdown ? 'block' : 'none';
