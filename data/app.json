@@ -2,6 +2,7 @@
     {"href":"/app/budget","imageurl":"/icon/menu-app-budget.png","picon":"💰"}
     ,{"href":"/app/diet","imageurl":"/icon/menu-app-diet.png","picon":"🍺"}
     ,{"href":"/app/stock","imageurl":"/icon/menu-app-stock.png","picon":"💰"}
+    ,{"href":"/app/helper","imageurl":"/icon/menu-app-helper.png","picon":"🔧"}
     ,{"href":"/app/JS-asmrcanvas","imageurl":"/icon/bookmark.png","picon":"🎮"}
     ,{"href":"/app/JS-CodeInvaders","imageurl":"/icon/menu-app-invader.png","picon":"🎮"}
 ]

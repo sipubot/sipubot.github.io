@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>표 데이터 변환기</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+
+        .converter-box {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+
+        .input-section, .output-section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 400px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            resize: vertical;
+            transition: border-color 0.2s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        .button-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding-top: 30px;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-convert {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-convert:hover {
+            background: #45a049;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(76,175,80,0.3);
+        }
+
+        .btn-copy {
+            background: #2196F3;
+            color: white;
+        }
+
+        .btn-copy:hover {
+            background: #1976D2;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(33,150,243,0.3);
+        }
+
+        .btn-clear {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-clear:hover {
+            background: #d32f2f;
+        }
+
+        .status {
+            text-align: center;
+            padding: 8px;
+            font-size: 12px;
+            color: #666;
+            min-height: 30px;
+        }
+
+        .status.success {
+            color: #4CAF50;
+            font-weight: 600;
+        }
+
+        .status.error {
+            color: #f44336;
+        }
+
+        .options {
+            background: white;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .option-row {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .option-item label {
+            font-size: 13px;
+            color: #555;
+        }
+
+        .option-item input[type="text"],
+        .option-item select {
+            padding: 6px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .option-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 900px) {
+            .converter-box {
+                grid-template-columns: 1fr;
+            }
+
+            .button-section {
+                flex-direction: row;
+                justify-content: center;
+                padding-top: 0;
+            }
+
+            textarea {
+                min-height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 표 데이터 변환기</h1>
+
+        <div class="options">
+            <div class="option-row">
+                <div class="option-item">
+                    <label>입력 구분자:</label>
+                    <select id="inputDelimiter">
+                        <option value="auto">자동 감지</option>
+                        <option value="\t">탭 (Tab)</option>
+                        <option value=",">쉼표 (,)</option>
+                        <option value=" ">공백</option>
+                        <option value="|">파이프 (|)</option>
+                    </select>
+                </div>
+                <div class="option-item">
+                    <label>출력 구분자:</label>
+                    <select id="outputDelimiter">
+                        <option value="\t">탭 (Tab)</option>
+                        <option value=",">쉼표 (,)</option>
+                        <option value="|">파이프 (|)</option>
+                        <option value="  ">두 칸 공백</option>
+                        <option value="custom">직접 입력</option>
+                    </select>
+                    <input type="text" id="customDelimiter" placeholder="구분자 입력" style="display:none; width:80px;">
+                </div>
+                <div class="option-item">
+                    <input type="checkbox" id="autoConvert" checked>
+                    <label for="autoConvert">자동 변환</label>
+                </div>
+                <div class="option-item">
+                    <input type="checkbox" id="trimSpaces" checked>
+                    <label for="trimSpaces">공백 제거</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="converter-box">
+            <div class="input-section">
+                <div class="section-title">
+                    <span>입력 데이터</span>
+                    <span style="font-size:12px; color:#999;">웹페이지 표를 복사해서 붙여넣기</span>
+                </div>
+                <textarea id="inputText" placeholder="여기에 표 데이터를 붙여넣으세요...
+예시:
+이름    나이    직업
+홍길동   30     개발자
+김철수   25     디자이너"></textarea>
+            </div>
+
+            <div class="button-section">
+                <button class="btn-convert" onclick="convert('IBKR')">IBKR 변환 ↓</button>
+                <button class="btn-convert" onclick="convert('CHSC')">CHSC 변환 ↓</button>
+                <button class="btn-copy" onclick="copyOutput()">복사 📋</button>
+                <button class="btn-clear" onclick="clearAll()">지우기 ✕</button>
+                <div class="status" id="status"></div>
+            </div>
+
+            <div class="output-section">
+                <div class="section-title">
+                    <span>변환 결과</span>
+                    <span style="font-size:12px; color:#999;">결과가 여기에 표시됩니다</span>
+                </div>
+                <textarea id="outputText" readonly placeholder="변환된 결과가 여기에 표시됩니다..."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
