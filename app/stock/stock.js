@@ -141,6 +141,10 @@ class StockChart {
 
         const validData = history.filter(h => parseFloat(h.p) > 0);
         const labels = validData.map(h => {
+            // 월별/연별 데이터는 t가 문자열 ("2024-03", "2024"), 일별은 숫자(timestamp)
+            if (typeof h.t === 'string') {
+                return h.t; // "2024-03" 또는 "2024" 형식 그대로 사용
+            }
             const d = new Date(h.t * 1000);
             return `${d.getMonth() + 1}/${d.getDate()} ${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
         });
@@ -182,6 +186,10 @@ class StockChart {
 
         const validData = history.filter(h => parseFloat(h.bi) > 0 || parseFloat(h.s) !== 0);
         const labels = validData.map(h => {
+            // 월별/연별 데이터는 t가 문자열 ("2024-03", "2024"), 일별은 숫자(timestamp)
+            if (typeof h.t === 'string') {
+                return h.t; // "2024-03" 또는 "2024" 형식 그대로 사용
+            }
             const d = new Date(h.t * 1000);
             return `${d.getMonth() + 1}/${d.getDate()} ${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
         });
