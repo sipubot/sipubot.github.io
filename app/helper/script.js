@@ -39,17 +39,17 @@ function customTransform(type, rows, inputDelimiter, outputDelimiter) {
         if (type === 'IBKR') {
             // IBKR 특정 변환 로직
             //ticker, quantity, price, currency, total, fee 등 필요한 필드 추출 및 재배치
-            ticker = row[4].split(' ').join(''); // 예시에서는 4번째 열이 "Buy SOXL" 형태
-            quantity = Math.abs(+row[5]); // 무조건 양수
-            total = +(row[7].replace(',', '')); // 예시에서는 9번째 열이 "-371.70" 형태
-            fee = Math.abs(+row[8]).toFixed(2); // 무조건 양수 소수점 2자리
+            ticker = row[4].split(' ').join('').trim(); // 예시에서는 4번째 열이 "Buy SOXL" 형태
+            quantity = Math.abs(+row[5].trim()); // 무조건 양수
+            total = (row[7].replace(',', '')).trim(); // 예시에서는 9번째 열이 "-371.70" 형태
+            fee = Math.abs(+row[8].trim()).toFixed(2); // 무조건 양수 소수점 2자리
 
         } else if (type === 'CHSC') {
             // CHSC 특정 변환 로직
             //2003/6/26, 오후 8:56:34	TRD	BOT +10 SOXL @52.60	$0.00	$0.00	-$526.00	$19,715.20
-            ticker = row[2].split(' ')[2]; // 예시에서는 3번째 열이 "BOT +10 SOXL @52.60" 형태
-            quantity = Math.abs(+row[2].split(' ')[1]); // "+10"에서 수량 추출
-            total = +(row[5].split('$')[1].replace(',', '')); // 예시에서는 6번째 열이 총액
+            ticker = row[2].split(' ')[2].trim(); // 예시에서는 3번째 열이 "BOT +10 SOXL @52.60" 형태
+            quantity = Math.abs(+row[2].split(' ')[1].trim()); // "+10"에서 수량 추출
+            total = (row[5].split('$').join('')).trim(); // 예시에서는 6번째 열이 총액
             fee = 0;
         }
 
@@ -58,8 +58,9 @@ function customTransform(type, rows, inputDelimiter, outputDelimiter) {
         //SOXL  7.00        -371.70         Math.round(fee, 2)
 
         //매수일때 토탈이 음수면 매수이니
-        if (total < 0){
-            return [ticker,quantity,'',Math.abs(total), '', fee].join(actualDelimiter);
+		console.log(total, actualDelimiter);
+        if (total < 0 ){
+            return [ticker, quantity,'',Math.abs(total), '', fee].join(actualDelimiter);
         } else {
             return [ticker,'', quantity , '', Math.abs(total), fee].join(actualDelimiter);
         }
