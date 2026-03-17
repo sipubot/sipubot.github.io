@@ -526,6 +526,10 @@ var SIPUCOMMON = (function (SIPUCOMMON, $, undefined) {
                     JOB_WK.TAXGET.ADD_URL = `/budget/tax/${UI_WK.getNodeValue(DATANODES.ACCOUNT.selecttax)}/${UI_WK.getNodeValue(DATANODES.TAXGET.date).slice(0, 4)}`;
                     RQ_WK(JOB_WK.TAXGET);
                 });
+                UI_WK.setEvent(DATANODES.EARNGET.submit, () => {
+                    JOB_WK.TAXGET.ADD_URL = `/budget/earn/${UI_WK.getNodeValue(DATANODES.ACCOUNT.selecttax)}/${UI_WK.getNodeValue(DATANODES.TAXGET.date).slice(0, 4)}`;
+                    RQ_WK(JOB_WK.TAXGET);
+                });
             }
         },
         ORGACCOUNT: {
