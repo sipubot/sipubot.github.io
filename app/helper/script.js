@@ -26,7 +26,7 @@ function customTransform(type, rows, inputDelimiter, outputDelimiter) {
     
     //ibkr 예시 
     //2026-03-03 	U***45252 	DIREXION DAILY SEMI BULL 3X 	Buy 	SOXL 	7.00 	53.1000  USD 	-371.70 	0.01 	-371.69 
-    
+    //2026-04-07 	U***45252 	SGOV(US46436E7186) Cash Dividend USD 0.292689 per Share (Ordinary Dividend) 	Dividend 	SGOV 	- 	- 	87.81 	- 	87.81
     return rows.map(row => {
         if (!Array.isArray(row)) return '';
         
@@ -35,6 +35,8 @@ function customTransform(type, rows, inputDelimiter, outputDelimiter) {
         let quantity = '';
         let total = '';
         let fee = '';
+        let dividend = ''; 
+        let isDividend = false;
 
         if (type === 'IBKR') {
             // IBKR 특정 변환 로직
@@ -43,10 +45,19 @@ function customTransform(type, rows, inputDelimiter, outputDelimiter) {
             quantity = Math.abs(+row[5].trim()); // 무조건 양수
             total = (row[7].replace(',', '')).trim(); // 예시에서는 9번째 열이 "-371.70" 형태
             fee = Math.abs(+row[8].trim()).toFixed(2); // 무조건 양수 소수점 2자리
+            if (row[3].trim() === 'Dividend') {
+                dividend = (row[9].replace(',', '')).trim(); // 예시에서는 10번째 열이 "-87.81" 형태
+                total = ''; // 배당인 경우 매매 관련 데이터셋팅 안함
+                fee = '';
+                quantity = '';
+                isDividend = true;
+            }
 
         } else if (type === 'CHSC') {
             // CHSC 특정 변환 로직
             //2003/6/26, 오후 8:56:34	TRD	BOT +10 SOXL @52.60	$0.00	$0.00	-$526.00	$19,715.20
+            //4/10/26, 10:49:19 PM	TRD	BOT +4 SMCZ @37.00	$0.00	$0.00	-$148.00	$33,204.53
+
             ticker = row[2].split(' ')[2].trim(); // 예시에서는 3번째 열이 "BOT +10 SOXL @52.60" 형태
             quantity = Math.abs(+row[2].split(' ')[1].trim()); // "+10"에서 수량 추출
             total = (row[5].split('$').join('')).trim(); // 예시에서는 6번째 열이 총액
@@ -59,12 +70,14 @@ function customTransform(type, rows, inputDelimiter, outputDelimiter) {
 
         //매수일때 토탈이 음수면 매수이니
 		console.log(total, actualDelimiter);
-        if (total < 0 ){
-            return [ticker, quantity,'',Math.abs(total), '', fee].join(actualDelimiter);
+        if (isDividend) {
+            return [ticker, '', '', '', '', '', dividend].join(actualDelimiter);
+        } else if (total < 0 ) {
+            return [ticker, quantity,'',Math.abs(total), '', fee, ''].join(actualDelimiter);
         } else {
-            return [ticker,'', quantity , '', Math.abs(total), fee].join(actualDelimiter);
+            return [ticker,'', quantity , '', Math.abs(total), fee, ''].join(actualDelimiter);
         }
-    }).join('\n');
+    }).reverse().join('\n');
 
 
     // ===== 커스텀 변환 예시들 =====
