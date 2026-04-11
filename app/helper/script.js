@@ -45,7 +45,7 @@ function customTransform(type, rows, inputDelimiter, outputDelimiter) {
             quantity = Math.abs(+row[5].trim()); // 무조건 양수
             total = (row[7].replace(',', '')).trim(); // 예시에서는 9번째 열이 "-371.70" 형태
             fee = Math.abs(+row[8].trim()).toFixed(2); // 무조건 양수 소수점 2자리
-            if (row[3].trim() === 'Dividend') {
+            if (row[2].includes('Dividend')) {
                 dividend = (row[9].replace(',', '')).trim(); // 예시에서는 10번째 열이 "-87.81" 형태
                 total = ''; // 배당인 경우 매매 관련 데이터셋팅 안함
                 fee = '';
