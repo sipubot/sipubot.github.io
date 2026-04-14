@@ -60,7 +60,7 @@ function customTransform(type, rows, inputDelimiter, outputDelimiter) {
 
             ticker = row[2].split(' ')[2].trim(); // 예시에서는 3번째 열이 "BOT +10 SOXL @52.60" 형태
             quantity = Math.abs(+row[2].split(' ')[1].trim()); // "+10"에서 수량 추출
-            total = (row[5].split('$').join('')).trim(); // 예시에서는 6번째 열이 총액
+            total = (row[5].split('$').join('').split(',').join('')).trim(); // 예시에서는 6번째 열이 총액
             fee = 0;
         }
 
@@ -73,7 +73,7 @@ function customTransform(type, rows, inputDelimiter, outputDelimiter) {
         if (isDividend) {
             return [ticker, '', '', '', '', '', dividend].join(actualDelimiter);
         } else if (total < 0 ) {
-            return [ticker, quantity,'',Math.abs(total), '', fee, ''].join(actualDelimiter);
+            return [ticker, quantity,'', Math.abs(total), '', fee, '', ''].join(actualDelimiter);
         } else {
             return [ticker,'', quantity , '', Math.abs(total), fee, ''].join(actualDelimiter);
         }
