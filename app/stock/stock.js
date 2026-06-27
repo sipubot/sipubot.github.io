@@ -34,19 +34,6 @@ const STATE = {
     scoreBreakdownObj: null
 };
 
-function normalizeScoreToPercent(value) {
-    const numeric = Number(value);
-    if (!Number.isFinite(numeric)) return 50;
-
-    if (numeric >= -1 && numeric <= 1) {
-        return ((numeric + 1) / 2) * 100;
-    }
-    if (numeric >= 0 && numeric <= 100) {
-        return numeric;
-    }
-    return Math.max(0, Math.min(100, numeric));
-}
-
 // ------------------------------------------
 // 1. Data Service
 // ------------------------------------------
@@ -78,6 +65,14 @@ class StockData {
 // 2. Chart Service
 // ------------------------------------------
 class StockChart {
+    static normalizeToPercent(rawScore) {
+        const score = Number(rawScore);
+        if (!Number.isFinite(score)) return 0;
+
+        // Score domain is fixed to -1..1 across the backend pipeline.
+        return Math.max(0, Math.min(100, ((score + 1) / 2) * 100));
+    }
+
     static renderChart(history, period) {
         if (!Array.isArray(history) || history.length === 0) return;
         this.renderMainChart(history, period);
@@ -91,16 +86,16 @@ class StockChart {
         if (STATE.scoreBreakdownObj) STATE.scoreBreakdownObj.destroy();
 
         const rawData = [
-            { label: '기술', score: breakdown.technical?.score ?? 0, scorePercent: breakdown.technical?.score_percent, weight: breakdown.technical?.weight || 0.35 },
-            { label: '뉴스', score: breakdown.news?.score ?? 0, scorePercent: breakdown.news?.score_percent, weight: breakdown.news?.weight || 0.30 },
-            { label: '소셜', score: breakdown.social?.score ?? 0, scorePercent: breakdown.social?.score_percent, weight: breakdown.social?.weight || 0.35 }
+            { label: '기술', score: breakdown.technical?.score || 0, weight: breakdown.technical?.weight || 0.35 },
+            { label: '뉴스', score: breakdown.news?.score || 0, weight: breakdown.news?.weight || 0.30 },
+            { label: '소셜', score: breakdown.social?.score || 0, weight: breakdown.social?.weight || 0.35 }
         ];
 
+        // 스케일 변환: 입력 도메인(-1~1 또는 0~1)을 0~100으로 정규화
         const data = rawData.map(d => ({
             label: d.label,
-            value: Math.max(1, Math.min(100, normalizeScoreToPercent(d.scorePercent ?? d.score))),
+            value: this.normalizeToPercent(d.score),
             rawScore: d.score,
-            scorePercent: normalizeScoreToPercent(d.scorePercent ?? d.score),
             weight: d.weight
         }));
 
@@ -135,7 +130,8 @@ class StockChart {
                         callbacks: {
                             label: (ctx) => {
                                 const d = data[ctx.dataIndex];
-                                return `${d.label}: ${d.scorePercent.toFixed(1)}점 (가중치 ${(d.weight * 100).toFixed(0)}%)`;
+                                const scorePercent = StockChart.normalizeToPercent(d.rawScore).toFixed(1);
+                                return `${d.label}: ${scorePercent}점 (가중치 ${(d.weight * 100).toFixed(0)}%)`;
                             }
                         }
                     }
@@ -281,7 +277,7 @@ class StockUI {
             if (parseFloat(s.ms) > 75) tr.style.cssText = 'border-left: 3px solid #ffd700; background: rgba(255,215,0,0.05);';
             
             const pc = s.pc === "green" ? "#28a745" : s.pc === "red" ? "#dc3545" : "#ccc";
-            const score = normalizeScoreToPercent(parseFloat(s.score) || 0);
+            const score = (((parseFloat(s.score) || 0) + 1) / 2) * 100;
             const scoreColor = score >= 80 ? "#28a745" : score >= 60 ? "#ffc107" : score >= 40 ? "#fd7e14" : "#dc3545";
             const nt = parseFloat(s.nt) || 0;
             const momentum = Math.min(100, Math.max(0, parseFloat(s.ms) || 50));
@@ -329,7 +325,7 @@ class StockUI {
         if (yahooBtn) yahooBtn.href = `https://finance.yahoo.com/quote/${symbol}`;
 
         document.getElementById('modal-price').innerText = `$${(parseFloat(s?.p)||0).toLocaleString(undefined, {minimumFractionDigits:2})}`;
-        document.getElementById('modal-score').innerText = normalizeScoreToPercent(parseFloat(s?.score)||0).toFixed(1);
+        document.getElementById('modal-score').innerText = ((((parseFloat(s?.score)||0)+1)/2)*100).toFixed(1);
         
         const feed = document.getElementById('social-feed');
         if (feed) {
@@ -338,6 +334,7 @@ class StockUI {
                 feed.insertAdjacentHTML('beforeend', `<div style="border:1px solid #333; padding:5px; margin-bottom:5px; background:#1a1a1a;"><small style="color:#666;">${l.platform||'INFO'}</small><a href="${l.link||l.url}" target="_blank" style="color:#ccc; display:block; text-decoration:none; font-size:12px;">${l.title}</a></div>`);
             });
         }
+
         // 스코어 브레이크다운 차트 렌더링
         const scoreBreakdownContainer = document.getElementById('score-breakdown-container');
         if (scoreBreakdownContainer) {
@@ -369,9 +366,9 @@ class StockUI {
         if (history?.length > 0) {
             const latest = history[history.length - 1];
             StockChart.renderScoreBreakdown({
-                technical: { score: parseFloat(latest.ps) || 0, score_percent: normalizeScoreToPercent(parseFloat(latest.ps) || 0), weight: 0.35 },
-                news:      { score: parseFloat(latest.ns) || 0, score_percent: normalizeScoreToPercent(parseFloat(latest.ns) || 0), weight: 0.30 },
-                social:    { score: parseFloat(latest.ss) || 0, score_percent: normalizeScoreToPercent(parseFloat(latest.ss) || 0), weight: 0.35 }
+                technical: { score: parseFloat(latest.ps) || 0, weight: 0.35 },
+                news:      { score: parseFloat(latest.ns) || 0, weight: 0.30 },
+                social:    { score: parseFloat(latest.ss) || 0, weight: 0.35 }
             });
         }
     }
