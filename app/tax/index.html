@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>해외주식 세금신고</title>
+    <meta name="viewport" content="width=device-width">
+    <link rel="icon" type="image/png" href="https://sipubot.github.io/icon/favicon.ico">
+    <link href="https://ajax.aspnetcdn.com/ajax/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/app/tax/stylesheets/common.min.css">
+    <style>
+        section { max-width: 1400px; }
+        header nav ul { display: flex; flex-wrap: nowrap; padding: 0; font-size: 0.9rem; }
+        body { overflow-x: hidden; }
+        .filter-bar { display: flex; align-items: center; gap: 0.4rem; flex-wrap: nowrap; }
+        input[type="month"] { min-width: 130px; }
+        .paste-area {
+            border: 2px dashed #555; padding: 0.5rem; margin-top: 0.4rem;
+            color: #666; font-size: 0.75rem; min-height: 40px;
+            cursor: text; border-radius: 4px; outline: none;
+        }
+        .paste-area:focus { border-color: #888; }
+        .paste-area:empty::before { content: attr(data-placeholder); color: #555; pointer-events: none; }
+        .pnl-pos { color: #4caf50; font-weight: 600; }
+        .pnl-neg { color: #f44336; font-weight: 600; }
+        .row-buy     { background: rgba(76,175,80,0.08)  !important; }
+        .row-sell    { background: rgba(244,67,54,0.08)  !important; }
+        .row-div     { background: rgba(33,150,243,0.08) !important; }
+        .row-matched { opacity: 0.55; }
+        .row-new td  { background: rgba(255,193,7,0.08)  !important; }
+        .selected-row td { outline: 2px solid #5b9cf6; }
+        .subtab-link { cursor: pointer; font-size: 0.78rem; padding: 0.15rem 0.55rem; }
+        .sub-panel { display: none; }
+        .sub-panel.active { display: block; }
+        .subtab-link { font-size: 1.0rem; padding: 0.15rem 0.55rem; margin-bottom: 0.3rem; }
+    </style>
+</head>
+
+<body>
+<div class="header-container">
+    <header class="wrapper clearfix">
+        <nav>
+            <ul>
+                <li><a href="#input"     title="입력"><i class="fas fa-pen fa-2x"></i></a></li>
+                <li><a href="#match"     title="매칭"><i class="fas fa-link fa-2x"></i></a></li>
+                <li><a href="#taxout"    title="세금산출"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></li>
+                <li><a href="#portfolio" title="포트폴리오"><i class="fas fa-chart-line fa-2x"></i></a></li>
+                <li><a href="#set"       title="설정"><i class="fas fa-cog fa-2x"></i></a></li>
+            </ul>
+        </nav>
+    </header>
+</div>
+
+<div class="main-container">
+<div class="main wrapper clearfix">
+
+<!-- ════════════════════════════════════════════════════════════
+     입력 탭
+     ════════════════════════════════════════════════════════════ -->
+<section id="input">
+    <header class="wrapper clearfix">
+        <div>
+            <span class="btn btn-outline-light btn-sm subtab-link badge badge-primary active-subtab" data-sub="sub-rates">환율</span>
+            <span class="btn btn-outline-light btn-sm subtab-link badge badge-secondary" data-sub="sub-trade">거래</span>
+            <span class="btn btn-outline-light btn-sm subtab-link badge badge-secondary" data-sub="sub-div">배당</span>
+            <span class="btn btn-outline-light btn-sm subtab-link badge badge-secondary" data-sub="sub-acctx">이체</span>
+        </div>
+    </header>
+
+    <div class="section clearfix">
+
+        <!-- ── 거래 (sub-trade) ── -->
+        <div id="sub-trade" class="sub-panel">
+            <div class="filter-bar mb-2">
+                <select data-node="TRADES-accselect" class="form-control form-control-sm w-auto bg-dark text-light border-secondary" title="계좌">
+                    <option value="">전체</option>
+                </select>
+                <input data-node="TRADES-month" type="month" class="form-control form-control-sm w-auto bg-dark text-light border-secondary">
+                <select data-node="TRADES-ticker" class="form-control form-control-sm w-auto bg-dark text-light border-secondary" placeholder="티커">
+                    <option value="">전체</option>
+                </select>
+                <button data-node="TRADES-loadbtn" type="button" class="btn btn-outline-light btn-sm">조회</button>
+                <button data-node="TRADE-addbtn"   type="button" class="btn btn-outline-secondary btn-sm">+ 행추가</button>
+            </div>
+            <div data-node="TRADE-pastezone" class="paste-area mb-2" contenteditable="true" tabindex="0"
+                 data-placeholder="엑셀 붙여넣기: 계좌  티커  날짜  매수수량  매도수량  매수액  매도액  수수료"></div>
+            <div class="table-responsive">
+                <table class="table table-sm table-striped table-dark">
+                    <thead><tr>
+                        <th>ID</th><th>계좌</th><th>티커</th><th>날짜</th>
+                        <th class="text-right">매수수량</th><th class="text-right">매도수량</th>
+                        <th class="text-right">매수액</th><th class="text-right">매도액</th>
+                        <th class="text-right">수수료</th><th>매칭</th><th></th>
+                    </tr></thead>
+                    <tbody data-node="TRADE-tbody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ── 배당 (sub-div) ── -->
+        <div id="sub-div" class="sub-panel">
+            <div class="filter-bar mb-2">
+                <select data-node="DIV-accselect" class="form-control form-control-sm w-auto bg-dark text-light border-secondary" title="계좌">
+                    <option value="">전체</option>
+                </select>
+                <input data-node="DIV-month" type="month" class="form-control form-control-sm w-auto bg-dark text-light border-secondary">
+                <select data-node="DIV-ticker" class="form-control form-control-sm w-auto bg-dark text-light border-secondary" placeholder="티커">
+                    <option value="">전체</option>
+                </select>
+                <button data-node="DIV-loadbtn" type="button" class="btn btn-outline-light btn-sm">조회</button>
+                <button data-node="DIV-addbtn"  type="button" class="btn btn-outline-secondary btn-sm">+ 행추가</button>
+            </div>
+            <div data-node="DIV-pastezone" class="paste-area mb-2" contenteditable="true" tabindex="0"
+                 data-placeholder="엑셀 붙여넣기: 계좌  티커  날짜  배당금액  배당세금"></div>
+            <div class="table-responsive">
+                <table class="table table-sm table-striped table-dark">
+                    <thead><tr>
+                        <th>ID</th><th>계좌</th><th>티커</th><th>날짜</th>
+                        <th class="text-right">배당(세전)</th><th class="text-right">배당세금</th>
+                        <th class="text-right">순배당</th><th></th>
+                    </tr></thead>
+                    <tbody data-node="DIV-tbody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ── 환율 (sub-rates) ── -->
+        <div id="sub-rates" class="sub-panel active">
+            <div class="filter-bar mb-2">
+                <input data-node="RATES-month" type="month" class="form-control form-control-sm w-auto bg-dark text-light border-secondary" title="환율 월 필터">
+                <button data-node="RATES-loadbtn" type="button" class="btn btn-outline-light btn-sm">조회</button>
+                <button data-node="RATES-addbtn"  type="button" class="btn btn-outline-secondary btn-sm">+ 행추가</button>
+            </div>
+            <div data-node="RATES-pastezone" class="paste-area mb-2" contenteditable="true" tabindex="0"
+                 data-placeholder="엑셀 붙여넣기: yyyy-mm-dd [TAB] 환율"></div>
+            <div class="table-responsive">
+                <table class="table table-sm table-striped table-dark">
+                    <thead><tr><th>날짜</th><th class="text-right">환율 (KRW/USD)</th><th></th></tr></thead>
+                    <tbody data-node="RATES-tbody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ── 이체 (sub-acctx) ── -->
+        <div id="sub-acctx" class="sub-panel">
+            <div class="filter-bar mb-2">
+                <select data-node="ACCTX-accselect" class="form-control form-control-sm w-auto bg-dark text-light border-secondary" title="계좌"></select>
+                <input data-node="ACCTX-month" type="month" class="form-control form-control-sm w-auto bg-dark text-light border-secondary" title="이체 월 필터">
+                <button data-node="ACCTX-loadbtn" type="button" class="btn btn-outline-light btn-sm">조회</button>
+                <button data-node="ACCTX-addbtn"  type="button" class="btn btn-outline-secondary btn-sm">+ 행추가</button>
+            </div>
+            <div data-node="ACCTX-pastezone" class="paste-area mb-2" contenteditable="true" tabindex="0"
+                 data-placeholder="엑셀 붙여넣기: 날짜  유형(예수금/이자/기타)  금액  메모"></div>
+            <div class="table-responsive">
+                <table class="table table-sm table-striped table-dark">
+                    <thead><tr>
+                        <th>ID</th><th>날짜</th><th>유형</th>
+                        <th class="text-right">금액</th><th>메모</th><th></th>
+                    </tr></thead>
+                    <tbody data-node="ACCTX-tbody"></tbody>
+                </table>
+            </div>
+        </div>
+
+    </div><!-- .section -->
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     매칭 탭
+     ════════════════════════════════════════════════════════════ -->
+<section id="match">
+    <header class="wrapper clearfix">
+        <div class="filter-bar">
+            <label class="mb-0 mr-1">계좌:
+                <select data-node="MATCH-accselect" class="form-control form-control-sm d-inline-block w-auto bg-dark text-light border-secondary"></select>
+            </label>
+            <label class="mb-0 mr-1">티커:
+                <select data-node="MATCH-tickerselect" class="form-control form-control-sm d-inline-block w-auto bg-dark text-light border-secondary">
+                    <option value="">-- 선택 --</option>
+                </select>
+            </label>
+            <button data-node="MATCH-loadbtn" type="button" class="btn btn-outline-light btn-sm">조회</button>
+        </div>
+    </header>
+    <div class="section clearfix">
+        <h6 class="text-muted mb-1">매도 목록 (미매칭)</h6>
+        <div style="max-height:160px;overflow-y:auto;border:1px solid #555;border-radius:4px;margin-bottom:0.5rem">
+            <table class="table table-sm table-dark table-bordered mb-0">
+                <thead style="position:sticky;top:0;z-index:1">
+                    <tr><th></th><th>ID</th><th>날짜</th><th class="text-right">수량</th><th class="text-right">매도액</th><th class="text-right">수수료</th></tr>
+                </thead>
+                <tbody data-node="MATCH-selltbody"></tbody>
+            </table>
+        </div>
+        <div class="d-flex align-items-center mb-2" style="gap:0.75rem">
+            <button data-node="MATCH-dobtn" type="button" class="btn btn-primary btn-sm" disabled>매칭 실행</button>
+            <span data-node="MATCH-info" class="text-muted small"></span>
+        </div>
+        <h6 class="text-muted mb-1">매수 목록 (미매칭) — 복수 선택 가능</h6>
+        <div style="max-height:200px;overflow-y:auto;border:1px solid #555;border-radius:4px;margin-bottom:0.75rem">
+            <table class="table table-sm table-dark table-bordered mb-0">
+                <thead style="position:sticky;top:0;z-index:1">
+                    <tr><th></th><th>ID</th><th>날짜</th><th class="text-right">수량</th><th class="text-right">매수액</th><th class="text-right">수수료</th><th>분할</th></tr>
+                </thead>
+                <tbody data-node="MATCH-buytbody"></tbody>
+            </table>
+        </div>
+        <h6 class="text-muted mb-1">완료된 매칭</h6>
+        <div style="max-height:180px;overflow-y:auto;border:1px solid #555;border-radius:4px">
+            <table class="table table-sm table-striped table-dark mb-0">
+                <thead style="position:sticky;top:0;z-index:1">
+                    <tr><th>매칭키</th><th>매수ID</th><th>매수일</th><th>매도ID</th><th>매도일</th><th class="text-right">수량</th><th></th></tr>
+                </thead>
+                <tbody data-node="MATCH-donetbody"></tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     세금산출 탭
+     ════════════════════════════════════════════════════════════ -->
+<section id="taxout">
+    <header class="wrapper clearfix">
+        <div class="filter-bar">
+            <label class="mb-0 mr-1">계좌:
+                <select data-node="TAXOUT-accselect" class="form-control form-control-sm d-inline-block w-auto bg-dark text-light border-secondary">
+                    <option value="">전체</option>
+                </select>
+            </label>
+            <label class="mb-0 mr-1">연도:
+                <input data-node="TAXOUT-year" type="number" min="2000" max="2099" placeholder="YYYY"
+                       class="form-control form-control-sm d-inline-block bg-dark text-light border-secondary" style="width:80px">
+            </label>
+            <button data-node="TAXOUT-loadbtn" type="button" class="btn btn-outline-light btn-sm">조회</button>
+            <button data-node="TAXOUT-copybtn" type="button" class="btn btn-outline-light btn-sm">📋 복사</button>
+            <button data-node="TAXOUT-tickerbtn" type="button" class="btn btn-outline-secondary btn-sm">종목명 관리</button>
+        </div>
+    </header>
+    <div class="section clearfix">
+        <div data-node="TAXOUT-alert" class="alert alert-warning py-1 small d-none"></div>
+        <div class="table-responsive">
+            <table class="table table-sm table-striped table-dark">
+                <thead><tr>
+                    <th>계좌</th><th>티커</th><th>종목명</th><th>판매일자</th>
+                    <th class="text-right">수량</th>
+                    <th class="text-right">취득가액(KRW)</th>
+                    <th class="text-right">양도가액(KRW)</th>
+                    <th class="text-right">필요경비(KRW)</th>
+                    <th class="text-right">양도차익(KRW)</th>
+                </tr></thead>
+                <tbody data-node="TAXOUT-tbody"></tbody>
+                <tfoot>
+                    <tr data-node="TAXOUT-total" class="font-weight-bold">
+                        <td colspan="8">합계</td><td class="text-right"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     포트폴리오 탭
+     ════════════════════════════════════════════════════════════ -->
+<section id="portfolio">
+    <header class="wrapper clearfix">
+        <div class="filter-bar">
+            <label class="mb-0 mr-1">계좌:
+                <select data-node="PF-accselect" class="form-control form-control-sm d-inline-block w-auto bg-dark text-light border-secondary">
+                    <option value="">전체</option>
+                </select>
+            </label>
+            <button data-node="PF-loadbtn"   type="button" class="btn btn-outline-light btn-sm">🔄 조회</button>
+            <button data-node="PF-recalcbtn" type="button" class="btn btn-outline-warning btn-sm">재계산</button>
+            <small data-node="PF-updated" class="text-muted"></small>
+        </div>
+    </header>
+    <div class="section clearfix">
+        <h4>티커별 현황</h4>
+        <div class="table-responsive mb-4">
+            <table class="table table-sm table-striped table-dark" style="font-size:0.72rem">
+                <thead><tr>
+                    <th>티커</th><th>총매수량</th><th>총매도량</th><th>잔여</th>
+                    <th>총매수액</th><th>총매도액</th><th>배당금</th><th>배당세금</th>
+                    <th>평균매수가</th><th>현재가</th><th>평가금액</th>
+                    <th>예상차익</th><th>실현손익</th><th>평단액</th><th>총손익</th><th>수익률</th>
+                </tr></thead>
+                <tbody data-node="PF-tbody"></tbody>
+            </table>
+        </div>
+        <div class="d-flex align-items-center mb-2" style="gap:0.75rem">
+            <h4 class="mb-0">연도별 요약</h4>
+            <input data-node="PF-year" type="number" min="2000" max="2099" placeholder="YYYY"
+                   class="form-control form-control-sm w-auto bg-dark text-light border-secondary" style="width:80px">
+            <button data-node="PF-yearbtn" type="button" class="btn btn-outline-light btn-sm">조회</button>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-sm table-striped table-dark">
+                <thead><tr>
+                    <th>계좌</th><th class="text-right">실현손익</th>
+                    <th class="text-right">배당금(세전)</th><th class="text-right">배당세금</th>
+                    <th class="text-right">순배당</th><th class="text-right">총수익</th><th class="text-right">현금잔액</th>
+                </tr></thead>
+                <tbody data-node="PF-yeartbody"></tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════
+     설정 탭
+     ════════════════════════════════════════════════════════════ -->
+<section id="set">
+    <header class="wrapper clearfix">
+        <div class="text-right">
+            <button data-node="ACCOUNT-addbtn"  type="button" class="btn btn-outline-light btn-sm">+ 계좌 추가</button>
+            <button data-node="ACCOUNT-savebtn" type="button" class="btn btn-outline-light btn-sm">저장</button>
+        </div>
+    </header>
+    <div class="section clearfix">
+        <h4>계좌 관리</h4>
+        <template data-node="ACCOUNT-template">
+            <tr>
+                <td><input data-node="ACCOUNT-name" type="text" class="form-control form-control-sm bg-dark text-light border-secondary" value="{name}" placeholder="계좌명"></td>
+                <td><input data-node="ACCOUNT-code" type="text" class="form-control form-control-sm bg-dark text-light border-secondary" value="{code}" placeholder="코드(2자)" maxlength="2" style="text-transform:uppercase"></td>
+                <td><button type="button" class="btn btn-sm btn-outline-danger account-del">-</button></td>
+            </tr>
+        </template>
+        <table class="table table-sm table-striped table-dark">
+            <thead><tr><th>계좌명</th><th>코드(2자리 대문자)</th><th></th></tr></thead>
+            <tbody data-node="ACCOUNT-tbody"></tbody>
+        </table>
+        <small data-node="ACCOUNT-msg" class="text-danger"></small>
+    </div>
+</section>
+
+</div><!-- .main -->
+</div><!-- .main-container -->
+
+<!-- ── 종목명 관리 모달 ── -->
+<div class="modal fade" id="ticker-modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content bg-secondary text-light">
+            <div class="modal-header border-0">
+                <h5 class="modal-title">종목명 관리</h5>
+                <button type="button" class="close text-light" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex align-items-center mb-2" style="gap:0.5rem">
+                    <input data-node="TICKER-tickerinput" type="text" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="티커 (예: AAPL)" style="max-width:110px;text-transform:uppercase">
+                    <input data-node="TICKER-nameinput"   type="text" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="종목명 (예: Apple Inc.)">
+                    <button data-node="TICKER-addbtn" type="button" class="btn btn-primary btn-sm">추가</button>
+                </div>
+                <small data-node="TICKER-msg" class="text-danger"></small>
+                <div data-node="TICKER-pastezone" class="paste-area mb-2" contenteditable="true" tabindex="0"
+                     data-placeholder="일괄 추가: 티커 [TAB] 종목명 (엑셀에서 복붙)"></div>
+                <table class="table table-sm table-dark mb-0">
+                    <thead><tr><th>티커</th><th>종목명</th><th></th></tr></thead>
+                    <tbody data-node="TICKER-tbody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ── 쪼개기 모달 ── -->
+<div class="modal fade" id="split-modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content bg-secondary text-light">
+            <div class="modal-header border-0">
+                <h5 class="modal-title">행 쪼개기</h5>
+                <button type="button" class="close text-light" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p data-node="SPLIT-info" class="small text-muted"></p>
+                <div data-node="SPLIT-inputs"></div>
+                <button data-node="SPLIT-addbtn" type="button" class="btn btn-outline-light btn-sm mt-2">+ 수량 추가</button>
+                <div class="d-flex align-items-center mt-3" style="gap:0.5rem">
+                    <button data-node="SPLIT-confirmbtn" type="button" class="btn btn-primary btn-sm">확인</button>
+                    <small data-node="SPLIT-error" class="text-danger"></small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.slim.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/bootstrap/4.2.1/bootstrap.min.js"></script>
+<script src="/app/tax/js/common.js"></script>
+</body>
+</html>
