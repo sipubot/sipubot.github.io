@@ -16,20 +16,21 @@
       type="image/x-icon"
       href="https://sipubot.github.io/icon/favicon.ico"
     />
-    <link
-      href="http://ajax.aspnetcdn.com/ajax/bootstrap/4.2.1/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
+    
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
-    <link rel="stylesheet" href="stylesheets/common.min.css">
     <!-- 1. 마크다운 변환 라이브러리 (marked) 로드 -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <!-- 2. 가독성을 위한 GitHub 마크다운 스타일 CSS 로드 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.8.1/github-markdown.min.css">
     <style>
+      /* 1. 전체 바디 및 컨테이너 배경을 어둡게 */
+      body {
+        background-color: #121214 !important;
+        color: #e3e3e6 !important;
+      }
       /* 네비 20 우측 본문 80 퍼센트 줄바꿈 없앰*/
       .main-container {
         display: flex;
@@ -39,8 +40,10 @@
         min-height: 100vh; /* 화면 전체 높이 차지 */
       }
       nav {
-        width: 40px;
+        flex: 0;
         flex-shrink: 0; /* 화면이 작아져도 네비게이션 너비가 줄어들지 않도록 고정 */
+        height: 100%;        /* 부모 높이(100vh)를 그대로 물려받음 */
+        margin-right: 10px; /* 네비게이션과 본문 사이에 여백 추가 */
       }
       /* 리스트 점(•) 제거 및 여백 초기화 */
       .sidebar ul {
@@ -54,6 +57,18 @@
         width: auto; /* 부트스트랩의 width: 100%를 무력화하여 남은 공간만 채우게 함 */
         flex: 1; /* 남은 공간을 모두 차지하도록 설정 */
         width: 80%;
+      }
+      /* 1. 네비게이션 내부 및 테이블 내부의 모든 링크 스타일 수정 */
+      .main-container a {
+        color: #38bdf8 !important;         /* 링크 색상: 밝은 하늘색 (다크모드 추천 색상) */
+        text-decoration: underline !important; /* 밑줄 활성화 */
+        text-decoration-color: #4b5563 !important; /* 밑줄 색상: 회색 */
+      }
+
+      /* 2. 링크에 마우스를 올렸을 때 (Hover) */
+      .main-container a:hover {
+        color: #7dd3fc !important;         /* 마우스 올리면 조금 더 밝은 하늘색 */
+        text-decoration-color: #9ca3af !important; /* 밑줄도 조금 더 밝은 회색 */
       }
     </style>
   </head>
@@ -73,4 +88,3 @@
     <script src="./stock/stock.js"></script>
   </body>
 </html>
-s
