@@ -572,6 +572,7 @@ const TAXCOMMON = (() => {
                                 <td class="text-right">${fmtMoney(a.dividend)}</td>
                                 <td class="text-right">${fmtMoney(a.dividend_tax)}</td>
                                 <td class="text-right">${fmtMoney(a.net_dividend)}</td>
+                                <td class="text-right">${fmtMoney(a.interest)}</td>
                                 <td class="text-right ${pnlClass(a.total_income)}">${fmtMoney(a.total_income)}</td>
                                 <td class="text-right">${fmtMoney(a.cash_balance)}</td>`;
                             obj.appendChild(tr);
@@ -585,6 +586,7 @@ const TAXCOMMON = (() => {
                             <td class="text-right">${fmtMoney(t.dividend)}</td>
                             <td class="text-right">${fmtMoney(t.dividend_tax)}</td>
                             <td class="text-right">${fmtMoney(t.net_dividend)}</td>
+                            <td class="text-right">${fmtMoney(t.interest)}</td>
                             <td class="text-right ${pnlClass(t.total_income)}">${fmtMoney(t.total_income)}</td>
                             <td class="text-right">${fmtMoney(t.cash_balance)}</td>`;
                         obj.appendChild(tot);
