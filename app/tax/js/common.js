@@ -93,6 +93,10 @@ const TAXCOMMON = (() => {
         const parts = Object.entries(params).filter(([, v]) => v).map(([k, v]) => `${k}=${encodeURIComponent(v)}`);
         return parts.length ? `?${parts.join("&")}` : "";
     }
+    function portfolioAccountParam(account) {
+        const value = String(account ?? "").trim();
+        return value || "all";
+    }
     const dateFilter = monthNode => {
         const val = monthNode && UI_WK.getNodeValue(monthNode);
         return val ? { month: val } : {};
@@ -125,7 +129,8 @@ const TAXCOMMON = (() => {
 
     function refreshPortfolio() {
         if (!STATE.pfLoaded) return;
-        RQ_WK({ ADD_URL: `/tax/portfolio${buildQs({ account: UI_WK.getNodeValue(DATANODES.PF.accselect) })}`,
+        const account = portfolioAccountParam(UI_WK.getNodeValue(DATANODES.PF.accselect));
+        RQ_WK({ ADD_URL: `/tax/portfolio${buildQs({ account })}`,
                 rqMethod: "GET", rsFunc: renderPortfolio });
     }
 
@@ -553,7 +558,8 @@ const TAXCOMMON = (() => {
                     }});
                 });
                 UI_WK.setEvent(DATANODES.PF.loadbtn, () => {
-                    const qs = buildQs({ account: UI_WK.getNodeValue(DATANODES.PF.accselect) });
+                    const account = portfolioAccountParam(UI_WK.getNodeValue(DATANODES.PF.accselect));
+                    const qs = buildQs({ account });
                     RQ_WK({ ADD_URL: `/tax/portfolio${qs}`, rqMethod: "GET",
                             rsFunc: data => { STATE.pfLoaded = true; renderPortfolio(data); } });
                     UI_WK.preventDoubleClick(DATANODES.PF.loadbtn);
